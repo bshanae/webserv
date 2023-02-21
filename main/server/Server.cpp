@@ -1,21 +1,25 @@
 #include "Server.h"
 
-#include "exceptions/SocketException.h"
+#include "tools/exceptions/SocketException.h"
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
-Server::Server(const std::string& ipAddress, const int port)
+Server::Server(Context &context): _context(context)
 {
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
 		throw SocketException("Can't create server socket");
 
+	const int port = context.getConfig().getServerPort();
+	const std::string address = context.getConfig().getServerAddress();
+
 	const struct sockaddr_in socketAddress = {
 		.sin_family = AF_INET,
-		.sin_port = htons(port), .sin_addr = {
-			.s_addr = inet_addr(ipAddress.c_str())
+		.sin_port = htons(port),
+		.sin_addr = {
+			.s_addr = inet_addr(address.c_str())
 		}
 	};
 
@@ -23,7 +27,7 @@ Server::Server(const std::string& ipAddress, const int port)
 		throw SocketException("Can't bind address to main socket!");
 
 	if (listen(_serverSocket, 32) < 0)
-		throw SocketException("Can't start listening!");
+		throw SocketException("Can listen socket!");
 }
 
 Server::~Server()
@@ -76,6 +80,6 @@ void Server::acceptNewConnection()
 	// TODO if (tempSocket < 0)
 
 	_targets.push_back((struct pollfd){ .fd = clientSocket, .events = POLLRDNORM });
-	_workers.push_back(Worker(clientSocket));
+	_workers.push_back(Worker(_context, clientSocket));
 	// TODO LIMIT
 }

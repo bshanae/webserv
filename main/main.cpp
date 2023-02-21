@@ -1,12 +1,27 @@
 #include <iostream>
+#include "tools/exceptions/SocketException.h"
 #include "server/Server.h"
-#include "exceptions/SocketException.h"
+#include "context/project/Project.h"
+#include "context/Context.h"
+
+Context buildContext()
+{
+	Config config;
+
+	Project project(config);
+
+	Context context(config, project);
+
+	return context;
+}
 
 int main()
 {
 	try
 	{
-		Server server("0.0.0.0", 80);
+		Context context = buildContext();
+
+		Server server(context);
 		server.run();
 
 		return 0;

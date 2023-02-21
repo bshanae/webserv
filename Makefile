@@ -7,10 +7,15 @@ BASE_LD_FLAGS=
 
 PROJECT_NAME=webserv
 
-SRCS=main/main.cpp                       \
-	 main/server/Server.cpp              \
-	 main/worker/Worker.cpp              \
-	 main/exceptions/SocketException.cpp
+SRCS=main/main.cpp                             \
+	 main/context/Context.cpp                  \
+	 main/context/config/Config.cpp            \
+	 main/context/project/Project.cpp          \
+	 main/server/Server.cpp                    \
+	 main/server/worker/Worker.cpp             \
+	 main/server/request/Request.cpp           \
+	 main/server/response/Response.cpp         \
+	 main/tools/exceptions/SocketException.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv
 
