@@ -52,7 +52,7 @@ void Server::run()
 			readyCount--;
 		}
 
-		for (int i = 1; i < _targets.size() && readyCount > 0; i++, readyCount--)
+		for (int i = 1; i < _targets.size() && readyCount > 0; i++)
 		{
 			const struct pollfd& target = _targets[i];
 			if (!(target.revents & (POLLRDNORM | POLLERR)))
@@ -68,6 +68,8 @@ void Server::run()
 
 				i--;
 			}
+
+			readyCount--;
 		}
 	}
 }
