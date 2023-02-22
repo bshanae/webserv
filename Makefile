@@ -17,7 +17,8 @@ SRCS=main/main.cpp                             \
 	 main/server/response/Response.cpp         \
 	 main/tools/exceptions/SocketException.cpp \
 	 main/tools/log/handler/handler.cpp        \
-	 main/tools/log/log.cpp
+	 main/tools/log/log.cpp                    \
+	 main/tools/sys/sys.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv
 

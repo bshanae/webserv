@@ -1,9 +1,9 @@
-#include <iostream>
 #include "tools/exceptions/SocketException.h"
 #include "server/Server.h"
 #include "context/project/Project.h"
 #include "context/Context.h"
 #include "tools/log/log.h"
+#include "tools/sys/sys.h"
 
 Context buildContext()
 {
@@ -23,6 +23,8 @@ int main()
 		log::i.enabled = true;
 		log::w.enabled = true;
 		log::e.enabled = true;
+
+		sys::listenForTermination();
 
 		Context context = buildContext();
 

@@ -27,8 +27,8 @@ std::string Project::readFile(const std::string &path)
 	std::ifstream file(finalPath);
 	if (!file)
 	{
-		log::e << log::entity << "Project" << log::endl;
-		log::e << "Can't open file at " << finalPath << log::endm;
+		log::e << log::entity << "Project" << log::endl
+			   << "Can't open file at " << finalPath << log::endm;
 
 		return "";
 	}

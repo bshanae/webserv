@@ -5,9 +5,14 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "tools/log/log.h"
+#include "tools/sys/sys.h"
 
 Server::Server(Context &context): _context(context)
 {
+	log::i << log::entity << "Server" << log::endl
+		   << "Startup." << log::endm;
+
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
 		throw SocketException("Can't create server socket");
@@ -32,6 +37,9 @@ Server::Server(Context &context): _context(context)
 
 Server::~Server()
 {
+	log::i << log::entity << "Server" << log::endl
+		   << "Shutdown." << log::endm;
+
 	close(_serverSocket);
 }
 
@@ -39,7 +47,7 @@ void Server::run()
 {
 	_targets.push_back((struct pollfd){ .fd = _serverSocket, .events = POLLRDNORM });
 
-	for (;;)
+	while (!sys::TerminationRequested)
 	{
 		int readyCount = poll(_targets.data(), _targets.size(), 0);
 		// TODO Check error
@@ -72,6 +80,9 @@ void Server::run()
 			readyCount--;
 		}
 	}
+
+	log::i << log::entity << "Server" << log::endl
+		   << "Terminating..." << log::endm;
 }
 
 void Server::acceptNewConnection()
