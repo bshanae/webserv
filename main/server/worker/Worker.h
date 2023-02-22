@@ -15,10 +15,12 @@ public:
 	void processRequest();
 
 private:
-	static const size_t _bufferSize = 30720;
+	static const size_t bufferSize = 30720;
 
 	Context& _context;
 	int _fd;
 
-	std::string buildResponse() const;
+	void logSelf() const;
+	void logRequest(const std::string &str) const;
+	void logResponse(const std::string &str) const;
 };

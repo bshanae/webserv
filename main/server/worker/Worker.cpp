@@ -4,10 +4,9 @@
 #include <unistd.h>
 #include <cerrno>
 #include <string>
-#include <sstream>
-#include <iostream>
 #include "server/request/Request.h"
 #include "server/response/Response.h"
+#include "tools/log/log.h"
 
 Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
 {
@@ -33,8 +32,8 @@ bool Worker::hasConnection() const
 
 void Worker::processRequest()
 {
-	char requestStr[_bufferSize] = { 0 }; // TODO Optimize
-	ssize_t bytesReceived = read(_fd, requestStr, _bufferSize);
+	char requestStr[bufferSize] = { 0 }; // TODO Optimize
+	ssize_t bytesReceived = read(_fd, requestStr, bufferSize);
 	if (bytesReceived == -1)
 	{
 		if (errno == ECONNRESET)
@@ -46,9 +45,7 @@ void Worker::processRequest()
 		// TODO ERROR
 	}
 
-	std::cout << "/// REQUEST" << std::endl;
-	std::cout << requestStr;
-	std::cout << "\\\\\\ REQUEST" << std::endl;
+	logRequest(requestStr);
 
 	Request request = Request::parse(requestStr);
 
@@ -57,14 +54,34 @@ void Worker::processRequest()
 	response.addBody(_context.getProject().readFile("sample.http"));
 
 	const std::string responseStr = response.build();
-
-	std::cout << "/// RESPONSE" << std::endl;
-	std::cout << responseStr;
-	std::cout << "\\\\\\ RESPONSE" << std::endl;
+	logResponse(responseStr);
 
 	const long bytesSent = write(_fd, responseStr.c_str(), responseStr.size());
 	if (bytesSent != responseStr.size())
 	{
 		// TODO Error
 	}
+}
+
+void Worker::logSelf() const
+{
+	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl;
+}
+
+void Worker::logRequest(const std::string& str) const
+{
+	logSelf();
+
+	log::i << "Request:" << log::endl
+		   << str << log::endl
+		   << "@" << log::endm;
+}
+
+void Worker::logResponse(const std::string& str) const
+{
+	logSelf();
+
+	log::i << "Response:" << log::endl
+		   << str << log::endl
+		   << "@" << log::endm;
 }

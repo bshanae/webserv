@@ -3,6 +3,7 @@
 #include "server/Server.h"
 #include "context/project/Project.h"
 #include "context/Context.h"
+#include "tools/log/log.h"
 
 Context buildContext()
 {
@@ -19,6 +20,10 @@ int main()
 {
 	try
 	{
+		log::i.enabled = true;
+		log::w.enabled = true;
+		log::e.enabled = true;
+
 		Context context = buildContext();
 
 		Server server(context);
@@ -28,12 +33,12 @@ int main()
 	}
 	catch (const std::exception& exception)
 	{
-		std::cerr << "Fatal error: " << exception.what() << std::endl;
+		log::e << "Fatal error: " << exception.what() << log::endm;
 		return 1;
 	}
 	catch (...)
 	{
-		std::cerr << "Fatal error." << std::endl;
+		log::e << "Fatal error." << log::endm;
 		return 1;
 	}
 }

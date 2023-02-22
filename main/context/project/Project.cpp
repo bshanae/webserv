@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <sstream>
-#include <iostream>
+#include "tools/log/log.h"
 
 Project::Project(const Config &config)
 {
@@ -27,7 +27,9 @@ std::string Project::readFile(const std::string &path)
 	std::ifstream file(finalPath);
 	if (!file)
 	{
-		std::cerr << "Can't open file at " << finalPath;
+		log::e << log::entity << "Project" << log::endl;
+		log::e << "Can't open file at " << finalPath << log::endm;
+
 		return "";
 	}
 

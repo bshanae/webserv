@@ -24,10 +24,10 @@ Server::Server(Context &context): _context(context)
 	};
 
 	if (bind(_serverSocket, reinterpret_cast<const sockaddr*>(&socketAddress), sizeof(socketAddress)) < 0)
-		throw SocketException("Can't bind address to main socket!");
+		throw SocketException("Bind fail.");
 
 	if (listen(_serverSocket, 32) < 0)
-		throw SocketException("Can listen socket!");
+		throw SocketException("Listen fail.");
 }
 
 Server::~Server()
