@@ -2,12 +2,12 @@
 
 #include <cstddef>
 #include <string>
-#include "context/Context.h"
-
+#include "context/VirtualServer.hpp"
+//#include "../../Include_main.hpp"
 class Worker
 {
 public:
-	Worker(Context& context, int fd);
+	Worker(VirtualServer& context, int fd);
 	Worker(const Worker& that);
 	Worker& operator=(const Worker& that);
 
@@ -17,7 +17,7 @@ public:
 private:
 	static const size_t _bufferSize = 30720;
 
-	Context& _context;
+	VirtualServer& _context;
 	int _fd;
 
 	std::string buildResponse() const;

@@ -5,15 +5,19 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "../Include_main.hpp"
 
-Server::Server(Context &context): _context(context)
+#include <iostream>
+Server::Server(serv_stor &context): _context(context)
 {
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
 		throw SocketException("Can't create server socket");
 
-	const int port = context.getConfig().getServerPort();
-	const std::string address = context.getConfig().getServerAddress();
+	serv_stor::iterator serv_itter = context.begin();
+	const int port = (*serv_itter).first;
+
+	const std::string address = ((serv_itter->second)[0]).ip_adress;
 
 	const struct sockaddr_in socketAddress = {
 		.sin_family = AF_INET,
@@ -22,9 +26,12 @@ Server::Server(Context &context): _context(context)
 			.s_addr = inet_addr(address.c_str())
 		}
 	};
-
-	if (bind(_serverSocket, reinterpret_cast<const sockaddr*>(&socketAddress), sizeof(socketAddress)) < 0)
+	
+	if (bind(_serverSocket, reinterpret_cast<const sockaddr*>(&socketAddress), sizeof(socketAddress)) < 0){
+		
+	
 		throw SocketException("Can't bind address to main socket!");
+	}
 
 	if (listen(_serverSocket, 32) < 0)
 		throw SocketException("Can listen socket!");
@@ -80,6 +87,7 @@ void Server::acceptNewConnection()
 	// TODO if (tempSocket < 0)
 
 	_targets.push_back((struct pollfd){ .fd = clientSocket, .events = POLLRDNORM });
-	_workers.push_back(Worker(_context, clientSocket));
+	//(_context.begin()->second)[0];  // first virtual_server
+	_workers.push_back( Worker(((_context.begin())->second)[0], clientSocket));
 	// TODO LIMIT
 }

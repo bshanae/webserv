@@ -9,7 +9,7 @@
 #include "server/request/Request.h"
 #include "server/response/Response.h"
 
-Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
+Worker::Worker(VirtualServer& context, int fd) : _context(context), _fd(fd)
 {
 }
 
@@ -54,7 +54,7 @@ void Worker::processRequest()
 
 	Response response;
 	response.addHeader();
-	response.addBody(_context.getProject().readFile("sample.http"));
+	response.addBody("Helloy word");
 
 	const std::string responseStr = response.build();
 

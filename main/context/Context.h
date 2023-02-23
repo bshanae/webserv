@@ -1,21 +1,21 @@
-#pragma once
+// #pragma once
 
-#include "config/Config.h"
-#include "project/Project.h"
+// #include "config/Config.h"
+// #include "project/Project.h"
 
-class Context
-{
-public:
-	Context(const Config& config, const Project& project);
-	Context(const Context& that);
-	Context& operator=(const Context& that);
+// class Context
+// {
+// public:
+// 	Context(const Config& config, const Project& project);
+// 	Context(const Context& that);
+// 	Context& operator=(const Context& that);
 
-	const Config& getConfig() const;
+// 	const Config& getConfig() const;
 
-	Project& getProject();
-	const Project& getProject() const;
+// 	Project& getProject();
+// 	const Project& getProject() const;
 
-private:
-	Config _config;
-	Project _project;
-};
+// private:
+// 	Config _config;
+// 	Project _project;
+// };

@@ -15,7 +15,9 @@ SRCS=main/main.cpp                             \
 	 main/server/worker/Worker.cpp             \
 	 main/server/request/Request.cpp           \
 	 main/server/response/Response.cpp         \
-	 main/tools/exceptions/SocketException.cpp
+	 main/tools/exceptions/SocketException.cpp \
+	 main/context/Location.cpp                 \
+	 main/context/VirtualServer.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv
 

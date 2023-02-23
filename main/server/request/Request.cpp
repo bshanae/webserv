@@ -1,7 +1,8 @@
 #include "Request.h"
-
+#include <iostream>
 Request Request::parse(const std::string& data)
 {
+	std::cout << data << std::endl;
 	return Request(GET, "", "1.1");
 }
 

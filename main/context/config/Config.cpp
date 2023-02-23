@@ -1,16 +1,16 @@
-#include "Config.h"
+// #include "Config.h"
 
-std::string Config::getProjectRoot() const
-{
-	return "test";
-}
+// std::string Config::getProjectRoot() const
+// {
+// 	return "main";
+// }
 
-std::string Config::getServerAddress() const
-{
-	return "0.0.0.0";
-}
+// std::string Config::getServerAddress() const
+// {
+// 	return "0.0.0.0";
+// }
 
-int Config::getServerPort() const
-{
-	return 80;
-}
+// int Config::getServerPort() const
+// {
+// 	return 1080;
+// }
