@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <cerrno>
 #include <string>
-#include "server/request/Request.h"
 #include "server/response/Response.h"
 #include "tools/log/log.h"
 
@@ -30,7 +29,17 @@ bool Worker::hasConnection() const
 	return _fd != -1;
 }
 
-void Worker::processRequest()
+void Worker::onDataReceived()
+{
+	Request request = readRequest();
+
+	Response response;
+	processRequest(request, response);
+
+	writeResponse(response);
+}
+
+Request Worker::readRequest()
 {
 	char requestStr[bufferSize] = { 0 }; // TODO Optimize
 	ssize_t bytesReceived = read(_fd, requestStr, bufferSize);
@@ -46,13 +55,11 @@ void Worker::processRequest()
 	}
 
 	logRequest(requestStr);
+	return Request::parse(requestStr);
+}
 
-	Request request = Request::parse(requestStr);
-
-	Response response;
-	response.addHeader();
-	response.addBody(_context.getProject().readFile("sample.http"));
-
+void Worker::writeResponse(const Response& response)
+{
 	const std::string responseStr = response.build();
 	logResponse(responseStr);
 
@@ -63,25 +70,33 @@ void Worker::processRequest()
 	}
 }
 
-void Worker::logSelf() const
+void Worker::processRequest(const Request& request, Response& response)
 {
-	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl;
+	const Request::Method method = request.getMethod();
+	if (method == Request::GET)
+	{
+		response.addHeader();
+		response.addBody(_context.getProject().readFile(request.getUrl()));
+	}
+	else
+	{
+		log::e << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+			   << "Unknown request method: " << request.getMethod() << log::endm;
+	}
 }
 
 void Worker::logRequest(const std::string& str) const
 {
-	logSelf();
-
-	log::i << "Request:" << log::endl
+	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+		   << "Request:" << log::endl
 		   << str << log::endl
 		   << "@" << log::endm;
 }
 
 void Worker::logResponse(const std::string& str) const
 {
-	logSelf();
-
-	log::i << "Response:" << log::endl
+	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+		   << "Response:" << log::endl
 		   << str << log::endl
 		   << "@" << log::endm;
 }

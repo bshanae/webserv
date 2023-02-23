@@ -6,7 +6,7 @@ class Request
 {
 public:
 
-	enum Type
+	enum Method
 	{
 		GET
 	};
@@ -16,15 +16,15 @@ public:
 	Request(const Request& that);
 	Request& operator=(const Request& that);
 
-	Type getType() const;
+	Method getMethod() const;
 	std::string getUrl() const;
 	std::string getHttpVersion() const;
 
 private:
 
-	Type _type;
+	Method _method;
 	std::string _url;
 	std::string _httpVersion;
 
-	Request(Type type, const std::string& url, const std::string& httpVersion);
+	Request(Method type, const std::string& url, const std::string& httpVersion);
 };

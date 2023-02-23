@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <string>
 #include "context/Context.h"
+#include "server/request/Request.h"
+#include "server/response/Response.h"
 
 class Worker
 {
@@ -12,7 +14,7 @@ public:
 	Worker& operator=(const Worker& that);
 
 	bool hasConnection() const;
-	void processRequest();
+	void onDataReceived();
 
 private:
 	static const size_t bufferSize = 30720;
@@ -20,7 +22,9 @@ private:
 	Context& _context;
 	int _fd;
 
-	void logSelf() const;
+	Request readRequest();
+	void writeResponse(const Response& response);
+	void processRequest(const Request &request, Response &response);
 	void logRequest(const std::string &str) const;
 	void logResponse(const std::string &str) const;
 };

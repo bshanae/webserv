@@ -12,7 +12,7 @@ void Response::addBody(const std::string& data)
 			<< data;
 }
 
-std::string Response::build()
+std::string Response::build() const
 {
 	// TODO Maybe optimize this
 	return _buffer.str();

@@ -4,7 +4,7 @@
 #include <sstream>
 #include "tools/log/log.h"
 
-Project::Project(const Config &config)
+Project::Project(const Config& config)
 {
 	_root = config.getProjectRoot();
 }
@@ -20,9 +20,19 @@ Project& Project::operator=(const Project& that)
 	return *this;
 }
 
-std::string Project::readFile(const std::string &path)
+std::string Project::readFile(const std::string& path)
 {
-	const std::string finalPath = _root + "/" + path;
+	if (path.length() == 0)
+	{
+		log::e << log::entity << "Project" << log::endl
+			   << "Path is empty!" << log::endm;
+		return "";
+	}
+
+	std::string finalPath = _root;
+	if (path[0] != '/')
+		finalPath += '/';
+	finalPath += path;
 
 	std::ifstream file(finalPath);
 	if (!file)

@@ -10,7 +10,7 @@ public:
 	void addHeader();
 	void addBody(const std::string& data);
 
-	std::string build();
+	std::string build() const;
 
 private:
 

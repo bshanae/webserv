@@ -15,7 +15,7 @@ Server::Server(Context &context): _context(context)
 
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
-		throw SocketException("Can't create server socket");
+		throw SocketException("Socket creation error.");
 
 	const int port = context.getConfig().getServerPort();
 	const std::string address = context.getConfig().getServerAddress();
@@ -67,7 +67,7 @@ void Server::run()
 				continue;
 
 			Worker& worker = _workers[i - 1];
-			worker.processRequest();
+			worker.onDataReceived();
 
 			if (!worker.hasConnection())
 			{
