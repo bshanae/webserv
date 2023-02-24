@@ -13,6 +13,7 @@ SRCS=main/main.cpp                                                             \
 	 main/context/project/Project.cpp                                          \
 	 main/server/Server.cpp                                                    \
 	 main/server/worker/Worker.cpp                                             \
+	 main/server/worker/tools/IndexGenerator.cpp                               \
 	 main/server/messages/request/Request.cpp                                  \
 	 main/server/messages/response/Response.cpp                                \
 	 main/server/messages/aux/HeaderType.cpp                                   \

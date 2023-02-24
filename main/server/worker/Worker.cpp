@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <unistd.h>
 #include <cerrno>
-#include "../messages/aux/StatusCode.h"
+#include "tools/IndexGenerator.h"
 #include "tools/log/log.h"
 #include "tools/exceptions/FileNotFoundException.h"
 
@@ -82,14 +82,23 @@ void Worker::processRequest(const Request& request, Response& response)
 	response.setServer("Webserv 21");
 
 	const RequestMethod method = request.getMethod();
+	const std::string &url = request.getUrl();
+
 	if (method == RequestMethodGET)
 	{
 		try
 		{
-			const std::string file = _context.getProject().readFile(request.getUrl());
-
-			response.setStatusCode(StatusCodeOk);
-			response.setBody(MediaTypeHtml, file);
+			if (_context.getProject().isDirectory(url))
+			{
+				// TODO Check indexing in config
+				response.setStatusCode(StatusCodeOk);
+				response.setBody(MediaTypeHtml, IndexGenerator::generatePage(_context.getProject(), url));
+			}
+			else
+			{
+				response.setStatusCode(StatusCodeOk);
+				response.setBody(MediaTypeHtml, _context.getProject().readFile(url));
+			}
 		}
 		catch (const FileNotFoundException& exception)
 		{
