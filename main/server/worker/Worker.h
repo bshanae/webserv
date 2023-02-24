@@ -9,14 +9,18 @@
 class Worker
 {
 public:
+
 	Worker(Context& context, int fd);
 	Worker(const Worker& that);
 	Worker& operator=(const Worker& that);
 
 	bool hasConnection() const;
-	void onDataReceived();
+	void onRequestReceived();
+
+	friend std::ostream& operator<<(std::ostream& stream, const Worker& worker);
 
 private:
+
 	static const size_t bufferSize = 30720;
 
 	Context& _context;
@@ -24,7 +28,9 @@ private:
 
 	Request readRequest();
 	void writeResponse(const Response& response);
-	void processRequest(const Request &request, Response &response);
-	void logRequest(const std::string &str) const;
-	void logResponse(const std::string &str) const;
+	void processRequest(const Request& request, Response& response);
+	void logRequest(const std::string& str) const;
+	void logResponse(const std::string& str) const;
 };
+
+std::ostream& operator<<(std::ostream& stream, const Worker& worker);

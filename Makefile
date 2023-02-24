@@ -7,17 +7,24 @@ BASE_LD_FLAGS=
 
 PROJECT_NAME=webserv
 
-SRCS=main/main.cpp                             \
-	 main/context/Context.cpp                  \
-	 main/context/config/Config.cpp            \
-	 main/context/project/Project.cpp          \
-	 main/server/Server.cpp                    \
-	 main/server/worker/Worker.cpp             \
-	 main/server/request/Request.cpp           \
-	 main/server/response/Response.cpp         \
-	 main/tools/exceptions/SocketException.cpp \
-	 main/tools/log/handler/handler.cpp        \
-	 main/tools/log/log.cpp                    \
+SRCS=main/main.cpp                                                             \
+	 main/context/Context.cpp                                                  \
+	 main/context/config/Config.cpp                                            \
+	 main/context/project/Project.cpp                                          \
+	 main/server/Server.cpp                                                    \
+	 main/server/worker/Worker.cpp                                             \
+	 main/server/request/Request.cpp                                           \
+	 main/server/response/Response.cpp                                         \
+	 main/server/response/headerType/HTTPHeaderType.cpp                        \
+	 main/server/response/statusCode/HTTPStatusCode.cpp                        \
+	 main/server/response/mediaType/HTTPMediaType.cpp                          \
+	 main/tools/exceptions/SocketException.cpp                                 \
+	 main/tools/exceptions/FileNotFoundException.cpp                           \
+	 main/tools/exceptions/InvalidArgumentException.cpp                        \
+	 main/tools/exceptions/InvalidUsageException.cpp                           \
+	 main/tools/exceptions/InvalidStateException.cpp                           \
+	 main/tools/log/handler/handler.cpp                                        \
+	 main/tools/log/log.cpp                                                    \
 	 main/tools/sys/sys.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv

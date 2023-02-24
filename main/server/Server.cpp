@@ -67,7 +67,7 @@ void Server::run()
 				continue;
 
 			Worker& worker = _workers[i - 1];
-			worker.onDataReceived();
+			worker.onRequestReceived();
 
 			if (!worker.hasConnection())
 			{

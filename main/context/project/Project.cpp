@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include "tools/log/log.h"
+#include "tools/exceptions/FileNotFoundException.h"
+#include "tools/exceptions/InvalidArgumentException.h"
 
 Project::Project(const Config& config)
 {
@@ -26,7 +28,7 @@ std::string Project::readFile(const std::string& path)
 	{
 		log::e << log::entity << "Project" << log::endl
 			   << "Path is empty!" << log::endm;
-		return "";
+		throw InvalidArgumentException("path");
 	}
 
 	std::string finalPath = _root;
@@ -39,8 +41,7 @@ std::string Project::readFile(const std::string& path)
 	{
 		log::e << log::entity << "Project" << log::endl
 			   << "Can't open file at " << finalPath << log::endm;
-
-		return "";
+		throw FileNotFoundException(path);
 	}
 
 	std::stringstream stream;

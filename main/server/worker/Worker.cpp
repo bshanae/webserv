@@ -3,9 +3,10 @@
 #include <cstdio>
 #include <unistd.h>
 #include <cerrno>
-#include <string>
 #include "server/response/Response.h"
+#include "server/response/statusCode/HTTPStatusCode.h"
 #include "tools/log/log.h"
+#include "tools/exceptions/FileNotFoundException.h"
 
 Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
 {
@@ -29,7 +30,7 @@ bool Worker::hasConnection() const
 	return _fd != -1;
 }
 
-void Worker::onDataReceived()
+void Worker::onRequestReceived()
 {
 	Request request = readRequest();
 
@@ -37,6 +38,12 @@ void Worker::onDataReceived()
 	processRequest(request, response);
 
 	writeResponse(response);
+}
+
+std::ostream& operator<<(std::ostream& stream, const Worker& worker)
+{
+	stream << "Worker(fd=" << worker._fd << ")";
+	return stream;
 }
 
 Request Worker::readRequest()
@@ -72,22 +79,38 @@ void Worker::writeResponse(const Response& response)
 
 void Worker::processRequest(const Request& request, Response& response)
 {
+	response.setDate(std::time(0));
+	response.setServer("Webserv 21");
+
 	const RequestMethod method = request.getMethod();
 	if (method == RequestMethodGET)
 	{
-		response.addHeader();
-		response.addBody(_context.getProject().readFile(request.getUrl()));
+		try
+		{
+			const std::string file = _context.getProject().readFile(request.getUrl());
+
+			response.setStatusCode(HTTPStatusCodeOk);
+			response.setBody(HttpMediaTypeHtml, file);
+		}
+		catch (const FileNotFoundException& exception)
+		{
+			response.setStatusCode(HTTPStatusCodeNotFound);
+		}
+		catch (const std::exception& exception)
+		{
+			// TODO
+		}
 	}
 	else
 	{
-		log::e << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+		log::e << log::entity << *this << log::endl
 			   << "Unknown request method: " << request.getMethod() << log::endm;
 	}
 }
 
 void Worker::logRequest(const std::string& str) const
 {
-	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+	log::i << log::entity << *this << log::endl
 		   << "Request:" << log::endl
 		   << str << log::endl
 		   << "@" << log::endm;
@@ -95,7 +118,7 @@ void Worker::logRequest(const std::string& str) const
 
 void Worker::logResponse(const std::string& str) const
 {
-	log::i << log::entity << "Worker(fd=" << _fd << ")" << log::endl
+	log::i << log::entity << *this << log::endl
 		   << "Response:" << log::endl
 		   << str << log::endl
 		   << "@" << log::endm;
