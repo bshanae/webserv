@@ -5,6 +5,7 @@
 #include "Location.hpp"
 class VirtualServer{
     private:
+    std::string::iterator set_init_ip(std::string str);
         // VirtualServer& operator= (VirtualServer &oth){};
         // VirtualServer(VirtualServer &oth){};
     public:
@@ -20,6 +21,14 @@ class VirtualServer{
         std::string ip_adress;
     public:
         VirtualServer();
+        void set_port_and_ip(std::string& );
+        void set_name(std::string& );
+        void set_root(std::string& );
+        void set_index(std::string& );
+        void set_err_page(std::string& );
+        void set_max_body_size(std::string& );
+        void set_upload(std::string& );
+        void set_cgi_path(std::string& );
 
 };
 

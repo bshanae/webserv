@@ -17,21 +17,18 @@
 
 // 	return context;
 // }
-void parse_fail(serv_stor &server_storage)
+
+int main(int argv,char ** argc)
 {
 	
-	std::vector<VirtualServer> Virt_server;
-	Virt_server.push_back(VirtualServer());
-	server_storage.insert(serv_stor::value_type(1080,Virt_server));
-}
-int main()
-{
-	serv_stor  server_storage;
+	if (argv != 2){
+		std::cout << "Incorrect Argument" << std::cout; 
+	}
 	try
 	{
-		parse_fail(server_storage);
+		Context Context_main(argc[1]);
 
-		Server server(server_storage);
+		Server server(Context_main);
 		server.run();
 
 		return 0;

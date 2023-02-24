@@ -1,32 +1,26 @@
-// #include "Context.h"
+#include "Context.h"
+#include <string>
+Context::Context(const char * str)
+{
+    FILE*  file = std::fopen(str,"r");
+	if (!file)
+		throw "cant open file";
 
-// Context::Context(const Config& config, const Project& project) :
-// 	_config(config),
-// 	_project(project)
-// {
-// }
+    VirtualServer temp_server = VirtualServer();
+	this->add_server(1080,temp_server);
 
-// Context::Context(const Context& that) : _project(that._project)
-// {
-// }
+}
 
-// Context& Context::operator=(const Context& that)
-// {
-// 	this->_project = that._project;
-// 	return *this;
-// }
 
-// const Config& Context::getConfig() const
-// {
-// 	return _config;
-// }
-
-// Project& Context::getProject()
-// {
-// 	return _project;
-// }
-
-// const Project& Context::getProject() const
-// {
-// 	return _project;
-// }
+Context::iterator Context::port_begin(){
+    return servers.begin();
+}
+Context::iterator Context::port_end(){
+    return servers.end();
+}
+void Context::add_server( int port, VirtualServer& serv){
+    servers[port].push_back(serv);
+}
+const std::vector<VirtualServer>& Context::get_servers_by_port(int port) const {
+    return servers.at(port);
+}

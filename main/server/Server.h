@@ -5,17 +5,16 @@
 #include <vector>
 #include "context/Context.h"
 #include "worker/Worker.h"
-#include "../Include_main.hpp"
 class Server
 {
 public:
-	explicit Server(serv_stor &context);
+	explicit Server(Context &context);
 	~Server();
 
 	void run();
 
 private:
-	serv_stor & _context;
+	Context & _context;
 	int _serverSocket;
 	std::vector<struct pollfd> _targets;
 	std::vector<Worker> _workers;
