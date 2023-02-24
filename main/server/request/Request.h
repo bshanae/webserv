@@ -1,30 +1,26 @@
 #pragma once
 
 #include <string>
+#include "requestMethod/RequestMethod.h"
 
 class Request
 {
 public:
-
-	enum Method
-	{
-		GET
-	};
 
 	static Request parse(const std::string& data);
 
 	Request(const Request& that);
 	Request& operator=(const Request& that);
 
-	Method getMethod() const;
+	RequestMethod getMethod() const;
 	std::string getUrl() const;
 	std::string getHttpVersion() const;
 
 private:
 
-	Method _method;
+	RequestMethod _method;
 	std::string _url;
 	std::string _httpVersion;
 
-	Request(Method type, const std::string& url, const std::string& httpVersion);
+	Request(RequestMethod type, const std::string& url, const std::string& httpVersion);
 };

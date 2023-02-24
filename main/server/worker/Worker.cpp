@@ -72,8 +72,8 @@ void Worker::writeResponse(const Response& response)
 
 void Worker::processRequest(const Request& request, Response& response)
 {
-	const Request::Method method = request.getMethod();
-	if (method == Request::GET)
+	const RequestMethod method = request.getMethod();
+	if (method == RequestMethodGET)
 	{
 		response.addHeader();
 		response.addBody(_context.getProject().readFile(request.getUrl()));

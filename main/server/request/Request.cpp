@@ -2,7 +2,7 @@
 
 Request Request::parse(const std::string& data)
 {
-	return Request(GET, "/sample1.http", "1.1");
+	return Request(RequestMethodGET, "/sample1.http", "1.1");
 }
 
 Request::Request(const Request& that)
@@ -21,7 +21,7 @@ Request& Request::operator=(const Request& that)
 	return *this;
 }
 
-Request::Method Request::getMethod() const
+RequestMethod Request::getMethod() const
 {
 	return _method;
 }
@@ -36,7 +36,7 @@ std::string Request::getHttpVersion() const
 	return _httpVersion;
 }
 
-Request::Request(const Method type, const std::string& url, const std::string& httpVersion) :
+Request::Request(const RequestMethod type, const std::string& url, const std::string& httpVersion) :
 	_method(type),
 	_url(url),
 	_httpVersion(httpVersion)
