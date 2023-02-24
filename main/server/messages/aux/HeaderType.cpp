@@ -1,21 +1,21 @@
-#include "HTTPHeaderType.h"
+#include "HeaderType.h"
 
 #include "tools/exceptions/InvalidArgumentException.h"
 
-std::string toString(HTTPHeaderType responseHeader)
+std::string toString(HeaderType responseHeader)
 {
 	switch (responseHeader)
 	{
-		case HTTPHeaderTypeDate:
+		case HeaderTypeDate:
 			return "Date";
 
-		case HTTPHeaderTypeServer:
+		case HeaderTypeServer:
 			return "Server";
 
-		case HTTPHeaderTypeContentLength:
+		case HeaderTypeContentLength:
 			return "Content-Length";
 
-		case HTTPHeaderTypeContentType:
+		case HeaderTypeContentType:
 			return "Content-Type";
 
 		default:

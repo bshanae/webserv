@@ -1,12 +1,12 @@
-#include "HttpMediaType.h"
+#include "MediaType.h"
 
 #include "tools/exceptions/InvalidArgumentException.h"
 
-std::string toString(HttpMediaType mediaType)
+std::string toString(MediaType mediaType)
 {
 	switch (mediaType)
 	{
-		case HttpMediaTypeHtml:
+		case MediaTypeHtml:
 			return "text/html";
 
 		default:

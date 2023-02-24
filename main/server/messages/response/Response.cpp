@@ -3,7 +3,7 @@
 #include <ctime>
 #include "tools/exceptions/InvalidUsageException.h"
 
-void Response::setStatusCode(const HTTPStatusCode code, const std::string& customReason)
+void Response::setStatusCode(const StatusCode code, const std::string& customReason)
 {
 	std::string finalReason = customReason;
 	if (finalReason.empty())
@@ -22,20 +22,20 @@ void Response::setDate(const std::time_t &date)
 	char dateStr[64] = { 0 };
 	std::strftime(dateStr, 64, "%a, %d %b %Y %T GMT", dateTm);
 
-	storeHeader(HTTPHeaderTypeDate, dateStr);
+	storeHeader(HeaderTypeDate, dateStr);
 }
 
 void Response::setServer(const std::string& serverName)
 {
-	storeHeader(HTTPHeaderTypeServer, serverName);
+	storeHeader(HeaderTypeServer, serverName);
 }
 
-void Response::setBody(HttpMediaType type, const std::string& data)
+void Response::setBody(MediaType type, const std::string& data)
 {
 	_body = data;
 
-	storeHeader(HTTPHeaderTypeContentLength, std::to_string(data.length()));
-	storeHeader(HTTPHeaderTypeContentType, toString(type));
+	storeHeader(HeaderTypeContentLength, std::to_string(data.length()));
+	storeHeader(HeaderTypeContentType, toString(type));
 }
 
 std::string Response::build() const
@@ -60,7 +60,7 @@ std::string Response::build() const
 	return buffer.str();
 }
 
-void Response::storeHeader(const HTTPHeaderType name, const std::string& value)
+void Response::storeHeader(const HeaderType name, const std::string& value)
 {
 	std::stringstream buffer;
 	buffer << toString(name) << ": " << value;

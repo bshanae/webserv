@@ -1,15 +1,15 @@
-#include "HTTPStatusCode.h"
+#include "StatusCode.h"
 
 #include "tools/exceptions/InvalidArgumentException.h"
 
-std::string defaultReason(HTTPStatusCode code)
+std::string defaultReason(StatusCode code)
 {
 	switch (code)
 	{
-		case HTTPStatusCodeOk:
+		case StatusCodeOk:
 			return "OK";
 
-		case HTTPStatusCodeNotFound:
+		case StatusCodeNotFound:
 			return "Not found";
 
 		default:

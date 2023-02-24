@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "requestMethod/RequestMethod.h"
+#include "../aux/RequestMethod.h"
 
 class Request
 {

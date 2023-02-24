@@ -3,8 +3,8 @@
 #include <cstddef>
 #include <string>
 #include "context/Context.h"
-#include "server/request/Request.h"
-#include "server/response/Response.h"
+#include "../messages/request/Request.h"
+#include "../messages/response/Response.h"
 
 class Worker
 {

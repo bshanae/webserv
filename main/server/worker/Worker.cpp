@@ -3,8 +3,7 @@
 #include <cstdio>
 #include <unistd.h>
 #include <cerrno>
-#include "server/response/Response.h"
-#include "server/response/statusCode/HTTPStatusCode.h"
+#include "../messages/aux/StatusCode.h"
 #include "tools/log/log.h"
 #include "tools/exceptions/FileNotFoundException.h"
 
@@ -89,12 +88,12 @@ void Worker::processRequest(const Request& request, Response& response)
 		{
 			const std::string file = _context.getProject().readFile(request.getUrl());
 
-			response.setStatusCode(HTTPStatusCodeOk);
-			response.setBody(HttpMediaTypeHtml, file);
+			response.setStatusCode(StatusCodeOk);
+			response.setBody(MediaTypeHtml, file);
 		}
 		catch (const FileNotFoundException& exception)
 		{
-			response.setStatusCode(HTTPStatusCodeNotFound);
+			response.setStatusCode(StatusCodeNotFound);
 		}
 		catch (const std::exception& exception)
 		{
