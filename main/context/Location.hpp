@@ -1,17 +1,17 @@
-#ifndef LOCATION_HPP
-#define LOCATION_HPP
+#pragma once
 #include <string>
-enum  methods{ GET = 0, POST = 1,DELETE = 2};
+enum  methods{ GET = 1, POST = 2,DELETE = 4};
 class location{
-    std::string uri;
-    std::string path;
-    std::string redirect;
-    char limit_except;
-    location():
-        uri(""),
-        path("/"),
-        redirect(""),
-        limit_except(GET & POST & DELETE)
-    {}
+    public:
+        std::string uri;
+        std::string path;
+        std::string redirect;
+        char limit_except;
+        location();
+        void parse_file(FILE*  file);
+        void parse_string(std::string & str);
+        void set_url(std::string &str);
+        void set_path(std::string &str);
+        void set_redirect(std::string &str);
+        void set_limits(std::string &str);
 };
-#endif

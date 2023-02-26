@@ -1,12 +1,12 @@
 #include <iostream>
 #include "tools/exceptions/SocketException.h"
-#include "server/Server.h"
+#include "context/ServerStorage.h"
 #include "context/project/Project.h"
-#include "context/Context.h"
+
 #include <vector>
 #include <map>
-#include "context/VirtualServer.hpp"
-#include "Include_main.hpp"
+
+
 // Context buildContext()
 // {
 // 	Config config;
@@ -21,21 +21,25 @@
 int main(int argv,char ** argc)
 {
 	
-	if (argv != 2){
-		std::cout << "Incorrect Argument" << std::cout; 
+	if (argv != 2)
+	{
+		std::cout << "Incorrect Argument" << std::endl; 
 	}
 	try
 	{
-		Context Context_main(argc[1]);
 
-		Server server(Context_main);
-		server.run();
-
+		ServerStorage server_stor(argc[1]);
+		server_stor.print_par();
 		return 0;
 	}
 	catch (const std::exception& exception)
 	{
 		std::cerr << "Fatal error: " << exception.what() << std::endl;
+		return 1;
+	}
+	catch (char * str)
+	{
+		std::cerr << "Fatal error cstring ." << str << std::endl;
 		return 1;
 	}
 	catch (...)

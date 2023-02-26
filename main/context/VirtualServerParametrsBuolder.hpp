@@ -1,9 +1,8 @@
-#ifndef VIRTSERV_HPP
-#define VIRTSERV_HPP
+#pragma once
 #include <string>
 #include <vector>
 #include "Location.hpp"
-class VirtualServer{
+class VirtualServerParametrsBuolder{
     private:
     std::string::iterator set_init_ip(std::string str);
         // VirtualServer& operator= (VirtualServer &oth){};
@@ -20,7 +19,8 @@ class VirtualServer{
         std::vector<location> locations;
         std::string ip_adress;
     public:
-        VirtualServer();
+        VirtualServerParametrsBuolder();
+        void parse_string(std::string &str,FILE*  file);
         void set_port_and_ip(std::string& );
         void set_name(std::string& );
         void set_root(std::string& );
@@ -32,4 +32,3 @@ class VirtualServer{
 
 };
 
-#endif
