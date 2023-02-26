@@ -7,17 +7,15 @@ struct Optional
 {
 public:
 
-	Optional()
+	Optional() : _hasValue(false)
 	{
 	}
 
-	Optional(const T& value)
+	explicit Optional(const T& value) : _hasValue(true), _value(value)
 	{
-		this->_hasValue = true;
-		this->_value = value;
 	}
 
-	Optional(const Optional<T>& that) : _value(that._value), _hasValue(that._hasValue)
+	Optional(const Optional<T>& that) :  _hasValue(that._hasValue), _value(that._value)
 	{
 		this->_hasValue = that._hasValue;
 		this->_value = that._value;
@@ -27,6 +25,8 @@ public:
 	{
 		this->_hasValue = that._hasValue;
 		this->_value = that._value;
+
+		return *this;
 	}
 
 	Optional& operator=(const T& value)
@@ -35,6 +35,11 @@ public:
 		_value = value;
 
 		return *this;
+	}
+
+	operator bool() const
+	{
+		return hasValue();
 	}
 
 	T& operator*()

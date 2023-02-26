@@ -47,8 +47,7 @@ std::string Project::readFile(const std::string& path) const
 {
 	if (path.length() == 0)
 	{
-		log::e << log::entity << "Project" << log::endl
-			   << "Path is empty!" << log::endm;
+		log::e << *this << log::startm << "Path is empty!" << log::endm;
 		throw InvalidArgumentException("path");
 	}
 
@@ -57,8 +56,7 @@ std::string Project::readFile(const std::string& path) const
 	std::ifstream file(absolutePath);
 	if (!file)
 	{
-		log::e << log::entity << "Project" << log::endl
-			   << "Can't open file at '" << absolutePath << "'" << log::endm;
+		log::e << *this << log::startm << "Can't open file at '" << absolutePath << "'" << log::endm;
 		throw FileNotFoundException(path);
 	}
 
@@ -84,8 +82,7 @@ std::vector<std::string> Project::enumerateDirectory(const std::string& path) co
 	DIR* dirDescriptor = opendir(absolutePath.c_str());
 	if (dirDescriptor == NULL)
 	{
-		log::e << log::entity << *this << log::endl
-			   << "Can't read directory" << log::endm;
+		log::e << *this << log::startm << "Can't read directory" << log::endm;
 		return std::vector<std::string>();
 	}
 
@@ -106,21 +103,20 @@ std::vector<std::string> Project::enumerateDirectory(const std::string& path) co
 	return entries;
 }
 
-std::ostream& operator<<(std::ostream& stream, const Project& project)
-{
-	stream << "Project(root=" << project._root << ")";
-	return stream;
-}
-
 Optional<struct stat> Project::getStat(const std::string &absolutePath) const
 {
 	struct stat s;
 	if (stat(absolutePath.c_str(), &s) != 0)
 	{
-		log::w << log::entity << *this << log::endl
-			   << "Can't get stats of file '" << absolutePath << "'" << log::endm;
+		log::w << *this << log::startm << "Can't get stats of file '" << absolutePath << "'" << log::endm;
 		return Optional<struct stat>();
 	}
 
 	return Optional<struct stat>(s);
+}
+
+std::ostream& operator<<(std::ostream& stream, const Project& project)
+{
+	stream << "[Project:root=" << project._root << "]";
+	return stream;
 }

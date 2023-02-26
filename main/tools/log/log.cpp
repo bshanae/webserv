@@ -1,13 +1,35 @@
 #include "log.h"
 
-#include "ansiCodes/AnsiCodes.h"
+#include <ostream>
 
 using namespace log;
 
-Handler log::i = Handler();
-Handler log::w = Handler(AnsiCodes::Yellow, AnsiCodes::Reset);
-Handler log::e = Handler(AnsiCodes::Red, AnsiCodes::Reset);
+LogStream log::v;
+LogStream log::i;
+LogStream log::w;
+LogStream log::e;
 
-std::string log::endl = AnsiCodes::Reset + "\n";
-std::string log::endm = AnsiCodes::Reset + "\n\n";
-std::string log::entity = "@";
+void log::endl(LogStream& stream)
+{
+	stream << std::endl;
+}
+
+void log::startm(LogStream& stream)
+{
+	stream.addModifier(LogModifier::italic);
+	stream << ' ';
+}
+
+void log::endm(LogStream& stream)
+{
+	stream.resetModifiers();
+	stream << std::endl << std::endl;
+}
+
+void log::initialize()
+{
+	log::v = LogStream(LogModifier::grey);
+	log::i = LogStream();
+	log::w = LogStream(LogModifier::yellow);
+	log::e = LogStream(LogModifier::red);
+}

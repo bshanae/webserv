@@ -20,6 +20,8 @@ int main()
 {
 	try
 	{
+		log::initialize();
+		log::v.enabled = true;
 		log::i.enabled = true;
 		log::w.enabled = true;
 		log::e.enabled = true;

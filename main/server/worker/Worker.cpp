@@ -6,6 +6,7 @@
 #include "tools/IndexGenerator.h"
 #include "tools/log/log.h"
 #include "tools/exceptions/FileNotFoundException.h"
+#include "tools/str/str.h"
 
 Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
 {
@@ -41,7 +42,7 @@ void Worker::onRequestReceived()
 
 std::ostream& operator<<(std::ostream& stream, const Worker& worker)
 {
-	stream << "Worker(fd=" << worker._fd << ")";
+	stream << "[Worker:fd=" << worker._fd << "]";
 	return stream;
 }
 
@@ -111,23 +112,27 @@ void Worker::processRequest(const Request& request, Response& response)
 	}
 	else
 	{
-		log::e << log::entity << *this << log::endl
-			   << "Unknown request method: " << request.getMethod() << log::endm;
+		log::e << *this << log::startm << "Unknown request method: " << request.getMethod() << log::endm;
 	}
 }
 
 void Worker::logRequest(const std::string& str) const
 {
-	log::i << log::entity << *this << log::endl
-		   << "Request:" << log::endl
-		   << str << log::endl
-		   << "@" << log::endm;
+	std::string markedStr = str;
+	markEmptyLines(markedStr, "\r\n");
+
+	log::v << *this << log::startm << "REQUEST" << log::endl
+		   << markedStr << log::endm;
 }
 
 void Worker::logResponse(const std::string& str) const
 {
-	log::i << log::entity << *this << log::endl
-		   << "Response:" << log::endl
-		   << str << log::endl
-		   << "@" << log::endm;
+	if (!log::v.enabled)
+		return;
+
+	std::string markedStr = str;
+	markEmptyLines(markedStr, "\r\n");
+
+	log::v << *this << log::startm << "RESPONSE" << log::endl
+		    << markedStr << log::endm;
 }

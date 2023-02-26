@@ -8,10 +8,9 @@
 #include "tools/log/log.h"
 #include "tools/sys/sys.h"
 
-Server::Server(Context &context): _context(context)
+Server::Server(Context& context) : _context(context)
 {
-	log::i << log::entity << "Server" << log::endl
-		   << "Startup." << log::endm;
+	log::i << *this << log::startm << "Startup." << log::endm;
 
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
@@ -37,8 +36,7 @@ Server::Server(Context &context): _context(context)
 
 Server::~Server()
 {
-	log::i << log::entity << "Server" << log::endl
-		   << "Shutdown." << log::endm;
+	log::i << *this << log::startm << "Shutdown." << log::endm;
 
 	close(_serverSocket);
 }
@@ -81,8 +79,7 @@ void Server::run()
 		}
 	}
 
-	log::i << log::entity << "Server" << log::endl
-		   << "Terminating..." << log::endm;
+	log::i << *this << log::startm << "Terminating..." << log::endm;
 }
 
 void Server::acceptNewConnection()
@@ -95,4 +92,10 @@ void Server::acceptNewConnection()
 	_targets.push_back((struct pollfd){ .fd = clientSocket, .events = POLLRDNORM });
 	_workers.push_back(Worker(_context, clientSocket));
 	// TODO LIMIT
+}
+
+std::ostream& operator<<(std::ostream& stream, const Server& _)
+{
+	stream << "[Server]";
+	return stream;
 }

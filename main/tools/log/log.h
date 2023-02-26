@@ -1,16 +1,20 @@
 #pragma once
 
-#include "handler/Handler.h"
+#include "tools/log/stream/LogStream.h"
 
 namespace log
 {
-	extern Handler i;
-	extern Handler w;
-	extern Handler e;
+	extern LogStream v;
+	extern LogStream i;
+	extern LogStream w;
+	extern LogStream e;
 
 	/// line end
-	extern std::string endl;
+	void endl(LogStream& stream);
+	/// message start
+	void startm(LogStream& stream);
 	/// message end
-	extern std::string endm;
-	extern std::string entity;
+	void endm(LogStream& stream);
+
+	void initialize();
 }

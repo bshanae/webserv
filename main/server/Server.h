@@ -9,12 +9,16 @@
 class Server
 {
 public:
-	explicit Server(Context &context);
+
+	explicit Server(Context& context);
 	~Server();
 
 	void run();
 
+	friend std::ostream& operator<<(std::ostream& stream, const Server& server);
+
 private:
+
 	Context& _context;
 	int _serverSocket;
 	std::vector<struct pollfd> _targets;
@@ -22,3 +26,5 @@ private:
 
 	void acceptNewConnection();
 };
+
+std::ostream& operator<<(std::ostream& stream, const Server& server);
