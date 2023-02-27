@@ -2,7 +2,7 @@
 
 Request Request::parse(const std::string& data)
 {
-	return Request(RequestMethodGET, "/sample1.http", "1.1");
+	return Request(RequestMethodGET, "/index.html", "1.1");
 }
 
 Request::Request(const Request& that)
