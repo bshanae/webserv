@@ -15,7 +15,7 @@ public:
 	void setStatusCode(StatusCode code, const std::string& customReason = "");
 	void setDate(const std::time_t& date);
 	void setServer(const std::string& serverName);
-	void setBody(MediaType type, const std::string& data);
+	void setBody(const MediaType& type, const std::string& data);
 	void setEmptyBody();
 
 	std::string build() const;

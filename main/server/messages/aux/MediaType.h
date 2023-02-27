@@ -2,9 +2,18 @@
 
 #include <string>
 
-enum MediaType
+class MediaType : public std::string
 {
-	MediaTypeHtml
-};
+public:
 
-std::string toString(MediaType mediaType);
+	static MediaType Default;
+	static MediaType Html;
+
+	static MediaType fromFileExtension(const std::string& fileExtension);
+
+	MediaType();
+	explicit MediaType(const std::string& string);
+	MediaType(const char* string);
+	MediaType(const MediaType& that);
+	MediaType& operator=(const MediaType& that);
+};

@@ -2,7 +2,7 @@
 
 std::string Config::getProjectRoot() const
 {
-	return "main/res/examples/apps/basic";
+	return "main/res/examples/apps/basic-image";
 }
 
 std::string Config::getServerAddress() const

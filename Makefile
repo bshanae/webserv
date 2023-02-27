@@ -24,10 +24,12 @@ SRCS=main/main.cpp                                                             \
 	 main/tools/exceptions/InvalidArgumentException.cpp                        \
 	 main/tools/exceptions/InvalidUsageException.cpp                           \
 	 main/tools/exceptions/InvalidStateException.cpp                           \
+	 main/tools/exceptions/ItemNotFoundException.cpp                           \
 	 main/tools/log/log.cpp                                                    \
 	 main/tools/log/stream/LogStream.cpp                                       \
 	 main/tools/log/modifier/LogModifier.cpp 							 	   \
 	 main/tools/sys/sys.cpp                                                    \
+	 main/tools/fsys/fsys.cpp                                                  \
 	 main/tools/str/str.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv

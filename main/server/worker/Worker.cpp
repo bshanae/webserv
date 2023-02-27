@@ -4,9 +4,10 @@
 #include <unistd.h>
 #include <cerrno>
 #include "tools/IndexGenerator.h"
-#include "tools/log/log.h"
 #include "tools/exceptions/FileNotFoundException.h"
+#include "tools/log/log.h"
 #include "tools/str/str.h"
+#include "tools/fsys/fsys.h"
 
 Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
 {
@@ -93,12 +94,15 @@ void Worker::processRequest(const Request& request, Response& response)
 			{
 				// TODO Check indexing in config
 				response.setStatusCode(StatusCodeOk);
-				response.setBody(MediaTypeHtml, IndexGenerator::generatePage(_context.getProject(), url));
+				response.setBody(MediaType::Html, IndexGenerator::generatePage(_context.getProject(), url));
 			}
 			else
 			{
 				response.setStatusCode(StatusCodeOk);
-				response.setBody(MediaTypeHtml, _context.getProject().readFile(url));
+				response.setBody(
+					MediaType::fromFileExtension(fsys::extension(url)),
+					_context.getProject().readFile(url)
+				);
 			}
 		}
 		catch (const FileNotFoundException& exception)
@@ -119,8 +123,8 @@ void Worker::processRequest(const Request& request, Response& response)
 
 void Worker::logRequest(const std::string& str) const
 {
-	std::string markedStr = str;
-	markEmptyLines(markedStr, "\r\n");
+	std::string markedStr = str::truncate(str, 300);
+	str::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "REQUEST" << log::endl
 		   << markedStr << log::endm;
@@ -131,8 +135,8 @@ void Worker::logResponse(const std::string& str) const
 	if (!log::v.enabled)
 		return;
 
-	std::string markedStr = str;
-	markEmptyLines(markedStr, "\r\n");
+	std::string markedStr = str::truncate(str, 300);
+	str::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "RESPONSE" << log::endl
 		    << markedStr << log::endm;

@@ -1,6 +1,14 @@
 #include "str.h"
 
-void markEmptyLines(std::string& target, const std::string& endl)
+std::string str::truncate(const std::string& target, const size_t length)
+{
+	if (target.length() > length)
+		return target.substr(0, length) + "...";
+
+	return target;
+}
+
+void str::markEmptyLines(std::string& target, const std::string& endl)
 {
 	replaceAll(target, endl + endl, endl + "$" + endl);
 
@@ -9,7 +17,7 @@ void markEmptyLines(std::string& target, const std::string& endl)
 		target.replace(lastEndlOffset, endl.length(), endl + "$");
 }
 
-void replaceAll(std::string& target, const std::string& search, const std::string& replace)
+void str::replaceAll(std::string& target, const std::string& search, const std::string& replace)
 {
 	size_t i = 0;
 	while ((i = target.find(search, i)) != std::string::npos)

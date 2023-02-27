@@ -5,7 +5,7 @@
 #include <sstream>
 #include <ctime>
 #include "tools/log/log.h"
-#include "tools/sys/sys.h"
+#include "tools/fsys/fsys.h"
 #include "tools/exceptions/FileNotFoundException.h"
 #include "tools/exceptions/InvalidArgumentException.h"
 
@@ -27,7 +27,7 @@ Project& Project::operator=(const Project& that)
 
 struct tm *Project::getTimeOfModification(const std::string& path) const
 {
-	const Optional<struct stat> s = getStat(sys::concatPath(_root, path));
+	const Optional<struct stat> s = getStat(fsys::concatPath(_root, path));
 	if (!s.hasValue())
 		return NULL;
 
@@ -36,7 +36,7 @@ struct tm *Project::getTimeOfModification(const std::string& path) const
 
 long Project::getSizeInBytes(const std::string& path) const
 {
-	const Optional<struct stat> s = getStat(sys::concatPath(_root, path));
+	const Optional<struct stat> s = getStat(fsys::concatPath(_root, path));
 	if (!s.hasValue())
 		return 0;
 
@@ -51,7 +51,7 @@ std::string Project::readFile(const std::string& path) const
 		throw InvalidArgumentException("path");
 	}
 
-	const std::string absolutePath = sys::concatPath(_root, path);
+	const std::string absolutePath = fsys::concatPath(_root, path);
 
 	std::ifstream file(absolutePath);
 	if (!file)
@@ -68,7 +68,7 @@ std::string Project::readFile(const std::string& path) const
 
 bool Project::isDirectory(const std::string& path) const
 {
-	const Optional<struct stat> s = getStat(sys::concatPath(_root, path));
+	const Optional<struct stat> s = getStat(fsys::concatPath(_root, path));
 	if (!s.hasValue())
 		return false;
 
@@ -77,7 +77,7 @@ bool Project::isDirectory(const std::string& path) const
 
 std::vector<std::string> Project::enumerateDirectory(const std::string& path) const
 {
-	const std::string absolutePath = sys::concatPath(_root, path);
+	const std::string absolutePath = fsys::concatPath(_root, path);
 
 	DIR* dirDescriptor = opendir(absolutePath.c_str());
 	if (dirDescriptor == NULL)

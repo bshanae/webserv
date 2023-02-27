@@ -30,17 +30,17 @@ void Response::setServer(const std::string& serverName)
 	storeHeader(HeaderTypeServer, serverName);
 }
 
-void Response::setBody(MediaType type, const std::string& data)
+void Response::setBody(const MediaType& type, const std::string& data)
 {
 	_body = data;
 
 	storeHeader(HeaderTypeContentLength, std::to_string(data.length()));
-	storeHeader(HeaderTypeContentType, toString(type));
+	storeHeader(HeaderTypeContentType, type);
 }
 
 void Response::setEmptyBody()
 {
-	setBody(MediaTypeHtml, "");
+	setBody(MediaType::Default, "");
 }
 
 std::string Response::build() const
