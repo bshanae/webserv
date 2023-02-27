@@ -104,6 +104,7 @@ void Worker::processRequest(const Request& request, Response& response)
 		catch (const FileNotFoundException& exception)
 		{
 			response.setStatusCode(StatusCodeNotFound);
+			response.setEmptyBody();
 		}
 		catch (const std::exception& exception)
 		{

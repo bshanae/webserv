@@ -16,6 +16,7 @@ public:
 	void setDate(const std::time_t& date);
 	void setServer(const std::string& serverName);
 	void setBody(MediaType type, const std::string& data);
+	void setEmptyBody();
 
 	std::string build() const;
 

@@ -38,6 +38,11 @@ void Response::setBody(MediaType type, const std::string& data)
 	storeHeader(HeaderTypeContentType, toString(type));
 }
 
+void Response::setEmptyBody()
+{
+	setBody(MediaTypeHtml, "");
+}
+
 std::string Response::build() const
 {
 	static const std::string endl = "\r\n";
@@ -54,8 +59,10 @@ std::string Response::build() const
 
 	buffer << endl;
 
-	if (_body.hasValue())
-		buffer << *_body;
+	if (!_body.hasValue())
+		throw InvalidUsageException("Response's body has to be set in order to fill header Content-Length!");
+
+	buffer << *_body;
 
 	return buffer.str();
 }
