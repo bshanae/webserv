@@ -16,6 +16,10 @@ Server::Server(Context& context) : _context(context)
 	if (_serverSocket < 0)
 		throw SocketException("Socket creation error.");
 
+	int opt = 1;
+	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+		throw SocketException("Can't set SO_REUSEADDR!");
+
 	const int port = context.getConfig().getServerPort();
 	const std::string address = context.getConfig().getServerAddress();
 
