@@ -69,7 +69,7 @@ void Server::run()
 				continue;
 
 			Worker& worker = _workers[i - 1];
-			worker.onRequestReceived();
+			worker.processEvent();
 
 			if (!worker.hasConnection())
 			{

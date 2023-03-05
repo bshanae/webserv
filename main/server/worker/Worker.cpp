@@ -31,9 +31,37 @@ bool Worker::hasConnection() const
 	return _fd != -1;
 }
 
-void Worker::onRequestReceived()
+void Worker::processEvent()
 {
-	Request request = readRequest();
+	char requestStr[bufferSize] = { 0 }; // TODO Optimize
+	ssize_t bytesReceived = read(_fd, requestStr, bufferSize);
+	if (bytesReceived == -1)
+	{
+		if (errno == ECONNRESET)
+		{
+			log::i << *this << log::startm << "Connection closed." << log::endm;
+			close(_fd);
+			_fd = -1;
+			return;
+		}
+		else
+		{
+			log::e << *this << log::startm << "Unknown read error!" << log::endm;
+			close(_fd);
+			_fd = -1;
+			return;
+		}
+	}
+	if (bytesReceived == 0)
+	{
+		log::i << *this << log::startm << "Connection closed." << log::endm;
+		close(_fd);
+		_fd = -1;
+		return;
+	}
+
+	Request request = Request::parse(requestStr);
+	logRequest(requestStr);
 
 	Response response;
 	processRequest(request, response);
@@ -45,25 +73,6 @@ std::ostream& operator<<(std::ostream& stream, const Worker& worker)
 {
 	stream << "[Worker:fd=" << worker._fd << "]";
 	return stream;
-}
-
-Request Worker::readRequest()
-{
-	char requestStr[bufferSize] = { 0 }; // TODO Optimize
-	ssize_t bytesReceived = read(_fd, requestStr, bufferSize);
-	if (bytesReceived == -1)
-	{
-		if (errno == ECONNRESET)
-		{
-			close(_fd);
-			_fd = -1;
-		}
-
-		// TODO ERROR
-	}
-
-	logRequest(requestStr);
-	return Request::parse(requestStr);
 }
 
 void Worker::writeResponse(const Response& response)

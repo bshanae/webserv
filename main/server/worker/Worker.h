@@ -16,7 +16,7 @@ public:
 	Worker& operator=(const Worker& that);
 
 	bool hasConnection() const;
-	void onRequestReceived();
+	void processEvent();
 
 	friend std::ostream& operator<<(std::ostream& stream, const Worker& worker);
 
