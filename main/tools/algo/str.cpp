@@ -1,6 +1,6 @@
 #include "str.h"
 
-std::string str::truncate(const std::string& target, const size_t length)
+std::string algo::truncate(const std::string& target, const size_t length)
 {
 	if (target.length() > length)
 		return target.substr(0, length) + "...";
@@ -8,7 +8,13 @@ std::string str::truncate(const std::string& target, const size_t length)
 	return target;
 }
 
-void str::markEmptyLines(std::string& target, const std::string& endl)
+void algo::toLower(std::string& target)
+{
+	for (int i = 0; i < target.length(); i++)
+		target[i] = std::tolower(target[i]);
+}
+
+void algo::markEmptyLines(std::string& target, const std::string& endl)
 {
 	replaceAll(target, endl + endl, endl + "$" + endl);
 
@@ -17,7 +23,7 @@ void str::markEmptyLines(std::string& target, const std::string& endl)
 		target.replace(lastEndlOffset, endl.length(), endl + "$");
 }
 
-void str::replaceAll(std::string& target, const std::string& search, const std::string& replace)
+void algo::replaceAll(std::string& target, const std::string& search, const std::string& replace)
 {
 	size_t i = 0;
 	while ((i = target.find(search, i)) != std::string::npos)

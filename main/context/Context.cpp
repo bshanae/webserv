@@ -6,13 +6,17 @@ Context::Context(const Config& config, const Project& project) :
 {
 }
 
-Context::Context(const Context& that) : _project(that._project)
+Context::Context(const Context& that) :
+	_config(that._config),
+	_project(that._project)
 {
 }
 
 Context& Context::operator=(const Context& that)
 {
-	this->_project = that._project;
+	_config = that._config;
+	_project = that._project;
+
 	return *this;
 }
 
@@ -22,11 +26,6 @@ const Config& Context::getConfig() const
 }
 
 Project& Context::getProject()
-{
-	return _project;
-}
-
-const Project& Context::getProject() const
 {
 	return _project;
 }

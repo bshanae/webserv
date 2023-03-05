@@ -1,7 +1,7 @@
 #include "MediaType.h"
 
 #include <unordered_map>
-#include "tools/exceptions/ItemNotFoundException.h"
+#include "tools/exceptions/ParsingException.h"
 
 MediaType MediaType::Default = MediaType("text/html");
 MediaType MediaType::Html = MediaType("text/html");
@@ -130,11 +130,11 @@ MediaType MediaType::fromFileExtension(const std::string& fileExtension)
 		types[".avi"] = "video/x-msvideo";
 	}
 
-	std::unordered_map<std::string, MediaType>::iterator iterator = types.find(fileExtension);
-	if (iterator == types.end())
-		throw ItemNotFoundException("Unsupported media type: " + fileExtension);
+	std::unordered_map<std::string, MediaType>::iterator i = types.find(fileExtension);
+	if (i == types.end())
+		throw ParsingException("Unsupported media type: " + fileExtension);
 
-	return iterator->second;
+	return i->second;
 }
 
 MediaType::MediaType()

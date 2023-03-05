@@ -17,20 +17,28 @@ SRCS=main/main.cpp                                                             \
 	 main/server/messages/request/Request.cpp                                  \
 	 main/server/messages/response/Response.cpp                                \
 	 main/server/messages/aux/HeaderType.cpp                                   \
+	 main/server/messages/aux/RequestMethod.cpp                                \
 	 main/server/messages/aux/StatusCode.cpp                                   \
 	 main/server/messages/aux/MediaType.cpp                                    \
+	 main/server/cgi/CGIExecutor.cpp                                           \
 	 main/tools/exceptions/SocketException.cpp                                 \
 	 main/tools/exceptions/FileNotFoundException.cpp                           \
 	 main/tools/exceptions/InvalidArgumentException.cpp                        \
-	 main/tools/exceptions/InvalidUsageException.cpp                           \
+	 main/tools/exceptions/InvalidOperationException.cpp                       \
 	 main/tools/exceptions/InvalidStateException.cpp                           \
-	 main/tools/exceptions/ItemNotFoundException.cpp                           \
+	 main/tools/exceptions/SystemException.cpp                                 \
+	 main/tools/exceptions/ParsingException.cpp                                \
 	 main/tools/log/log.cpp                                                    \
 	 main/tools/log/stream/LogStream.cpp                                       \
 	 main/tools/log/modifier/LogModifier.cpp 							 	   \
 	 main/tools/sys/sys.cpp                                                    \
-	 main/tools/fsys/fsys.cpp                                                  \
-	 main/tools/str/str.cpp
+	 main/tools/sys/Process.cpp                                                \
+	 main/tools/sys/Pipe.cpp                                                   \
+	 main/tools/sys/FDescriptor.cpp                                            \
+	 main/tools/sys/FDStream.cpp                                               \
+	 main/tools/sys/sys.path.cpp                                               \
+	 main/tools/algo/str.cpp												   \
+	 main/tools/io/io.cpp
 INCLUDE_DIRS=main
 EXE_NAME=webserv
 

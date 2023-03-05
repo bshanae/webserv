@@ -1,7 +1,7 @@
 #include "IndexGenerator.h"
 
 #include <sstream>
-#include "tools/fsys/fsys.h"
+#include "tools/sys/sys.path.h"
 
 std::string IndexGenerator::generatePage(Project& project, const std::string& path)
 {
@@ -11,7 +11,7 @@ std::string IndexGenerator::generatePage(Project& project, const std::string& pa
 	for (int i = 0; i < entries.size(); i++)
 	{
 		const std::string& entryName = entries[i];
-		const std::string entryPath = fsys::concatPath(path, entryName);
+		const std::string entryPath = sys::path::concat(path, entryName);
 
 		filesDescriptions.push_back(buildFileDescription(project, entryName, entryPath));
 	}

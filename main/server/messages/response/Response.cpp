@@ -1,7 +1,7 @@
 #include "Response.h"
 
 #include <ctime>
-#include "tools/exceptions/InvalidUsageException.h"
+#include "tools/exceptions/InvalidOperationException.h"
 
 void Response::setStatusCode(const StatusCode code, const std::string& customReason)
 {
@@ -30,11 +30,20 @@ void Response::setServer(const std::string& serverName)
 	storeHeader(HeaderTypeServer, serverName);
 }
 
-void Response::setBody(const MediaType& type, const std::string& data)
+void Response::addHeader(const std::string& header)
+{
+	_headers.push_back(header);
+}
+
+void Response::setBody(const std::string& data)
 {
 	_body = data;
-
 	storeHeader(HeaderTypeContentLength, std::to_string(data.length()));
+}
+
+void Response::setBody(const MediaType& type, const std::string& data)
+{
+	setBody(data);
 	storeHeader(HeaderTypeContentType, type);
 }
 
@@ -48,7 +57,7 @@ std::string Response::build() const
 	static const std::string endl = "\r\n";
 
 	if (_statusLine.empty())
-		throw InvalidUsageException();
+		throw InvalidOperationException("Status line is empty!");
 
 	std::stringstream buffer;
 
@@ -60,7 +69,7 @@ std::string Response::build() const
 	buffer << endl;
 
 	if (!_body.hasValue())
-		throw InvalidUsageException("Response's body has to be set in order to fill header Content-Length!");
+		throw InvalidOperationException("Response's body has to be set in order to fill header Content-Length!");
 
 	buffer << *_body;
 

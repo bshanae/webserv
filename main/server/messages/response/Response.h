@@ -12,9 +12,16 @@ class Response
 {
 public:
 
+	// status line
 	void setStatusCode(StatusCode code, const std::string& customReason = "");
+
+	// header
 	void setDate(const std::time_t& date);
 	void setServer(const std::string& serverName);
+	void addHeader(const std::string& header);
+
+	// body
+	void setBody(const std::string& data);
 	void setBody(const MediaType& type, const std::string& data);
 	void setEmptyBody();
 

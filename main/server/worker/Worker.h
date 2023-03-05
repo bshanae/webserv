@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <string>
 #include "context/Context.h"
+#include "../cgi/CGIExecutor.h"
 #include "../messages/request/Request.h"
 #include "../messages/response/Response.h"
 
@@ -24,11 +25,13 @@ private:
 	static const size_t bufferSize = 30720;
 
 	Context& _context;
+	CGIExecutor _cgiExecutor;
 	int _fd;
 
 	Request readRequest();
 	void writeResponse(const Response& response);
 	void processRequest(const Request& request, Response& response);
+
 	void logRequest(const std::string& str) const;
 	void logResponse(const std::string& str) const;
 };

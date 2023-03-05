@@ -17,6 +17,7 @@ public:
 	struct tm *getTimeOfModification(const std::string& path) const;
 	long getSizeInBytes(const std::string& path) const;
 	std::string readFile(const std::string& path) const;
+	bool isFile(const std::string& path) const;
 	bool isDirectory(const std::string& path) const;
 	std::vector<std::string> enumerateDirectory(const std::string& path) const;
 

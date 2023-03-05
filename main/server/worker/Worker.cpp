@@ -6,14 +6,14 @@
 #include "tools/IndexGenerator.h"
 #include "tools/exceptions/FileNotFoundException.h"
 #include "tools/log/log.h"
-#include "tools/str/str.h"
-#include "tools/fsys/fsys.h"
+#include "tools/algo/str.h"
+#include "tools/sys/sys.path.h"
 
-Worker::Worker(Context& context, int fd) : _context(context), _fd(fd)
+Worker::Worker(Context& context, int fd) : _context(context), _fd(fd), _cgiExecutor(_context)
 {
 }
 
-Worker::Worker(const Worker& that) : _context(that._context), _fd(that._fd)
+Worker::Worker(const Worker& that) : _context(that._context), _fd(that._fd), _cgiExecutor(_context)
 {
 
 }
@@ -84,7 +84,26 @@ void Worker::processRequest(const Request& request, Response& response)
 	response.setServer("Webserv 21");
 
 	const RequestMethod method = request.getMethod();
-	const std::string &url = request.getUrl();
+	const std::string &url = request.getPath();
+
+	if (_cgiExecutor.isCGI(url))
+	{
+		try
+		{
+			CGIOutput output = _cgiExecutor.executeCGI(request);
+
+			response.setStatusCode(StatusCodeOk);
+			response.setBody(output.body);
+			for (int i = 0; i < output.headers.size(); i++)
+				response.addHeader(output.headers[i]);
+
+			return;
+		}
+		catch (std::exception& e)
+		{
+			// TODO
+		}
+	}
 
 	if (method == RequestMethodGET)
 	{
@@ -100,7 +119,7 @@ void Worker::processRequest(const Request& request, Response& response)
 			{
 				response.setStatusCode(StatusCodeOk);
 				response.setBody(
-					MediaType::fromFileExtension(fsys::extension(url)),
+					MediaType::fromFileExtension(sys::path::extension(url)),
 					_context.getProject().readFile(url)
 				);
 			}
@@ -123,8 +142,8 @@ void Worker::processRequest(const Request& request, Response& response)
 
 void Worker::logRequest(const std::string& str) const
 {
-	std::string markedStr = str::truncate(str, 300);
-	str::markEmptyLines(markedStr, "\r\n");
+	std::string markedStr = algo::truncate(str, 500);
+	algo::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "REQUEST" << log::endl
 		   << markedStr << log::endm;
@@ -135,8 +154,8 @@ void Worker::logResponse(const std::string& str) const
 	if (!log::v.enabled)
 		return;
 
-	std::string markedStr = str::truncate(str, 300);
-	str::markEmptyLines(markedStr, "\r\n");
+	std::string markedStr = algo::truncate(str, 500);
+	algo::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "RESPONSE" << log::endl
 		    << markedStr << log::endm;

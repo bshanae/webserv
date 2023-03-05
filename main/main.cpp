@@ -35,9 +35,9 @@ int main()
 
 		return 0;
 	}
-	catch (const std::exception& exception)
+	catch (const std::exception& e)
 	{
-		log::e << "Fatal error: " << exception.what() << log::endm;
+		log::e << "Fatal error: " << e.what() << log::endm;
 		return 1;
 	}
 	catch (...)

@@ -1,22 +1,33 @@
 #include "Request.h"
 
+#include <sstream>
+
 Request Request::parse(const std::string& data)
 {
-	return Request(RequestMethodGET, "/index.html", "1.1");
+	std::stringstream stream(data);
+
+	RequestMethod method;
+	stream >> method;
+
+	std::string uri;
+	stream >> uri;
+
+	return Request(method, uri, "HTTP/1.1");
 }
 
 Request::Request(const Request& that)
 {
-	_method = that._method;
-	_url = that._url;
-	_httpVersion = that._httpVersion;
+	*this = that;
 }
 
 Request& Request::operator=(const Request& that)
 {
-	_method = that._method;
-	_url = that._url;
-	_httpVersion = that._httpVersion;
+	this->_method = that._method;
+	this->_uri = that._uri;
+	this->_path = that._path;
+	this->_query = that._query;
+	this->_query = that._query;
+	this->_protocol = that._protocol;
 
 	return *this;
 }
@@ -26,19 +37,38 @@ RequestMethod Request::getMethod() const
 	return _method;
 }
 
-std::string Request::getUrl() const
+const std::string& Request::getUri() const
 {
-	return _url;
+	return _uri;
 }
 
-std::string Request::getHttpVersion() const
+const std::string& Request::getPath() const
 {
-	return _httpVersion;
+	return _path;
 }
 
-Request::Request(const RequestMethod type, const std::string& url, const std::string& httpVersion) :
-	_method(type),
-	_url(url),
-	_httpVersion(httpVersion)
+const std::string& Request::getQuery() const
 {
+	return _query;
+}
+
+const std::string& Request::getProtocol() const
+{
+	return _protocol;
+}
+
+Request::Request(RequestMethod method, const std::string& uri, const std::string& protocol) :
+	_method(method), _uri(uri), _protocol(protocol)
+{
+	const size_t iQuestion = uri.find('?');
+	if (iQuestion != std::string::npos)
+	{
+		_path = uri.substr(0, iQuestion);
+		_query = uri.substr(iQuestion + 1, uri.length() - 1);
+	}
+	else
+	{
+		_path = uri;
+		_query = "";
+	}
 }
