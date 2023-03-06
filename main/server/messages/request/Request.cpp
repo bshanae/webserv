@@ -15,23 +15,6 @@ Request Request::parse(const std::string& data)
 	return Request(method, uri, "HTTP/1.1");
 }
 
-Request::Request(const Request& that)
-{
-	*this = that;
-}
-
-Request& Request::operator=(const Request& that)
-{
-	this->_method = that._method;
-	this->_uri = that._uri;
-	this->_path = that._path;
-	this->_query = that._query;
-	this->_query = that._query;
-	this->_protocol = that._protocol;
-
-	return *this;
-}
-
 RequestMethod Request::getMethod() const
 {
 	return _method;

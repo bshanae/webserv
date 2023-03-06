@@ -9,8 +9,6 @@ namespace sys
 	public:
 
 		Pipe();
-		Pipe(const Pipe& that);
-		Pipe& operator=(const Pipe& that);
 
 		FDescriptor& r();
 		FDescriptor r() const;

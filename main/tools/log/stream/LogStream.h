@@ -18,8 +18,6 @@ namespace log
 
 		LogStream();
 		explicit LogStream(const LogModifier& permanentModifier);
-		LogStream(const LogStream& that);
-		LogStream& operator=(const LogStream& that);
 
 		void addModifier(const LogModifier& modifier);
 		void resetModifiers();

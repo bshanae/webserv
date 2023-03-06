@@ -8,8 +8,6 @@ class Context
 public:
 
 	Context(const Config& config, const Project& project);
-	Context(const Context& that);
-	Context& operator=(const Context& that);
 
 	const Config& getConfig() const;
 	Project& getProject();

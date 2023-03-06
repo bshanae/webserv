@@ -10,16 +10,6 @@ CGIExecutor::CGIExecutor(Context& context) : _context(context)
 {
 }
 
-CGIExecutor::CGIExecutor(const CGIExecutor& that) : _context(that._context)
-{
-}
-
-CGIExecutor& CGIExecutor::operator=(const CGIExecutor& that)
-{
-	this->_context = that._context;
-	return *this;
-}
-
 bool CGIExecutor::isCGI(const std::string& path) const
 {
 	const std::string extension = sys::path::extension(path);

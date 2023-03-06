@@ -9,8 +9,6 @@ class CGIExecutor
 public:
 
 	explicit CGIExecutor(Context& context);
-	CGIExecutor(const CGIExecutor& that);
-	CGIExecutor& operator=(const CGIExecutor& that);
 
 	bool isCGI(const std::string& path) const;
 	CGIOutput executeCGI(const Request& request) const;

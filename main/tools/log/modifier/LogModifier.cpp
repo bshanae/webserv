@@ -14,17 +14,6 @@ LogModifier::LogModifier() : _code(-1)
 {
 }
 
-LogModifier::LogModifier(const LogModifier &that)
-{
-	_code = that._code;
-}
-
-LogModifier& LogModifier::operator=(const LogModifier &that)
-{
-	_code = that._code;
-	return *this;
-}
-
 LogModifier::LogModifier(int code) : _code(code)
 {
 }

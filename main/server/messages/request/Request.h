@@ -10,9 +10,6 @@ public:
 
 	static Request parse(const std::string& data);
 
-	Request(const Request& that);
-	Request& operator=(const Request& that);
-
 	RequestMethod getMethod() const;
 	const std::string& getUri() const;
 	const std::string& getPath() const;

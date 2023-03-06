@@ -11,8 +11,6 @@ class Project
 public:
 
 	explicit Project(const Config& config);
-	Project(const Project& that);
-	Project& operator=(const Project& that);
 
 	struct tm *getTimeOfModification(const std::string& path) const;
 	long getSizeInBytes(const std::string& path) const;

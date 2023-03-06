@@ -148,13 +148,3 @@ MediaType::MediaType(const std::string& string) : std::string(string)
 MediaType::MediaType(const char* string) : std::string(string)
 {
 }
-
-MediaType::MediaType(const MediaType& that) : std::string(that)
-{
-}
-
-MediaType& MediaType::operator=(const MediaType& that)
-{
-	static_cast<std::string>(*this) = that;
-	return *this;
-}

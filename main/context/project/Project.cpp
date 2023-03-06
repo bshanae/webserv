@@ -14,17 +14,6 @@ Project::Project(const Config& config)
 	_root = config.getProjectRoot();
 }
 
-Project::Project(const Project& that)
-{
-	*this = that;
-}
-
-Project& Project::operator=(const Project& that)
-{
-	_root = that._root;
-	return *this;
-}
-
 struct tm *Project::getTimeOfModification(const std::string& path) const
 {
 	const Optional<struct stat> s = getStat(sys::path::concat(_root, path));

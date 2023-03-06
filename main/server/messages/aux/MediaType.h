@@ -14,6 +14,4 @@ public:
 	MediaType();
 	explicit MediaType(const std::string& string);
 	MediaType(const char* string);
-	MediaType(const MediaType& that);
-	MediaType& operator=(const MediaType& that);
 };

@@ -16,8 +16,6 @@ namespace log
 		static LogModifier reset;
 
 		LogModifier();
-		LogModifier(const LogModifier &that);
-		LogModifier& operator=(const LogModifier &that);
 
 		friend std::string to_string(const LogModifier& modifier);
 		friend std::string to_string(const std::vector<LogModifier>& modifiers);

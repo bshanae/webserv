@@ -18,22 +18,6 @@ LogStream::LogStream(const LogModifier& permanentModifier) :
 	updateSuffix();
 }
 
-LogStream::LogStream(const LogStream &that) : enabled(false)
-{
-	*this = that;
-}
-
-LogStream& LogStream::operator=(const LogStream &that)
-{
-	this->enabled = that.enabled;
-	this->_permanentModifier = that._permanentModifier;
-	this->_modifiers = that._modifiers;
-
-	this->updatePrefix();
-
-	return *this;
-}
-
 void LogStream::addModifier(const LogModifier &modifier)
 {
 	_modifiers.push_back(modifier);
