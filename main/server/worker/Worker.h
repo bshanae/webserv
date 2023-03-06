@@ -28,7 +28,6 @@ private:
 	CGIExecutor _cgiExecutor;
 	int _fd;
 
-	Request readRequest();
 	void writeResponse(const Response& response);
 	void processRequest(const Request& request, Response& response);
 
