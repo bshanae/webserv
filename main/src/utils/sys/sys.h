@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <vector>
 #include "FDescriptor.h"
+#include "utils/templates/Optional.h"
 
 namespace sys
 {
@@ -12,7 +13,7 @@ namespace sys
 	void close(FDescriptor& fd);
 	void transfer(FDescriptor& fdFrom, FDescriptor fdTo);
 
-	struct stat stat(const std::string &absolutePath);
+	Optional<struct stat> stat(const std::string &absolutePath);
 	tm* modificationTime(const std::string& path);
 	long sizeInBytes(const std::string& path);
 	std::string readFile(const std::string& path);

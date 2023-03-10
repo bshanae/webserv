@@ -2,7 +2,7 @@
 
 #include <ostream>
 #include "log/log.h"
-#include "utils/sys/sys.h"
+#include "common/exceptions/WebException.h"
 #include "utils/sys/sys.path.h"
 #include "utils/sys/Process.h"
 #include "utils/io/io.h"
@@ -10,9 +10,9 @@
 CGIExecutor::CGIExecutor(
 	const CGIConfig& cgiConfig,
 	const VirtualServerConfig& vServerConfig,
-	const Project& _project
+	Project& project
 ) :
-	_project(_project)
+	_project(project)
 {
 	_roots = cgiConfig.roots();
 	_extensions = cgiConfig.extensions();
@@ -30,9 +30,6 @@ bool CGIExecutor::isCGI(const std::string& remotePath, const std::string& localP
 	const std::string directory = sys::path::directory(remotePath);
 	const std::set<std::string> cgiRoots = _roots;
 	if (cgiRoots.find(directory) == cgiRoots.end())
-		return false;
-
-	if (!sys::isFile(localPath))
 		return false;
 
 	return true;
@@ -68,6 +65,7 @@ CGIOutput CGIExecutor::executeCGI(const Request& request) const
 		{
 			log::e << *this << log::startm << "CGI exited with code " << exitCode << ", stderr:" << log::endl
 				   << stdErr << log::endm;
+			throw WebException(StatusCodeInternalServerError, "Can't execute CGI");
 		}
 
 		return parseCGIOutput(stdOut);
@@ -77,7 +75,7 @@ CGIOutput CGIExecutor::executeCGI(const Request& request) const
 		log::e << *this << log::startm
 			   << "Can't execute script at " << request.path() << log::endl
 			   << "Exception:" << e.what() << log::endm;
-		throw std::runtime_error("Can't execute CGI");
+		throw WebException(StatusCodeInternalServerError, "Can't execute CGI");
 	}
 }
 

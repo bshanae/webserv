@@ -38,25 +38,32 @@ void sys::transfer(FDescriptor& from, FDescriptor to)
 	close(from);
 }
 
-struct stat sys::stat(const std::string &absolutePath)
+Optional<struct stat> sys::stat(const std::string &absolutePath)
 {
 	struct stat s;
-	if (::stat(absolutePath.c_str(), &s) != 0)
-		throw FileException("Can't get stat of file " + absolutePath);
+	if (::stat(absolutePath.c_str(), &s) == 0)
+		return s;
 
-	return s;
+	return Optional<struct stat>();
 }
 
 
 tm* sys::modificationTime(const std::string& path)
 {
-	const struct stat s = stat(path);
-	return gmtime(&s.st_mtime);
+	const Optional<struct stat> s = stat(path);
+	if (!s)
+		throw FileException("Can't get modification time. Invalid path.");
+
+	return gmtime(&s->st_mtime);
 }
 
 long sys::sizeInBytes(const std::string& path)
 {
-	return stat(path).st_size;
+	const Optional<struct stat> s = stat(path);
+	if (!s)
+		throw FileException("Can't get size in bytes. Invalid path.");
+
+	return s->st_size;
 }
 
 std::string sys::readFile(const std::string& path)
@@ -76,12 +83,20 @@ std::string sys::readFile(const std::string& path)
 
 bool sys::isFile(const std::string& path)
 {
-	return (stat(path).st_mode & S_IFREG) != 0;
+	const Optional<struct stat> s = stat(path);
+	if (!s)
+		return false;
+
+	return (stat(path)->st_mode & S_IFREG) != 0;
 }
 
 bool sys::isDirectory(const std::string& path)
 {
-	return (stat(path).st_mode & S_IFDIR) != 0;
+	const Optional<struct stat> s = stat(path);
+	if (!s)
+		return false;
+
+	return (stat(path)->st_mode & S_IFDIR) != 0;
 }
 
 std::vector<std::string> sys::enumerateDirectory(const std::string& path)

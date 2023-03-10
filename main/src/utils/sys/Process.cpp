@@ -67,17 +67,6 @@ int Process::wait()
 	return WEXITSTATUS(status);
 }
 
-Process::Process(Process& that)
-{
-	// deleted
-}
-
-Process& Process::operator=(Process& that)
-{
-	// deleted
-	return *this;
-}
-
 void Process::ifParent()
 {
 	sys::close(_stdInPipe.r());

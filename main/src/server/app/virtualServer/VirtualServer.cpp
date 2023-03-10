@@ -1,88 +1,84 @@
 #include "VirtualServer.h"
 
-#include "server/app/project/IndexGenerator.h"
 #include "log/log.h"
-#include "utils/sys/sys.path.h"
-#include "utils/exceptions/FileException.h"
+#include "server/app/requestProcessors/GetRequestProcessor.h"
+#include "common/exceptions/WebException.h"
 
 VirtualServer::VirtualServer(const VirtualServerConfig& config) :
 	_project(config.root()),
 	_address(config.address()),
 	_cgi(config.cgi(), config, _project)
 {
-
+	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project);
 }
 
-const WebAddress& VirtualServer::address() const
+VirtualServer::~VirtualServer()
 {
-	return _address;
+	for (std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.begin(); i != _requestProcessors.end(); i++)
+		delete i->second;
 }
 
 Optional<Response> VirtualServer::onServerReceivedRequest(const Request& request)
 {
+	// TODO Check server name
+
 	Response response;
 	response.setDate(std::time(0));
 	response.setServer("Webserv 21");
 
-	const RequestMethod method = request.method();
-	const std::string& remotePath = request.path();
-	const std::string& localPath = _project.resolvePath(request.path());
-
-	if (_cgi.isCGI(remotePath, localPath))
+	try
 	{
-		try
-		{
-			CGIOutput output = _cgi.executeCGI(request);
-
-			response.setStatusCode(StatusCodeOk);
-			response.setBody(output.body);
-			for (int i = 0; i < output.headers.size(); i++)
-				response.addHeader(output.headers[i]);
-
+		if (processCGIRequest(request, response))
 			return response;
-		}
-		catch (std::exception& e)
-		{
-			// TODO
-			return Optional<Response>();
-		}
-	}
 
-	if (method == RequestMethodGET)
-	{
-		try
-		{
-			if (sys::isDirectory(localPath))
-			{
-				// TODO Check indexing in config
-				response.setStatusCode(StatusCodeOk);
-				response.setBody(MediaType::Html, IndexGenerator::generatePage(_project, remotePath, localPath));
-			}
-			else
-			{
-				response.setStatusCode(StatusCodeOk);
-				response.setBody(
-					MediaType::fromFileExtension(sys::path::extension(localPath)),
-					sys::readFile(localPath)
-				);
-			}
-		}
-		catch (const FileException& exception)
-		{
-			response.setStatusCode(StatusCodeNotFound);
-			response.setEmptyBody();
-		}
-		catch (const std::exception& exception)
-		{
-			// TODO
-		}
+		processRegularRequest(request, response);
 	}
-	else
+	catch (WebException& e)
 	{
-		log::e << *this << log::startm << "Unknown request method: " << request.method() << log::endm;
+		log::e << *this << log::startm << "Web error. Code: " << e.code() << ". Cause: " << e.what() << log::endm;
+
+		response.setStatusCode(e.code());
+		response.setEmptyBody();
+	}
+	catch (std::exception& e)
+	{
+		log::e << *this << log::startm << "Unknown error: " << e.what() << log::endm;
+
+		response.setStatusCode(StatusCodeInternalServerError);
+		response.setEmptyBody();
 	}
 
 	return response;
+}
+
+void VirtualServer::processRegularRequest(const Request& request, Response& response)
+{
+	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
+	if (i == _requestProcessors.end())
+		throw WebException(StatusCodeBadRequest, "Unsupported request method");
+
+	i->second->processRequest(request, response);
+}
+
+bool VirtualServer::processCGIRequest(const Request& request, Response& response)
+{
+	const std::string& remotePath = request.path();
+	const std::string& localPath = _project.resolvePath(request.path());
+
+	if (!_cgi.isCGI(remotePath, localPath))
+		return false;
+
+	if (!sys::isFile(localPath))
+		throw WebException(StatusCodeNotFound, "CGI script not found.");
+
+	CGIOutput output = _cgi.executeCGI(request);
+
+	response.setStatusCode(StatusCodeOk);
+	response.setBody(output.body);
+	for (int i = 0; i < output.headers.size(); i++)
+		response.addHeader(output.headers[i]);
+
+	return true;
 }
 
 std::ostream& operator<<(std::ostream& stream, const VirtualServer& server)

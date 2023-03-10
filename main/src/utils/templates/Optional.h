@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "utils/exceptions/InvalidStateException.h"
 
 template<typename T>

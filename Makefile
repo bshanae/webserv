@@ -19,6 +19,8 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/server/core/messages/Request.cpp                                \
      main/src/server/core/messages/Response.cpp                               \
      main/src/server/app/virtualServer/VirtualServer.cpp                      \
+	 main/src/server/app/requestProcessors/RequestProcessor.cpp               \
+	 main/src/server/app/requestProcessors/GetRequestProcessor.cpp            \
 	 main/src/server/app/project/Project.cpp                                  \
 	 main/src/server/app/project/IndexGenerator.cpp                           \
 	 main/src/server/app/cgi/CGIExecutor.cpp                                  \
@@ -31,6 +33,7 @@ SRCS=main/src/main.cpp                                                        \
      main/src/common/StatusCode.cpp                                           \
      main/src/common/MediaType.cpp                                            \
      main/src/common/WebAddress.cpp                                           \
+     main/src/common/exceptions/WebException.cpp                              \
 	 main/src/utils/sys/Process.cpp                                           \
 	 main/src/utils/sys/Pipe.cpp                                              \
 	 main/src/utils/sys/FDescriptor.cpp                                       \

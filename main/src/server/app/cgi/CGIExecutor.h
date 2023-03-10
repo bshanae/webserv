@@ -13,7 +13,7 @@ public:
 	CGIExecutor(
 		const CGIConfig& cgiConfig,
 		const VirtualServerConfig& vServerConfig,
-		const Project& _project
+		Project& project
 	);
 
 	bool isCGI(const std::string& remotePath, const std::string& localPath) const;
@@ -24,7 +24,7 @@ private:
 	std::vector<std::string> _constEnv;
 	std::set<std::string> _roots;
 	std::set<std::string> _extensions;
-	Project _project;
+	Project& _project;
 
 	std::vector<std::string> collectConstEnv(const VirtualServerConfig& vServerConfig) const;
 	std::vector<std::string> collectEnv(const Request& request) const;

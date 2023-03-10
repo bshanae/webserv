@@ -32,7 +32,7 @@ void CoreServer::run()
 
 			if (_socketControllers[i]->socket() == sys::nullFd)
 			{
-				log::i << *this << log::startm << "Unregister socket controller:" << _socketControllers[i] << log::endm;
+				log::i << *this << log::startm << "Unregister " << *_socketControllers[i] << log::endm;
 
 				_pollingTargets.erase(_pollingTargets.begin() + i);
 				_socketControllers.erase(_socketControllers.begin() + i);
