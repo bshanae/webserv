@@ -7,39 +7,45 @@ BASE_LD_FLAGS=
 
 PROJECT_NAME=webserv
 
-SRCS=main/main.cpp                                                             \
-	 main/context/Context.cpp                                                  \
-	 main/context/config/Config.cpp                                            \
-	 main/context/project/Project.cpp                                          \
-	 main/server/Server.cpp                                                    \
-	 main/server/worker/Worker.cpp                                             \
-	 main/server/worker/tools/IndexGenerator.cpp                               \
-	 main/server/messages/request/Request.cpp                                  \
-	 main/server/messages/response/Response.cpp                                \
-	 main/server/messages/aux/HeaderType.cpp                                   \
-	 main/server/messages/aux/RequestMethod.cpp                                \
-	 main/server/messages/aux/StatusCode.cpp                                   \
-	 main/server/messages/aux/MediaType.cpp                                    \
-	 main/server/cgi/CGIExecutor.cpp                                           \
-	 main/tools/exceptions/SocketException.cpp                                 \
-	 main/tools/exceptions/FileNotFoundException.cpp                           \
-	 main/tools/exceptions/InvalidArgumentException.cpp                        \
-	 main/tools/exceptions/InvalidOperationException.cpp                       \
-	 main/tools/exceptions/InvalidStateException.cpp                           \
-	 main/tools/exceptions/SystemException.cpp                                 \
-	 main/tools/exceptions/ParsingException.cpp                                \
-	 main/tools/log/log.cpp                                                    \
-	 main/tools/log/stream/LogStream.cpp                                       \
-	 main/tools/log/modifier/LogModifier.cpp 							 	   \
-	 main/tools/sys/sys.cpp                                                    \
-	 main/tools/sys/Process.cpp                                                \
-	 main/tools/sys/Pipe.cpp                                                   \
-	 main/tools/sys/FDescriptor.cpp                                            \
-	 main/tools/sys/FDStream.cpp                                               \
-	 main/tools/sys/sys.path.cpp                                               \
-	 main/tools/algo/str.cpp												   \
-	 main/tools/io/io.cpp
-INCLUDE_DIRS=main
+SRCS=main/src/main.cpp                                                        \
+	 main/src/config/Config.cpp                                               \
+	 main/src/config/LogConfig.cpp                                            \
+	 main/src/config/VirtualServerConfig.cpp                                  \
+	 main/src/config/CGIConfig.cpp                                            \
+	 main/src/server/core/coreServer/CoreServer.cpp                           \
+	 main/src/server/core/socketControllers/SocketController.cpp              \
+	 main/src/server/core/socketControllers/ServerSocketController.cpp        \
+	 main/src/server/core/socketControllers/ClientSocketController.cpp        \
+	 main/src/server/core/messages/Request.cpp                                \
+     main/src/server/core/messages/Response.cpp                               \
+     main/src/server/app/virtualServer/VirtualServer.cpp                      \
+	 main/src/server/app/project/Project.cpp                                  \
+	 main/src/server/app/project/IndexGenerator.cpp                           \
+	 main/src/server/app/cgi/CGIExecutor.cpp                                  \
+	 main/src/log/log.cpp                                                     \
+	 main/src/log/logStream/LogStream.cpp                                     \
+	 main/src/log/logModifier/LogModifier.cpp 							 	  \
+	 main/src/utils/sys/sys.cpp                                               \
+     main/src/common/HeaderType.cpp                                           \
+     main/src/common/RequestMethod.cpp                                        \
+     main/src/common/StatusCode.cpp                                           \
+     main/src/common/MediaType.cpp                                            \
+     main/src/common/WebAddress.cpp                                           \
+	 main/src/utils/sys/Process.cpp                                           \
+	 main/src/utils/sys/Pipe.cpp                                              \
+	 main/src/utils/sys/FDescriptor.cpp                                       \
+	 main/src/utils/sys/FDStream.cpp                                          \
+	 main/src/utils/sys/sys.path.cpp                                          \
+	 main/src/utils/algo/str.cpp									          \
+	 main/src/utils/io/io.cpp										          \
+	 main/src/utils/exceptions/SocketException.cpp                            \
+     main/src/utils/exceptions/FileException.cpp                              \
+     main/src/utils/exceptions/InvalidArgumentException.cpp                   \
+     main/src/utils/exceptions/InvalidOperationException.cpp                  \
+     main/src/utils/exceptions/InvalidStateException.cpp                      \
+     main/src/utils/exceptions/SystemException.cpp                            \
+     main/src/utils/exceptions/ParsingException.cpp
+INCLUDE_DIRS=main/src
 EXE_NAME=webserv
 
 # TOOLS

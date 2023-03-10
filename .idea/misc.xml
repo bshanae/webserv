@@ -3,8 +3,13 @@
   <component name="CidrRootsConfiguration">
     <sourceRoots>
       <file path="$PROJECT_DIR$/main/context" />
-      <file path="$PROJECT_DIR$/main/server" />
-      <file path="$PROJECT_DIR$/main/tools" />
+      <file path="$PROJECT_DIR$/main/src" />
+      <file path="$PROJECT_DIR$/main/src/common" />
+      <file path="$PROJECT_DIR$/main/src/config" />
+      <file path="$PROJECT_DIR$/main/src/log" />
+      <file path="$PROJECT_DIR$/main/src/server" />
+      <file path="$PROJECT_DIR$/main/src/utils" />
+      <file path="$PROJECT_DIR$/main/src/utils/tools" />
     </sourceRoots>
     <excludeRoots>
       <file path="$PROJECT_DIR$/build" />
@@ -14,6 +19,8 @@
   <component name="MakefileSettings">
     <option name="linkedExternalProjectsSettings">
       <MakefileProjectSettings>
+        <option name="buildOptions" value="-j 8" />
+        <option name="cleanTarget" value="fclean" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
