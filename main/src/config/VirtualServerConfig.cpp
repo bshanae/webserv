@@ -5,7 +5,7 @@ using namespace webserv::config;
 
 std::string VirtualServerConfig::root() const
 {
-	return "main/res/examples/cgi-3";
+	return "main/res/examples/misc-1/basic";
 }
 
 WebAddress VirtualServerConfig::address() const
