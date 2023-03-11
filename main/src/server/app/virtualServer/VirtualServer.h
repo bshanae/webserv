@@ -2,6 +2,7 @@
 
 #include <map>
 #include "config/VirtualServerConfig.h"
+#include "config/MediaConfig.h"
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
 #include "server/core/socketControllers/ServerSocketController.h"
@@ -16,7 +17,7 @@ class VirtualServer : public IServerSocketListener
 
 public:
 
-	explicit VirtualServer(const VirtualServerConfig& config);
+	VirtualServer(const VirtualServerConfig& config, const MediaConfig& mediaConfig);
 	~VirtualServer();
 
 private:

@@ -5,7 +5,10 @@
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
 
-GetRequestProcessor::GetRequestProcessor(Project& project, bool autoindex): RequestProcessor(project), _autoindex(autoindex)
+GetRequestProcessor::GetRequestProcessor(Project& project, bool autoindex, const MediaConfig& mediaConfig):
+	RequestProcessor(project),
+	_autoindex(autoindex),
+	_mediaConfig(mediaConfig)
 {
 }
 
@@ -35,7 +38,7 @@ void GetRequestProcessor::processRequest(const Request& request, Response& respo
 	{
 		response.setStatusCode(StatusCodeOk);
 		response.setBody(
-			MediaType::fromFileExtension(sys::path::extension(localPath)),
+			_mediaConfig.fileExtensionToMediaType().at(sys::path::extension(localPath)),
 			sys::readFile(localPath)
 		);
 	}

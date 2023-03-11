@@ -23,7 +23,7 @@ int main()
 
 		std::map<WebAddress, std::vector<VirtualServer*> > virtualServersByAddress;
 		for (std::vector<VirtualServerConfig>::const_iterator vs = config.virtualServers().cbegin(); vs != config.virtualServers().cend(); vs++)
-			virtualServersByAddress[vs->address()].push_back(new VirtualServer(*vs));
+			virtualServersByAddress[vs->address()].push_back(new VirtualServer(*vs, config.media()));
 
 		// initialize server socket controllers, link virtual servers to them
 

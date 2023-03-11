@@ -9,8 +9,6 @@ public:
 	static MediaType Default;
 	static MediaType Html;
 
-	static MediaType fromFileExtension(const std::string& fileExtension);
-
 	MediaType();
 	explicit MediaType(const std::string& string);
 	MediaType(const char* string);

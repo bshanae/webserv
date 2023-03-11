@@ -4,12 +4,12 @@
 #include "server/app/requestProcessors/GetRequestProcessor.h"
 #include "common/exceptions/WebException.h"
 
-VirtualServer::VirtualServer(const VirtualServerConfig& config) :
+VirtualServer::VirtualServer(const VirtualServerConfig& config, const MediaConfig& mediaConfig):
 	_project(config.root()),
 	_address(config.address()),
 	_cgi(config.cgi(), config, _project)
 {
-	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex());
+	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex(), mediaConfig);
 }
 
 VirtualServer::~VirtualServer()
