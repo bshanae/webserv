@@ -4,6 +4,8 @@
 #include <string>
 #include "utils/sys/sys.path.h"
 
+using namespace webserv;
+
 Project::Project(const std::string& root) : _root(root)
 {
 }

@@ -2,39 +2,40 @@
 
 #include <ostream>
 
-using namespace log;
+using namespace webserv::config;
+using namespace webserv::log;
 
-LogStream log::v;
-LogStream log::i;
-LogStream log::w;
-LogStream log::e;
+LogStream webserv::log::v;
+LogStream webserv::log::i;
+LogStream webserv::log::w;
+LogStream webserv::log::e;
 
-void log::endl(LogStream& stream)
+void webserv::log::endl(LogStream& stream)
 {
 	stream << std::endl;
 }
 
-void log::startm(LogStream& stream)
+void webserv::log::startm(LogStream& stream)
 {
 	stream.addModifier(LogModifier::italic);
 	stream << ' ';
 }
 
-void log::endm(LogStream& stream)
+void webserv::log::endm(LogStream& stream)
 {
 	stream.resetModifiers();
 	stream << std::endl << std::endl;
 }
 
-void log::initialize(const LogConfig& config)
+void webserv::log::initialize(const LogConfig& config)
 {
-	log::v = LogStream(LogModifier::grey);
-	log::i = LogStream();
-	log::w = LogStream(LogModifier::yellow);
-	log::e = LogStream(LogModifier::red);
+	v = LogStream(LogModifier::grey);
+	i = LogStream();
+	w = LogStream(LogModifier::yellow);
+	e = LogStream(LogModifier::red);
 
-	log::v.enabled = true;
-	log::i.enabled = true;
-	log::w.enabled = true;
-	log::e.enabled = true;
+	v.enabled = true;
+	i.enabled = true;
+	w.enabled = true;
+	e.enabled = true;
 }

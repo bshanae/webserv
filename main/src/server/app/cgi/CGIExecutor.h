@@ -6,13 +6,20 @@
 #include "server/app/project/Project.h"
 #include "CGIOutput.h"
 
-class CGIExecutor
+namespace webserv
+{
+	struct CGIExecutor;
+}
+
+std::ostream& operator<<(std::ostream& stream, const webserv::CGIExecutor& executor);
+
+class webserv::CGIExecutor
 {
 public:
 
 	CGIExecutor(
-		const CGIConfig& cgiConfig,
-		const VirtualServerConfig& vServerConfig,
+		const config::CGIConfig& cgiConfig,
+		const config::VirtualServerConfig& vServerConfig,
 		Project& project
 	);
 
@@ -26,9 +33,7 @@ private:
 	std::set<std::string> _extensions;
 	Project& _project;
 
-	std::vector<std::string> collectConstEnv(const VirtualServerConfig& vServerConfig) const;
+	std::vector<std::string> collectConstEnv(const config::VirtualServerConfig& vServerConfig) const;
 	std::vector<std::string> collectEnv(const Request& request) const;
 	CGIOutput parseCGIOutput(const std::string& rawOutput) const;
 };
-
-std::ostream& operator<<(std::ostream& stream, const CGIExecutor& executor);

@@ -2,7 +2,12 @@
 
 #include <string>
 
-class MediaType : public std::string
+namespace webserv
+{
+	class MediaType;
+}
+
+class webserv::MediaType : public std::string
 {
 public:
 

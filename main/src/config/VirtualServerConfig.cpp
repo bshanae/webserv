@@ -1,5 +1,8 @@
 #include "VirtualServerConfig.h"
 
+using namespace webserv;
+using namespace webserv::config;
+
 std::string VirtualServerConfig::root() const
 {
 	return "main/res/examples/cgi-3";

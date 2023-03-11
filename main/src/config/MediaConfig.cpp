@@ -1,5 +1,8 @@
 #include "MediaConfig.h"
 
+using namespace webserv;
+using namespace webserv::config;
+
 MediaConfig::MediaConfig()
 {
 	_fileExtensionToMediaType[".html"] = "text/html";

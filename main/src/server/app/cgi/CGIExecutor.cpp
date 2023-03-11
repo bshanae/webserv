@@ -7,6 +7,9 @@
 #include "utils/sys/Process.h"
 #include "utils/io/io.h"
 
+using namespace webserv;
+using namespace webserv::config;
+
 CGIExecutor::CGIExecutor(
 	const CGIConfig& cgiConfig,
 	const VirtualServerConfig& vServerConfig,
@@ -100,7 +103,7 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 //	env.push_back("REMOTE_ADDR=" + vServerConfig.address().host); TODO
 //	env.push_back("REMOTE_PORT=" + std::to_string(vServerConfig.address().port)); TODO
 	env.push_back("QUERY_STRING=" + request.query());
-	env.push_back("REQUEST_METHOD=" + to_string(request.method()));
+	env.push_back("REQUEST_METHOD=" + toString(request.method()));
 	env.push_back("REQUEST_URI=" + request.uri());
 
 	return env;
@@ -129,7 +132,7 @@ CGIOutput CGIExecutor::parseCGIOutput(const std::string& rawOutput) const
 	return output;
 }
 
-std::ostream& operator<<(std::ostream& stream, const CGIExecutor& executor)
+std::ostream& operator<<(std::ostream& stream, const webserv::CGIExecutor& executor)
 {
 	stream << "[CGIExecutor]";
 	return stream;

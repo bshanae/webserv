@@ -2,13 +2,15 @@
 
 #include <string>
 
-enum HeaderType
+namespace webserv
 {
-	HeaderTypeDate,
-	HeaderTypeServer,
-	HeaderTypeContentLength,
-	HeaderTypeContentType,
-};
+	enum HeaderType
+	{
+		HeaderTypeDate,
+		HeaderTypeServer,
+		HeaderTypeContentLength,
+		HeaderTypeContentType,
+	};
+}
 
-
-std::string toString(HeaderType responseHeader);
+std::string toString(webserv::HeaderType responseHeader);

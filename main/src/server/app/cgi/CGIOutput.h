@@ -3,7 +3,12 @@
 #include <vector>
 #include <string>
 
-struct CGIOutput
+namespace webserv
+{
+	struct CGIOutput;
+}
+
+struct webserv::CGIOutput
 {
 	std::vector<std::string> headers;
 	std::string body;

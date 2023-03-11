@@ -11,13 +11,20 @@
 #include "server/app/cgi/CGIExecutor.h"
 #include "utils/templates/Optional.h"
 
-class VirtualServer : public IServerSocketListener
+namespace webserv
 {
-	friend std::ostream& operator<<(std::ostream& stream, const VirtualServer& server);
+	class VirtualServer;
+}
+
+std::ostream& operator<<(std::ostream& stream, const webserv::VirtualServer& server);
+
+class webserv::VirtualServer : public IServerSocketListener
+{
+	friend std::ostream& ::operator<<(std::ostream& stream, const VirtualServer& server);
 
 public:
 
-	VirtualServer(const VirtualServerConfig& config, const MediaConfig& mediaConfig);
+	VirtualServer(const config::VirtualServerConfig& config, const config::MediaConfig& mediaConfig);
 	~VirtualServer();
 
 private:
@@ -34,5 +41,3 @@ private:
 	void processRegularRequest(const Request& request, Response& response);
 	bool processCGIRequest(const Request& request, Response& response);
 };
-
-std::ostream& operator<<(std::ostream& stream, const VirtualServer& server);

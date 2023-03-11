@@ -3,6 +3,8 @@
 #include <ctime>
 #include "utils/exceptions/InvalidOperationException.h"
 
+using namespace webserv;
+
 void Response::setStatusCode(const StatusCode code, const std::string& customReason)
 {
 	std::string finalReason = customReason;

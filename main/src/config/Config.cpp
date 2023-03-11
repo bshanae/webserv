@@ -1,5 +1,7 @@
 #include "Config.h"
 
+using namespace webserv::config;
+
 Config::Config()
 {
 	_virtualServers.push_back(VirtualServerConfig());

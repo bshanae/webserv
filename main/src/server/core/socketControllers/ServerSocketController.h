@@ -7,16 +7,24 @@
 #include "server/core/messages/Response.h"
 #include "utils/templates/Optional.h"
 
-class IServerSocketListener
+namespace webserv
+{
+	class IServerSocketListener;
+	class ServerSocketController;
+}
+
+class webserv::IServerSocketListener
 {
 public:
 
 	virtual Optional<Response> onServerReceivedRequest(const Request& request) = 0;
 };
 
-class ServerSocketController : public SocketController, public IClientSocketListener
+std::ostream& operator<<(std::ostream& stream, const webserv::ServerSocketController& controller);
+
+class webserv::ServerSocketController : public SocketController, public IClientSocketListener
 {
-	friend std::ostream& operator<<(std::ostream& stream, const ServerSocketController& controller);
+	friend std::ostream& ::operator<<(std::ostream& stream, const ServerSocketController& controller);
 
 public:
 

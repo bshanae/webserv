@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-using namespace log;
+using namespace webserv::log;
 
 LogModifier LogModifier::red = LogModifier(31);
 LogModifier LogModifier::yellow = LogModifier(33);
@@ -18,7 +18,7 @@ LogModifier::LogModifier(int code) : _code(code)
 {
 }
 
-std::string log::to_string(const LogModifier& modifier)
+std::string toString(const LogModifier& modifier)
 {
 	std::stringstream buffer;
 
@@ -28,7 +28,7 @@ std::string log::to_string(const LogModifier& modifier)
 	return buffer.str();
 }
 
-std::string log::to_string(const std::vector<LogModifier>& modifiers)
+std::string toString(const std::vector<LogModifier>& modifiers)
 {
 	if (modifiers.empty())
 		return "";

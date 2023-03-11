@@ -4,6 +4,8 @@
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
 
+using namespace webserv;
+
 std::string IndexGenerator::generatePage(Project& project, const std::string& remotePath, const std::string& localPath)
 {
 	const std::vector<std::string> entries = sys::enumerateDirectory(localPath);

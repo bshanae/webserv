@@ -3,7 +3,15 @@
 #include <string>
 #include <set>
 
-class CGIConfig
+namespace webserv
+{
+	namespace config
+	{
+		class CGIConfig;
+	}
+}
+
+class webserv::config::CGIConfig
 {
 public:
 

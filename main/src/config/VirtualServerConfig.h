@@ -4,7 +4,15 @@
 #include "common/WebAddress.h"
 #include "CGIConfig.h"
 
-class VirtualServerConfig
+namespace webserv
+{
+	namespace config
+	{
+		class VirtualServerConfig;
+	}
+}
+
+class webserv::config::VirtualServerConfig
 {
 public:
 

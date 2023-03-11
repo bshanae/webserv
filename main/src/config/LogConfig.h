@@ -1,6 +1,14 @@
 #pragma once
 
-class LogConfig
+namespace webserv
+{
+	namespace config
+	{
+		class LogConfig;
+	}
+}
+
+class webserv::config::LogConfig
 {
 public:
 

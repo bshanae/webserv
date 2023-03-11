@@ -4,6 +4,9 @@
 #include "log/log.h"
 #include "utils/algo/str.h"
 
+using namespace webserv;
+using namespace webserv::log;
+
 ClientSocketController::ClientSocketController(sys::FDescriptor socket): _listener(NULL) // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
 	bindSocket(socket);

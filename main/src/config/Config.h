@@ -5,7 +5,15 @@
 #include "MediaConfig.h"
 #include "VirtualServerConfig.h"
 
-class Config
+namespace webserv
+{
+	namespace config
+	{
+		class Config;
+	}
+}
+
+class webserv::config::Config
 {
 public:
 

@@ -2,12 +2,15 @@
 
 #include <string>
 
-enum StatusCode
+namespace webserv
 {
-	StatusCodeOk = 200,
-	StatusCodeBadRequest = 400,
-	StatusCodeNotFound = 404,
-	StatusCodeInternalServerError = 500,
-};
+	enum StatusCode
+	{
+		StatusCodeOk = 200,
+		StatusCodeBadRequest = 400,
+		StatusCodeNotFound = 404,
+		StatusCodeInternalServerError = 500,
+	};
+}
 
-std::string defaultReason(StatusCode code);
+std::string defaultReason(webserv::StatusCode code);

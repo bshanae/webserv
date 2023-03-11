@@ -2,6 +2,8 @@
 
 #include "utils/exceptions/InvalidArgumentException.h"
 
+using namespace webserv;
+
 std::string defaultReason(StatusCode code)
 {
 	switch (code)

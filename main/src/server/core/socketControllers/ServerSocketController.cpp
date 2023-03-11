@@ -8,6 +8,8 @@
 #include "utils/algo/str.h"
 #include "utils/exceptions/SocketException.h"
 
+using namespace webserv;
+
 ServerSocketController::ServerSocketController(const WebAddress& address) : _address(address)
 {
 	sys::FDescriptor s = ::socket(AF_INET, SOCK_STREAM, 0);

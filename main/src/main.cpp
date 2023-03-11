@@ -5,6 +5,10 @@
 #include "log/log.h"
 #include "utils/sys/sys.h"
 
+using namespace webserv;
+using namespace webserv::config;
+using namespace webserv::log;
+
 int main()
 {
 	sys::listenForTermination();

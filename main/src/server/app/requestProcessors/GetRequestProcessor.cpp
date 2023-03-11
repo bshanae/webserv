@@ -5,6 +5,9 @@
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
 
+using namespace webserv;
+using namespace webserv::config;
+
 GetRequestProcessor::GetRequestProcessor(Project& project, bool autoindex, const MediaConfig& mediaConfig):
 	RequestProcessor(project),
 	_autoindex(autoindex),

@@ -3,30 +3,35 @@
 #include <string>
 #include <vector>
 
-namespace log
+namespace webserv
 {
-	class LogModifier
+	namespace log
 	{
-	public:
-
-		static LogModifier red;
-		static LogModifier yellow;
-		static LogModifier grey;
-		static LogModifier italic;
-		static LogModifier reset;
-
-		LogModifier();
-
-		friend std::string to_string(const LogModifier& modifier);
-		friend std::string to_string(const std::vector<LogModifier>& modifiers);
-
-	private:
-
-		int _code;
-
-		explicit LogModifier(int code);
-	};
-
-	std::string to_string(const LogModifier& modifier);
-	std::string to_string(const std::vector<LogModifier>& modifiers);
+		class LogModifier;
+	}
 }
+
+std::string toString(const webserv::log::LogModifier& modifier);
+std::string toString(const std::vector<webserv::log::LogModifier>& modifiers);
+
+class webserv::log::LogModifier
+{
+	friend std::string (::toString)(const LogModifier& modifier);
+	friend std::string (::toString)(const std::vector<LogModifier>& modifiers);
+
+public:
+
+	static LogModifier red;
+	static LogModifier yellow;
+	static LogModifier grey;
+	static LogModifier italic;
+	static LogModifier reset;
+
+	LogModifier();
+
+private:
+
+	int _code;
+
+	explicit LogModifier(int code);
+};

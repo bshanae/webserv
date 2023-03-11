@@ -7,6 +7,8 @@
 #include "utils/exceptions/ParsingException.h"
 #include "utils/exceptions/InvalidArgumentException.h"
 
+using namespace webserv;
+
 std::istream& operator>>(std::istream& stream, RequestMethod& method)
 {
 	static std::unordered_map<std::string, RequestMethod> lookup;
@@ -30,7 +32,7 @@ std::istream& operator>>(std::istream& stream, RequestMethod& method)
 	return stream;
 }
 
-std::string to_string(RequestMethod method)
+std::string toString(RequestMethod method)
 {
 	static std::map<RequestMethod, std::string> lookup;
 	if (lookup.empty())

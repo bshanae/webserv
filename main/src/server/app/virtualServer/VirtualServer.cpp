@@ -4,6 +4,9 @@
 #include "server/app/requestProcessors/GetRequestProcessor.h"
 #include "common/exceptions/WebException.h"
 
+using namespace webserv;
+using namespace webserv::config;
+
 VirtualServer::VirtualServer(const VirtualServerConfig& config, const MediaConfig& mediaConfig):
 	_project(config.root()),
 	_address(config.address()),

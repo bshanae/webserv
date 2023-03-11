@@ -3,16 +3,22 @@
 #include <iosfwd>
 #include "utils/sys/sys.h"
 
-class SocketController;
+namespace webserv
+{
+	class ISocketControllerCreationListener;
+	class SocketController;
+}
 
-class ISocketControllerCreationListener
+class webserv::ISocketControllerCreationListener
 {
 public:
 
 	virtual void onSocketControllerCreated(SocketController *newController) = 0;
 };
 
-class SocketController
+std::ostream& operator<<(std::ostream& stream, const webserv::SocketController& controller);
+
+class webserv::SocketController
 {
 public:
 
@@ -35,5 +41,3 @@ private:
 	sys::FDescriptor _socket;
 	ISocketControllerCreationListener *_newSocketControllerListener;
 };
-
-std::ostream& operator<<(std::ostream& stream, const SocketController& controller);

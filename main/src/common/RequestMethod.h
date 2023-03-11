@@ -2,12 +2,15 @@
 
 #include <iosfwd>
 
-enum RequestMethod
+namespace webserv
 {
-	RequestMethodGET,
-	RequestMethodPUT,
-	RequestMethodPOST
-};
+	enum RequestMethod
+	{
+		RequestMethodGET,
+		RequestMethodPUT,
+		RequestMethodPOST
+	};
+}
 
-std::istream& operator>>(std::istream& stream, RequestMethod& method);
-std::string to_string(RequestMethod method);
+std::istream& operator>>(std::istream& stream, webserv::RequestMethod& method);
+std::string toString(webserv::RequestMethod method);

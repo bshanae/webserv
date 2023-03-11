@@ -5,7 +5,12 @@
 #include "common/RequestMethod.h"
 #include "utils/templates/Optional.h"
 
-class Request
+namespace webserv
+{
+	class Request;
+}
+
+class webserv::Request
 {
 public:
 

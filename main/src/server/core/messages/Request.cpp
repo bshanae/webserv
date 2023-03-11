@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+using namespace webserv;
+
 Optional<Request> Request::parse(const std::string& data)
 {
 	std::stringstream stream(data);

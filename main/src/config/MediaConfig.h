@@ -4,13 +4,21 @@
 #include <string>
 #include "common/MediaType.h"
 
-class MediaConfig
+namespace webserv
+{
+	namespace config
+	{
+		class MediaConfig;
+	}
+}
+
+class webserv::config::MediaConfig
 {
 public:
 
 	MediaConfig();
 
-	const std::unordered_map<std::string, MediaType> &fileExtensionToMediaType() const;
+	const std::unordered_map<std::string, MediaType>& fileExtensionToMediaType() const;
 
 private:
 

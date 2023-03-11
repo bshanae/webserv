@@ -1,7 +1,8 @@
 #include "MediaType.h"
 
-#include <unordered_map>
 #include "utils/exceptions/ParsingException.h"
+
+using namespace webserv;
 
 MediaType MediaType::Default = MediaType("text/html");
 MediaType MediaType::Html = MediaType("text/html");

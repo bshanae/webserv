@@ -2,7 +2,12 @@
 
 #include <string>
 
-struct WebAddress
+namespace webserv
+{
+	struct WebAddress;
+}
+
+struct webserv::WebAddress
 {
 	std::string host;
 	int port;
@@ -13,4 +18,4 @@ struct WebAddress
 	bool operator<(const WebAddress& r) const;
 };
 
-std::ostream& operator<<(std::ostream& stream, const WebAddress& address);
+std::ostream& operator<<(std::ostream& stream, const webserv::WebAddress& address);

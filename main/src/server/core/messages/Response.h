@@ -8,7 +8,12 @@
 #include "common/MediaType.h"
 #include "utils/templates/Optional.h"
 
-class Response
+namespace webserv
+{
+	class Response;
+}
+
+class webserv::Response
 {
 public:
 

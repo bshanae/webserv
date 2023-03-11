@@ -5,9 +5,16 @@
 #include <sys/stat.h>
 #include "utils/templates/Optional.h"
 
-class Project
+namespace webserv
 {
-	friend std::ostream& operator<<(std::ostream& stream, const Project& project);
+	class Project;
+}
+
+std::ostream& operator<<(std::ostream& stream, const webserv::Project& project);
+
+class webserv::Project
+{
+	friend std::ostream& ::operator<<(std::ostream& stream, const Project& project);
 
 public:
 
@@ -19,5 +26,3 @@ private:
 
 	std::string _root;
 };
-
-std::ostream& operator<<(std::ostream& stream, const Project& project);

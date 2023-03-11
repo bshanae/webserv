@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 
+using namespace webserv;
+
 WebAddress::WebAddress() : port(-1)
 {
 }

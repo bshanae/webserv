@@ -2,6 +2,8 @@
 
 #include "log/log.h"
 
+using namespace webserv;
+
 void CoreServer::registerSocketController(SocketController* controller)
 {
 	log::i << *this << log::startm << "Register " << *controller << log::endm;

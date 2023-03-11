@@ -5,7 +5,14 @@
 #include "utils/sys/sys.h"
 #include "server/core/socketControllers/SocketController.h"
 
-class CoreServer : public ISocketControllerCreationListener
+namespace webserv
+{
+	class CoreServer;
+}
+
+std::ostream& operator<<(std::ostream& stream, const webserv::CoreServer& _);
+
+class webserv::CoreServer : public ISocketControllerCreationListener
 {
 public:
 
@@ -20,5 +27,3 @@ private:
 
 	virtual void onSocketControllerCreated(SocketController *newController);
 };
-
-std::ostream& operator<<(std::ostream& stream, const CoreServer& _);

@@ -5,9 +5,13 @@
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
 
-class ClientSocketController;
+namespace webserv
+{
+	class IClientSocketListener;
+	class ClientSocketController;
+}
 
-class IClientSocketListener
+class webserv::IClientSocketListener
 {
 public:
 
@@ -15,9 +19,11 @@ public:
 	virtual Optional<Response> onClientSentRequest(const ClientSocketController& controller, const Request& request) = 0;
 };
 
-class ClientSocketController : public SocketController
+std::ostream& operator<<(std::ostream& stream, const webserv::ClientSocketController& controller);
+
+class webserv::ClientSocketController : public SocketController
 {
-	friend std::ostream& operator<<(std::ostream& stream, const ClientSocketController& controller);
+	friend std::ostream& ::operator<<(std::ostream& stream, const ClientSocketController& controller);
 
 public:
 

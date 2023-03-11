@@ -1,5 +1,7 @@
 #include "LogConfig.h"
 
+using namespace webserv::config;
+
 bool LogConfig::verboseLevelEnabled() const
 {
 	return true;

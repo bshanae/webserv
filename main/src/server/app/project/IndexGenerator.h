@@ -3,7 +3,12 @@
 #include <string>
 #include "Project.h"
 
-class IndexGenerator
+namespace webserv
+{
+	class IndexGenerator;
+}
+
+class webserv::IndexGenerator
 {
 public:
 

@@ -3,7 +3,12 @@
 
 #include "common/StatusCode.h"
 
-class WebException : public std::runtime_error
+namespace webserv
+{
+	class WebException;
+}
+
+class webserv::WebException : public std::runtime_error
 {
 public:
 

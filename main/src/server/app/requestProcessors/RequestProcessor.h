@@ -4,7 +4,12 @@
 #include "server/core/messages/Response.h"
 #include "server/app/project/Project.h"
 
-class RequestProcessor
+namespace webserv
+{
+	class RequestProcessor;
+};
+
+class webserv::RequestProcessor
 {
 public:
 

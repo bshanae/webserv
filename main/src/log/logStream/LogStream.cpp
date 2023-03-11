@@ -1,6 +1,6 @@
 #include "LogStream.h"
 
-using namespace log;
+using namespace webserv::log;
 
 LogStream::LogStream() : enabled(false)
 {
@@ -35,15 +35,15 @@ void LogStream::resetModifiers()
 
 void LogStream::updatePrefix()
 {
-	this->_cachedPrefix = to_string(_modifiers);
+	this->_cachedPrefix = toString(_modifiers);
 }
 
 void LogStream::updateSuffix()
 {
-	this->_cachedSuffix = to_string(LogModifier::reset);
+	this->_cachedSuffix = toString(LogModifier::reset);
 }
 
-log::LogStream& log::operator<<(log::LogStream& stream, std::basic_ostream<char>& (*delegate)(std::basic_ostream<char>&))
+LogStream& operator<<(LogStream& stream, std::basic_ostream<char>& (*delegate)(std::basic_ostream<char>&))
 {
 	if (!stream.enabled)
 		return stream;
@@ -55,7 +55,7 @@ log::LogStream& log::operator<<(log::LogStream& stream, std::basic_ostream<char>
 	return stream;
 }
 
-LogStream& log::operator<<(LogStream& stream, LogStreamDelegate delegate)
+LogStream& operator<<(LogStream& stream, LogStreamDelegate delegate)
 {
 	if (!stream.enabled)
 		return stream;

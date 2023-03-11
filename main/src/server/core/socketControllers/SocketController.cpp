@@ -3,6 +3,8 @@
 #include <ostream>
 #include "utils/exceptions/InvalidOperationException.h"
 
+using namespace webserv;
+
 SocketController::SocketController() : _socket(sys::nullFd), _newSocketControllerListener(NULL)
 {
 }
