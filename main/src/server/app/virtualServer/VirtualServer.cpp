@@ -9,7 +9,7 @@ VirtualServer::VirtualServer(const VirtualServerConfig& config) :
 	_address(config.address()),
 	_cgi(config.cgi(), config, _project)
 {
-	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project);
+	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex());
 }
 
 VirtualServer::~VirtualServer()

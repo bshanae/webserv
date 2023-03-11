@@ -4,9 +4,13 @@
 
 class GetRequestProcessor : public RequestProcessor
 {
-public :
+public:
 
-	explicit GetRequestProcessor(Project& project);
+	GetRequestProcessor(Project& project, bool autoindex);
 
 	virtual void processRequest(const Request& request, Response& response);
+
+private:
+
+	bool _autoindex;
 };

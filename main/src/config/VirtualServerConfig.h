@@ -10,5 +10,6 @@ public:
 
 	std::string root() const;
 	WebAddress address() const;
+	bool autoindex() const;
 	CGIConfig cgi() const;
 };

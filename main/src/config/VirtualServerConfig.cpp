@@ -10,6 +10,11 @@ WebAddress VirtualServerConfig::address() const
 	return WebAddress("0.0.0.0", 80);
 }
 
+bool VirtualServerConfig::autoindex() const
+{
+	return false;
+}
+
 CGIConfig VirtualServerConfig::cgi() const
 {
 	return CGIConfig();
