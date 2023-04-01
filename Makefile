@@ -11,8 +11,10 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/config/Config.cpp                                               \
 	 main/src/config/LogConfig.cpp                                            \
 	 main/src/config/VirtualServerConfig.cpp                                  \
+	 main/src/config/LocationConfig.cpp                                       \
 	 main/src/config/CGIConfig.cpp                                            \
 	 main/src/config/MediaConfig.cpp                                          \
+	 main/src/config/utils.cpp                                                \
 	 main/src/server/core/coreServer/CoreServer.cpp                           \
 	 main/src/server/core/socketControllers/SocketController.cpp              \
 	 main/src/server/core/socketControllers/ServerSocketController.cpp        \

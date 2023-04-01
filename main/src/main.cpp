@@ -1,15 +1,42 @@
+#include <fstream>
+#include <unistd.h>
 #include "config/Config.h"
 #include "server/core/coreServer/CoreServer.h"
 #include "server/core/socketControllers/ServerSocketController.h"
 #include "server/app/virtualServer/VirtualServer.h"
 #include "log/log.h"
 #include "utils/sys/sys.h"
+#include "utils/sys/sys.path.h"
 
 using namespace webserv;
 using namespace webserv::config;
 using namespace webserv::log;
 
-int main()
+bool getConfigFile(int argc, char** argv, std::ifstream& configFile)
+{
+	if (argc != 2)
+	{
+		std::cerr << "Invalid usage." << std::endl;
+		std::cerr << "Usage: ./webserv [config path]" << std::endl;
+		return false;
+	}
+
+	const std::string configPath = argv[1];
+
+	configFile = std::ifstream(configPath);
+	if (!configFile)
+	{
+		std::cerr << "Can't open file " << configPath << std::endl;
+		return false;
+	}
+
+	const std::string configDir = sys::path::directory(configPath);
+	chdir(configDir.c_str());
+
+	return true;
+}
+
+int main(int argc, char** argv)
 {
 	sys::listenForTermination();
 
@@ -17,7 +44,12 @@ int main()
 	{
 		// read config
 
+		std::ifstream configFile;
+		if (!getConfigFile(argc, argv, configFile))
+			return 1;
+
 		Config config;
+		configFile >> config;
 
 		// initialize log
 
@@ -61,12 +93,12 @@ int main()
 	}
 	catch (const std::exception& e)
 	{
-		log::e << "Fatal error: " << e.what() << log::endm;
+		std::cerr << "Fatal error: " << e.what() << std::endl;
 		return 1;
 	}
 	catch (...)
 	{
-		log::e << "Fatal error." << log::endm;
+		std::cerr << "Fatal error." << std::endl;
 		return 1;
 	}
 }

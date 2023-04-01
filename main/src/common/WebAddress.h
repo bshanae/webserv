@@ -18,4 +18,5 @@ struct webserv::WebAddress
 	bool operator<(const WebAddress& r) const;
 };
 
+std::istream& operator>>(std::istream& stream, webserv::WebAddress& address);
 std::ostream& operator<<(std::ostream& stream, const webserv::WebAddress& address);

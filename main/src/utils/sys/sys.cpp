@@ -1,6 +1,7 @@
 #include "sys.h"
 
 #include <csignal>
+#include <iostream>
 #include <unistd.h>
 #include <dirent.h>
 #include <string>

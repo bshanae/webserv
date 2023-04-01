@@ -12,11 +12,15 @@ namespace webserv
 	}
 }
 
+std::istream& operator>>(std::istream& source, webserv::config::MediaConfig& config);
+
 class webserv::config::MediaConfig
 {
+	friend std::istream& ::operator>>(std::istream& source, webserv::config::MediaConfig& config);
+
 public:
 
-	MediaConfig();
+	static MediaConfig makeDefault();
 
 	const std::unordered_map<std::string, MediaType>& fileExtensionToMediaType() const;
 
