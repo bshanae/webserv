@@ -1,20 +1,69 @@
 #include "Request.h"
 
 #include <sstream>
+#include "utils/exceptions/ParsingException.h"
+#include "utils/algo/str.h"
+#include "log/log.h"
+#include "common/HeaderName.h"
 
 using namespace webserv;
 
 Optional<Request> Request::parse(const std::string& data)
 {
-	std::stringstream stream(data);
+	try
+	{
+		std::stringstream stream(data);
 
-	RequestMethod method;
-	stream >> method;
+		Request r;
 
-	std::string uri;
-	stream >> uri;
+		stream >> r._method;
 
-	return Request(method, uri, "HTTP/1.1");
+		stream >> r._uri;
+
+		const size_t iQuestion = r._uri.find('?');
+		if (iQuestion != std::string::npos)
+		{
+			r._path = r._uri.substr(0, iQuestion);
+			r._query = r._uri.substr(iQuestion + 1, r._uri.length() - 1);
+		}
+		else
+		{
+			r._path = r._uri;
+			r._query = "";
+		}
+
+		stream >> r._protocol;
+
+		// drop \r
+		stream.get();
+		stream.get();
+
+		std::string line;
+		while (std::getline(stream, line))
+		{
+			if (std::isspace(line[0])) // line == \r
+				break;
+
+			const HeaderName headerName = HeaderName(line.substr(0, line.find(':')));
+			const std::string headerValue = algo::cut(line, line.find(' '), line.length() - 1); // from space till \r
+
+			r._headers[headerName] = headerValue;
+		}
+
+		stream >> r._body;
+
+		return r;
+	}
+	catch (const std::exception& e)
+	{
+		log::e << "Request" << log::startm << "Parsing error: " << e.what() << log::endm;
+		return Optional<Request>();
+	}
+	catch (...)
+	{
+		log::e << "Request" << log::startm << "Unknown  parsing error." << log::endm;
+		return Optional<Request>();
+	}
 }
 
 RequestMethod Request::method() const
@@ -42,18 +91,12 @@ const std::string& Request::protocol() const
 	return _protocol;
 }
 
-Request::Request(RequestMethod method, const std::string& uri, const std::string& protocol) :
-	_method(method), _uri(uri), _protocol(protocol)
+const std::map<HeaderName, std::string>& Request::headers() const
 {
-	const size_t iQuestion = uri.find('?');
-	if (iQuestion != std::string::npos)
-	{
-		_path = uri.substr(0, iQuestion);
-		_query = uri.substr(iQuestion + 1, uri.length() - 1);
-	}
-	else
-	{
-		_path = uri;
-		_query = "";
-	}
+	return _headers;
+}
+
+const std::string& Request::body() const
+{
+	return _body;
 }

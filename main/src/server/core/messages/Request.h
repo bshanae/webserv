@@ -2,8 +2,9 @@
 
 #include "string"
 #include "map"
-#include "common/RequestMethod.h"
 #include "utils/templates/Optional.h"
+#include "common/RequestMethod.h"
+#include "common/HeaderName.h"
 
 namespace webserv
 {
@@ -21,6 +22,8 @@ public:
 	const std::string& path() const;
 	const std::string& query() const;
 	const std::string& protocol() const;
+	const std::map<HeaderName, std::string>& headers() const;
+	const std::string& body() const;
 
 private:
 
@@ -29,6 +32,6 @@ private:
 	std::string _path;
 	std::string _query;
 	std::string _protocol;
-
-	Request(RequestMethod method, const std::string& url, const std::string& protocol);
+	std::map<HeaderName, std::string> _headers;
+	std::string _body;
 };

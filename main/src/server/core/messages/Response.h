@@ -3,7 +3,7 @@
 #include "string"
 #include "sstream"
 #include "vector"
-#include "common/HeaderType.h"
+#include "common/HeaderName.h"
 #include "common/StatusCode.h"
 #include "common/MediaType.h"
 #include "utils/templates/Optional.h"
@@ -38,5 +38,5 @@ private:
 	std::vector<std::string> _headers;
 	Optional<std::string> _body;
 
-	void storeHeader(HeaderType name, const std::string& value);
+	void storeHeader(const HeaderName& name, const std::string& value);
 };

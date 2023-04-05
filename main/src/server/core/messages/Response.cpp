@@ -24,12 +24,12 @@ void Response::setDate(const std::time_t &date)
 	char dateStr[64] = { 0 };
 	std::strftime(dateStr, 64, "%a, %d %b %Y %T GMT", dateTm);
 
-	storeHeader(HeaderTypeDate, dateStr);
+	storeHeader(HeaderName::Date, dateStr);
 }
 
 void Response::setServer(const std::string& serverName)
 {
-	storeHeader(HeaderTypeServer, serverName);
+	storeHeader(HeaderName::Server, serverName);
 }
 
 void Response::addHeader(const std::string& header)
@@ -40,13 +40,13 @@ void Response::addHeader(const std::string& header)
 void Response::setBody(const std::string& data)
 {
 	_body = data;
-	storeHeader(HeaderTypeContentLength, std::to_string(data.length()));
+	storeHeader(HeaderName::ContentLength, std::to_string(data.length()));
 }
 
 void Response::setBody(const MediaType& type, const std::string& data)
 {
 	setBody(data);
-	storeHeader(HeaderTypeContentType, type);
+	storeHeader(HeaderName::ContentType, type);
 }
 
 void Response::setEmptyBody()
@@ -78,10 +78,10 @@ std::string Response::build() const
 	return buffer.str();
 }
 
-void Response::storeHeader(const HeaderType name, const std::string& value)
+void Response::storeHeader(const HeaderName& name, const std::string& value)
 {
 	std::stringstream buffer;
-	buffer << toString(name) << ": " << value;
+	buffer << name << ": " << value;
 
 	_headers.push_back(buffer.str());
 }

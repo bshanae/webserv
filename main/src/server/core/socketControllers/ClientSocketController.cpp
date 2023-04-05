@@ -48,7 +48,7 @@ void ClientSocketController::processSocketEvent()
 	Optional<Request> request = Request::parse(requestStr);
 	if (!request)
 	{
-		log::e << *this << log::startm << "Request can't be parsed!" << log::endm;
+		log::e << *this << log::startm << "Request was not parsed!" << log::endm;
 		return;
 	}
 

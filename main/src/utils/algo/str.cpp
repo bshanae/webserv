@@ -16,6 +16,11 @@ std::string algo::ltrim(const std::string& str)
 	return str.substr(i, str.length());
 }
 
+std::string algo::cut(const std::string& str, size_t begin, size_t end)
+{
+	return str.substr(begin, end - begin);
+}
+
 bool algo::startsWith(const std::string& main, const std::string& prefix)
 {
 	int i = 0;

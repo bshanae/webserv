@@ -31,7 +31,7 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/log/logStream/LogStream.cpp                                     \
 	 main/src/log/logModifier/LogModifier.cpp 							 	  \
 	 main/src/utils/sys/sys.cpp                                               \
-     main/src/common/HeaderType.cpp                                           \
+     main/src/common/HeaderName.cpp                                           \
      main/src/common/RequestMethod.cpp                                        \
      main/src/common/StatusCode.cpp                                           \
      main/src/common/MediaType.cpp                                            \
