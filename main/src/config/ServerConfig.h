@@ -10,19 +10,19 @@ namespace webserv
 {
 	namespace config
 	{
-		class VirtualServerConfig;
+		class ServerConfig;
 	}
 }
 
-std::istream& operator>>(std::istream& source, webserv::config::VirtualServerConfig& config);
+std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& config);
 
-class webserv::config::VirtualServerConfig
+class webserv::config::ServerConfig
 {
-	friend std::istream& ::operator>>(std::istream& source, webserv::config::VirtualServerConfig& config);
+	friend std::istream& ::operator>>(std::istream& source, webserv::config::ServerConfig& config);
 
 public:
 
-	VirtualServerConfig();
+	ServerConfig();
 
 	const std::string& name() const;
 	const WebAddress& address() const;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "config/VirtualServerConfig.h"
+#include "config/ServerConfig.h"
 #include "config/MediaConfig.h"
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
@@ -13,19 +13,19 @@
 
 namespace webserv
 {
-	class VirtualServer;
+	class Server;
 }
 
-std::ostream& operator<<(std::ostream& stream, const webserv::VirtualServer& server);
+std::ostream& operator<<(std::ostream& stream, const webserv::Server& server);
 
-class webserv::VirtualServer : public IServerSocketListener
+class webserv::Server : public IServerSocketListener
 {
-	friend std::ostream& ::operator<<(std::ostream& stream, const VirtualServer& server);
+	friend std::ostream&::operator<<(std::ostream& stream, const Server& server);
 
 public:
 
-	VirtualServer(const config::VirtualServerConfig& config, const config::MediaConfig& mediaConfig);
-	~VirtualServer();
+	Server(const config::ServerConfig& config, const config::MediaConfig& mediaConfig);
+	~Server();
 
 private:
 
@@ -34,8 +34,8 @@ private:
 	CGIExecutor _cgi;
 	std::map<RequestMethod, RequestProcessor*> _requestProcessors;
 
-	VirtualServer(VirtualServer &);
-	VirtualServer& operator=(VirtualServer &);
+	Server(Server&);
+	Server& operator=(Server&);
 
 	virtual Optional<Response> onServerReceivedRequest(const Request& request);
 	void processRegularRequest(const Request& request, Response& response);

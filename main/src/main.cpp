@@ -3,7 +3,7 @@
 #include "config/Config.h"
 #include "server/core/coreServer/CoreServer.h"
 #include "server/core/socketControllers/ServerSocketController.h"
-#include "server/app/virtualServer/VirtualServer.h"
+#include "server/app/server/Server.h"
 #include "log/log.h"
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
@@ -57,18 +57,18 @@ int main(int argc, char** argv)
 
 		// initialize virtual servers
 
-		std::map<WebAddress, std::vector<VirtualServer*> > virtualServersByAddress;
-		for (std::vector<VirtualServerConfig>::const_iterator vs = config.virtualServers().cbegin(); vs != config.virtualServers().cend(); vs++)
-			virtualServersByAddress[vs->address()].push_back(new VirtualServer(*vs, config.media()));
+		std::map<WebAddress, std::vector<Server*> > serversByAddress;
+		for (std::vector<ServerConfig>::const_iterator s = config.servers().cbegin(); s != config.servers().cend(); s++)
+			serversByAddress[s->address()].push_back(new Server(*s, config.media()));
 
 		// initialize server socket controllers, link virtual servers to them
 
 		std::vector<ServerSocketController*> serverSockets;
-		for (std::map<WebAddress, std::vector<VirtualServer*> >::iterator aByVs = virtualServersByAddress.begin(); aByVs != virtualServersByAddress.end(); aByVs++)
+		for (std::map<WebAddress, std::vector<Server*> >::iterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
 		{
-			serverSockets.push_back(new ServerSocketController(aByVs->first));
-			for (std::vector<VirtualServer*>::iterator vs = aByVs->second.begin(); vs != aByVs->second.end(); vs++)
-				serverSockets.back()->registerListener(dynamic_cast<IServerSocketListener&>(**vs));
+			serverSockets.push_back(new ServerSocketController(sByA->first));
+			for (std::vector<Server*>::iterator s = sByA->second.begin(); s != sByA->second.end(); s++)
+				serverSockets.back()->registerListener(dynamic_cast<IServerSocketListener&>(**s));
 		}
 
 		// run server
@@ -83,10 +83,10 @@ int main(int argc, char** argv)
 		for (int i = 0; i < serverSockets.size(); i++)
 			delete serverSockets[i];
 
-		for (std::map<WebAddress, std::vector<VirtualServer*> >::iterator aByVs = virtualServersByAddress.begin(); aByVs != virtualServersByAddress.end(); aByVs++)
+		for (std::map<WebAddress, std::vector<Server*> >::iterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
 		{
-			for (std::vector<VirtualServer*>::iterator vs = aByVs->second.begin(); vs != aByVs->second.end(); vs++)
-				delete *vs;
+			for (std::vector<Server*>::iterator s = sByA->second.begin(); s != sByA->second.end(); s++)
+				delete *s;
 		}
 
 		return 0;

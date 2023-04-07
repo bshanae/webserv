@@ -42,8 +42,8 @@ std::istream& operator>>(std::istream& source, webserv::config::Config& config)
 		}
 		else if (algo::startsWith(line, "server"))
 		{
-			config._virtualServers.push_back(VirtualServerConfig());
-			source >> config._virtualServers.back();
+			config._servers.push_back(ServerConfig());
+			source >> config._servers.back();
 		}
 		else
 		{
@@ -72,7 +72,7 @@ const MediaConfig& Config::media() const
 	return _media;
 }
 
-const std::vector<VirtualServerConfig>& Config::virtualServers() const
+const std::vector<ServerConfig>& Config::servers() const
 {
-	return _virtualServers;
+	return _servers;
 }

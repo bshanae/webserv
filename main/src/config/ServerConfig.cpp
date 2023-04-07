@@ -1,4 +1,4 @@
-#include "VirtualServerConfig.h"
+#include "ServerConfig.h"
 
 #include "utils/algo/str.h"
 #include "config/utils.h"
@@ -7,7 +7,7 @@
 using namespace webserv;
 using namespace webserv::config;
 
-std::istream& operator>>(std::istream& source, webserv::config::VirtualServerConfig& config)
+std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& config)
 {
 	std::string line;
 	while (utils::getLine(source, line))
@@ -56,35 +56,35 @@ std::istream& operator>>(std::istream& source, webserv::config::VirtualServerCon
 	return source;
 }
 
-VirtualServerConfig::VirtualServerConfig() : _autoindex(false)
+ServerConfig::ServerConfig() : _autoindex(false)
 {}
 
-const std::string& VirtualServerConfig::name() const
+const std::string& ServerConfig::name() const
 {
 	return _name;
 }
 
-const WebAddress& VirtualServerConfig::address() const
+const WebAddress& ServerConfig::address() const
 {
 	return _address;
 }
 
-const std::string& VirtualServerConfig::root() const
+const std::string& ServerConfig::root() const
 {
 	return _root;
 }
 
-const std::vector<LocationConfig>& VirtualServerConfig::locations() const
+const std::vector<LocationConfig>& ServerConfig::locations() const
 {
 	return _locations;
 }
 
-bool VirtualServerConfig::autoindex() const
+bool ServerConfig::autoindex() const
 {
 	return _autoindex;
 }
 
-const CGIConfig& VirtualServerConfig::cgi() const
+const CGIConfig& ServerConfig::cgi() const
 {
 	return _cgi;
 }

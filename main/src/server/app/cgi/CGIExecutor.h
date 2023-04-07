@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config/CGIConfig.h"
-#include "config/VirtualServerConfig.h"
+#include "config/ServerConfig.h"
 #include "server/core/messages/Request.h"
 #include "server/app/project/Project.h"
 #include "CGIOutput.h"
@@ -19,7 +19,7 @@ public:
 
 	CGIExecutor(
 		const config::CGIConfig& cgiConfig,
-		const config::VirtualServerConfig& vServerConfig,
+		const config::ServerConfig& serverConfig,
 		Project& project
 	);
 
@@ -33,7 +33,7 @@ private:
 	std::set<std::string> _extensions;
 	Project& _project;
 
-	std::vector<std::string> collectConstEnv(const config::VirtualServerConfig& vServerConfig) const;
+	std::vector<std::string> collectConstEnv(const config::ServerConfig& serverConfig) const;
 	std::vector<std::string> collectEnv(const Request& request) const;
 	CGIOutput parseCGIOutput(const std::string& rawOutput) const;
 };

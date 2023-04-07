@@ -4,7 +4,7 @@
 #include "utils/templates/Optional.h"
 #include "LogConfig.h"
 #include "MediaConfig.h"
-#include "VirtualServerConfig.h"
+#include "ServerConfig.h"
 
 namespace webserv
 {
@@ -24,11 +24,11 @@ public:
 
 	const LogConfig& log() const;
 	const MediaConfig& media() const;
-	const std::vector<VirtualServerConfig>& virtualServers() const;
+	const std::vector<ServerConfig>& servers() const;
 
 private:
 
 	LogConfig _log;
 	MediaConfig _media;
-	std::vector<VirtualServerConfig> _virtualServers;
+	std::vector<ServerConfig> _servers;
 };

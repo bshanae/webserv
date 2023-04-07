@@ -1,4 +1,4 @@
-#include "VirtualServer.h"
+#include "Server.h"
 
 #include "log/log.h"
 #include "server/app/requestProcessors/GetRequestProcessor.h"
@@ -7,7 +7,7 @@
 using namespace webserv;
 using namespace webserv::config;
 
-VirtualServer::VirtualServer(const VirtualServerConfig& config, const MediaConfig& mediaConfig):
+Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_project(config.root()),
 	_address(config.address()),
 	_cgi(config.cgi(), config, _project)
@@ -15,13 +15,13 @@ VirtualServer::VirtualServer(const VirtualServerConfig& config, const MediaConfi
 	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex(), mediaConfig);
 }
 
-VirtualServer::~VirtualServer()
+Server::~Server()
 {
 	for (std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.begin(); i != _requestProcessors.end(); i++)
 		delete i->second;
 }
 
-Optional<Response> VirtualServer::onServerReceivedRequest(const Request& request)
+Optional<Response> Server::onServerReceivedRequest(const Request& request)
 {
 	// TODO Check server name
 
@@ -54,7 +54,7 @@ Optional<Response> VirtualServer::onServerReceivedRequest(const Request& request
 	return response;
 }
 
-void VirtualServer::processRegularRequest(const Request& request, Response& response)
+void Server::processRegularRequest(const Request& request, Response& response)
 {
 	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
 	if (i == _requestProcessors.end())
@@ -63,7 +63,7 @@ void VirtualServer::processRegularRequest(const Request& request, Response& resp
 	i->second->processRequest(request, response);
 }
 
-bool VirtualServer::processCGIRequest(const Request& request, Response& response)
+bool Server::processCGIRequest(const Request& request, Response& response)
 {
 	const std::string& remotePath = request.path();
 	const std::string& localPath = _project.resolvePath(request.path());
@@ -84,8 +84,8 @@ bool VirtualServer::processCGIRequest(const Request& request, Response& response
 	return true;
 }
 
-std::ostream& operator<<(std::ostream& stream, const VirtualServer& server)
+std::ostream& operator<<(std::ostream& stream, const Server& server)
 {
-	stream << "[VirtualServer:address=" << server._address << "]";
+	stream << "[Server:address=" << server._address << "]";
 	return stream;
 }

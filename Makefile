@@ -10,7 +10,7 @@ PROJECT_NAME=webserv
 SRCS=main/src/main.cpp                                                        \
 	 main/src/config/Config.cpp                                               \
 	 main/src/config/LogConfig.cpp                                            \
-	 main/src/config/VirtualServerConfig.cpp                                  \
+	 main/src/config/ServerConfig.cpp                                         \
 	 main/src/config/LocationConfig.cpp                                       \
 	 main/src/config/CGIConfig.cpp                                            \
 	 main/src/config/MediaConfig.cpp                                          \
@@ -21,7 +21,7 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/server/core/socketControllers/ClientSocketController.cpp        \
 	 main/src/server/core/messages/Request.cpp                                \
      main/src/server/core/messages/Response.cpp                               \
-     main/src/server/app/virtualServer/VirtualServer.cpp                      \
+     main/src/server/app/Server/Server.cpp                                    \
 	 main/src/server/app/requestProcessors/RequestProcessor.cpp               \
 	 main/src/server/app/requestProcessors/GetRequestProcessor.cpp            \
 	 main/src/server/app/project/Project.cpp                                  \
