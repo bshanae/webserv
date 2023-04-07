@@ -3,7 +3,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include <unistd.h>
+#include <sys/fcntl.h>
 #include "log/log.h"
 #include "utils/algo/str.h"
 #include "utils/exceptions/SocketException.h"
@@ -15,6 +15,9 @@ ServerSocketController::ServerSocketController(const WebAddress& address) : _add
 	sys::FDescriptor s = ::socket(AF_INET, SOCK_STREAM, 0);
 	if (s < 0)
 		throw SocketException("Socket creation error.");
+
+	if (fcntl(s, F_SETFL, O_NONBLOCK) != 0)
+		throw SocketException("Can't set O_NONBLOCK!");
 
 	int opt = 1;
 	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
@@ -58,6 +61,9 @@ void ServerSocketController::processSocketEvent()
 	uint32_t addressLength;
 	int s = accept(socket(), reinterpret_cast<sockaddr*>(&clientAddress), &addressLength);
 	// TODO if (tempSocket < 0)
+
+	if (fcntl(s, F_SETFL, O_NONBLOCK) != 0)
+		throw SocketException("Can't set O_NONBLOCK!");
 
 	ClientSocketController* clientController = new ClientSocketController(s);
 	_clientControllers.push_back(clientController);

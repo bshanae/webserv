@@ -1,6 +1,7 @@
 #include "SocketController.h"
 
 #include <ostream>
+#include <sys/fcntl.h>
 #include "utils/exceptions/InvalidOperationException.h"
 
 using namespace webserv;
