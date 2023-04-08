@@ -15,14 +15,14 @@ GetRequestProcessor::GetRequestProcessor(Project& project, bool autoindex, const
 {
 }
 
-void GetRequestProcessor::processRequest(const Request& request, Response& response)
+void GetRequestProcessor::processRequest(const Request& request, const std::string& localPath, Response& response)
 {
 	const std::string& remotePath = request.path();
-	const std::string& localPath = project().resolvePath(request.path());
+	const std::string& fullLocalPath = project().resolvePath(localPath);
 
-	if (sys::isDirectory(localPath))
+	if (sys::isDirectory(fullLocalPath))
 	{
-		const std::string indexPath = sys::path::concat(localPath, "index.html");
+		const std::string indexPath = sys::path::concat(fullLocalPath, "index.html");
 		if (sys::isFile(indexPath))
 		{
 			response.setStatusCode(StatusCodeOk);
@@ -34,15 +34,19 @@ void GetRequestProcessor::processRequest(const Request& request, Response& respo
 				throw WebException(StatusCodeNotFound, "Directory is requested, but autoindex is disabled.");
 
 			response.setStatusCode(StatusCodeOk);
-			response.setBody(MediaType::Html, IndexGenerator::generatePage(project(), remotePath, localPath));
+			response.setBody(MediaType::Html, IndexGenerator::generatePage(project(), remotePath, fullLocalPath));
 		}
 	}
-	else
+	else if (sys::isFile(fullLocalPath))
 	{
 		response.setStatusCode(StatusCodeOk);
 		response.setBody(
-			_mediaConfig.fileExtensionToMediaType().at(sys::path::extension(localPath)),
-			sys::readFile(localPath)
+			_mediaConfig.fileExtensionToMediaType().at(sys::path::extension(fullLocalPath)),
+			sys::readFile(fullLocalPath)
 		);
+	}
+	else
+	{
+		throw WebException(StatusCodeNotFound, "File not found: " + fullLocalPath);
 	}
 }

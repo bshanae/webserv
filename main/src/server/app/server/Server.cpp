@@ -1,8 +1,9 @@
 #include "Server.h"
 
+#include "utils/algo/container.h"
+#include "common/exceptions/WebException.h"
 #include "log/log.h"
 #include "server/app/requestProcessors/GetRequestProcessor.h"
-#include "common/exceptions/WebException.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -10,6 +11,7 @@ using namespace webserv::config;
 Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_project(config.root()),
 	_address(config.address()),
+	_locationProcessor(config.locations()),
 	_cgi(config.cgi(), config, _project)
 {
 	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex(), mediaConfig);
@@ -31,10 +33,17 @@ Optional<Response> Server::onServerReceivedRequest(const Request& request)
 
 	try
 	{
-		if (processCGIRequest(request, response))
-			return response;
+		const Location& location = _locationProcessor.resolveLocation(request.path());
+		if (!algo::contains(location.methods(), request.method()))
+			throw WebException(StatusCodeMethodNowAllowed);
 
-		processRegularRequest(request, response);
+		const std::string localPath = location.transformRemotePath(request.path());
+
+		if (processRedirect(location, response))
+			return response;
+		if (processCGIRequest(request, localPath, response))
+			return response;
+		processRegularRequest(request, localPath, response);
 	}
 	catch (WebException& e)
 	{
@@ -54,24 +63,27 @@ Optional<Response> Server::onServerReceivedRequest(const Request& request)
 	return response;
 }
 
-void Server::processRegularRequest(const Request& request, Response& response)
+bool Server::processRedirect(const Location& location, Response& response)
 {
-	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
-	if (i == _requestProcessors.end())
-		throw WebException(StatusCodeBadRequest, "Unsupported request method");
-
-	i->second->processRequest(request, response);
-}
-
-bool Server::processCGIRequest(const Request& request, Response& response)
-{
-	const std::string& remotePath = request.path();
-	const std::string& localPath = _project.resolvePath(request.path());
-
-	if (!_cgi.isCGI(remotePath, localPath))
+	if (location.redirectionUrl().empty())
 		return false;
 
-	if (!sys::isFile(localPath))
+	response.setStatusCode(location.redirectionCode());
+	response.setLocation(location.redirectionUrl());
+	response.setEmptyBody();
+
+	return true;
+}
+
+bool Server::processCGIRequest(const Request& request, const std::string& localPath, Response& response)
+{
+	const std::string& remotePath = request.path();
+	const std::string& fullLocalPath = _project.resolvePath(localPath);
+
+	if (!_cgi.isCGI(remotePath, fullLocalPath))
+		return false;
+
+	if (!sys::isFile(fullLocalPath))
 		throw WebException(StatusCodeNotFound, "CGI script not found.");
 
 	CGIOutput output = _cgi.executeCGI(request);
@@ -82,6 +94,15 @@ bool Server::processCGIRequest(const Request& request, Response& response)
 		response.addHeader(output.headers[i]);
 
 	return true;
+}
+
+void Server::processRegularRequest(const Request& request, const std::string& localPath, Response& response)
+{
+	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
+	if (i == _requestProcessors.end())
+		throw WebException(StatusCodeBadRequest, "Unsupported request method");
+
+	i->second->processRequest(request, localPath, response);
 }
 
 std::ostream& operator<<(std::ostream& stream, const Server& server)

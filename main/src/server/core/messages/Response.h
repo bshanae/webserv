@@ -18,11 +18,13 @@ class webserv::Response
 public:
 
 	// status line
+	void setStatusCode(int code);
 	void setStatusCode(StatusCode code, const std::string& customReason = "");
 
 	// header
 	void setDate(const std::time_t& date);
 	void setServer(const std::string& serverName);
+	void setLocation(const std::string& location);
 	void addHeader(const std::string& header);
 
 	// body

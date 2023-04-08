@@ -34,7 +34,7 @@ std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& co
 		}
 		else if (algo::startsWith(line, "location"))
 		{
-			LocationConfig location;
+			Location location;
 			source >> location;
 
 			config._locations.push_back(location);
@@ -74,7 +74,7 @@ const std::string& ServerConfig::root() const
 	return _root;
 }
 
-const std::vector<LocationConfig>& ServerConfig::locations() const
+const std::vector<Location>& ServerConfig::locations() const
 {
 	return _locations;
 }

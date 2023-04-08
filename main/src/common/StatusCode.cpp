@@ -17,6 +17,9 @@ std::string defaultReason(StatusCode code)
 		case StatusCodeNotFound:
 			return "Not found";
 
+		case StatusCodeMethodNowAllowed:
+			return "Method not allowed";
+
 		case StatusCodeInternalServerError:
 			return "Internal server error";
 

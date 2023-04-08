@@ -8,6 +8,7 @@
 #include "server/core/socketControllers/ServerSocketController.h"
 #include "server/app/requestProcessors/RequestProcessor.h"
 #include "server/app/project/Project.h"
+#include "server/app/locationProcessor/LocationProcessor.h"
 #include "server/app/cgi/CGIExecutor.h"
 #include "utils/templates/Optional.h"
 
@@ -31,6 +32,7 @@ private:
 
 	WebAddress _address;
 	Project _project;
+	LocationProcessor _locationProcessor;
 	CGIExecutor _cgi;
 	std::map<RequestMethod, RequestProcessor*> _requestProcessors;
 
@@ -38,6 +40,7 @@ private:
 	Server& operator=(Server&);
 
 	virtual Optional<Response> onServerReceivedRequest(const Request& request);
-	void processRegularRequest(const Request& request, Response& response);
-	bool processCGIRequest(const Request& request, Response& response);
+	bool processRedirect(const Location& location, Response& response);
+	bool processCGIRequest(const Request& request, const std::string& localPath, Response& response);
+	void processRegularRequest(const Request& request, const std::string& localPath, Response& response);
 };

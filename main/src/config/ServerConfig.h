@@ -3,7 +3,7 @@
 #include <string>
 #include "utils/templates/Optional.h"
 #include "common/WebAddress.h"
-#include "LocationConfig.h"
+#include "common/Location.h"
 #include "CGIConfig.h"
 
 namespace webserv
@@ -27,7 +27,7 @@ public:
 	const std::string& name() const;
 	const WebAddress& address() const;
 	const std::string& root() const;
-	const std::vector<LocationConfig>& locations() const;
+	const std::vector<Location>& locations() const;
 	bool autoindex() const;
 	const CGIConfig& cgi() const;
 
@@ -36,7 +36,7 @@ private:
 	std::string _name;
 	WebAddress _address;
 	std::string _root;
-	std::vector<LocationConfig> _locations;
+	std::vector<Location> _locations;
 	bool _autoindex;
 	CGIConfig _cgi;
 };

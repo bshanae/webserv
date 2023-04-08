@@ -9,7 +9,7 @@ namespace algo
 	/// L-trims whitespaces
 	std::string ltrim(const std::string& str);
 
-	std::string cut(const std::string& str, size_t begin, size_t end);
+	std::string range(const std::string& str, size_t begin, size_t end);
 
 	bool startsWith(const std::string& main, const std::string& prefix);
 

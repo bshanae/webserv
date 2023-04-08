@@ -16,7 +16,7 @@ public:
 	explicit RequestProcessor(Project& project);
 	virtual ~RequestProcessor();
 
-	virtual void processRequest(const Request& request, Response& response) = 0;
+	virtual void processRequest(const Request& request, const std::string& localPath, Response& response) = 0;
 
 protected:
 

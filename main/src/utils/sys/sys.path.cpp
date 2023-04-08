@@ -18,6 +18,15 @@ std::string sys::path::directory(const std::string& path)
 	return path.substr(0, lastSlashIndex);
 }
 
+std::string sys::path::asDirectory(const std::string& path)
+{
+	std::string result;
+	if (result[result.length() - 1] != '/')
+		result += '/';
+
+	return result;
+}
+
 std::string sys::path::concat(const std::string& a, const std::string& b)
 {
 	if (a.empty())

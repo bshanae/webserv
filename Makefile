@@ -11,7 +11,6 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/config/Config.cpp                                               \
 	 main/src/config/LogConfig.cpp                                            \
 	 main/src/config/ServerConfig.cpp                                         \
-	 main/src/config/LocationConfig.cpp                                       \
 	 main/src/config/CGIConfig.cpp                                            \
 	 main/src/config/MediaConfig.cpp                                          \
 	 main/src/config/utils.cpp                                                \
@@ -22,6 +21,7 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/server/core/messages/Request.cpp                                \
      main/src/server/core/messages/Response.cpp                               \
      main/src/server/app/Server/Server.cpp                                    \
+	 main/src/server/app/locationProcessor/LocationProcessor.cpp              \
 	 main/src/server/app/requestProcessors/RequestProcessor.cpp               \
 	 main/src/server/app/requestProcessors/GetRequestProcessor.cpp            \
 	 main/src/server/app/project/Project.cpp                                  \
@@ -37,6 +37,7 @@ SRCS=main/src/main.cpp                                                        \
      main/src/common/MediaType.cpp                                            \
      main/src/common/WebAddress.cpp                                           \
      main/src/common/exceptions/WebException.cpp                              \
+	 main/src/common/Location.cpp                                             \
 	 main/src/utils/sys/Process.cpp                                           \
 	 main/src/utils/sys/Pipe.cpp                                              \
 	 main/src/utils/sys/FDescriptor.cpp                                       \

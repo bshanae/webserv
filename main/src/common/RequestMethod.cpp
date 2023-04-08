@@ -17,6 +17,7 @@ std::istream& operator>>(std::istream& stream, RequestMethod& method)
 		lookup["get"] = RequestMethodGET;
 		lookup["put"] = RequestMethodPUT;
 		lookup["post"] = RequestMethodPOST;
+		lookup["delete"] = RequestMethodDELETE;
 	}
 
 	std::string str;

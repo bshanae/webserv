@@ -50,17 +50,19 @@ std::vector<std::string> webserv::config::utils::extractArguments(const std::str
 
 	std::vector<std::string> args;
 
-	size_t argBegin = i;
+	size_t argBegin = i + 1;
 	size_t argEnd = -1;
-	while (argEnd < line.length())
+	while (argEnd != line.length())
 	{
-		argEnd = line.find(',');
+		argEnd = line.find(',', argBegin);
+		if (argEnd == -1)
+			argEnd = line.find(' ', argBegin);
 		if (argEnd == -1)
 			argEnd = line.length();
 
-		args.push_back(line.substr(i, line.length() - 1));
+		args.push_back(algo::range(line, argBegin, argEnd));
 
-		argBegin++;
+		argBegin = argEnd + 1;
 		algo::pass(line, argBegin, ' ');
 	}
 

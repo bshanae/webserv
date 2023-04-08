@@ -52,6 +52,17 @@ namespace webserv
 				
 				return values;
 			}
+
+			template <typename T>
+			T convert(const std::string& s)
+			{
+				std::stringstream sStream = std::stringstream(s);
+
+				T value;
+				sStream >> value;
+
+				return value;
+			}
 		}
 	}
 }

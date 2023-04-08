@@ -45,7 +45,7 @@ Optional<Request> Request::parse(const std::string& data)
 				break;
 
 			const HeaderName headerName = HeaderName(line.substr(0, line.find(':')));
-			const std::string headerValue = algo::cut(line, line.find(' '), line.length() - 1); // from space till \r
+			const std::string headerValue = algo::range(line, line.find(' '), line.length() - 1); // from space till \r
 
 			r._headers[headerName] = headerValue;
 		}

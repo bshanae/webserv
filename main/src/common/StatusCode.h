@@ -9,6 +9,7 @@ namespace webserv
 		StatusCodeOk = 200,
 		StatusCodeBadRequest = 400,
 		StatusCodeNotFound = 404,
+		StatusCodeMethodNowAllowed = 405,
 		StatusCodeInternalServerError = 500,
 	};
 }

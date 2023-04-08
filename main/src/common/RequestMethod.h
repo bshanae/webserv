@@ -8,7 +8,8 @@ namespace webserv
 	{
 		RequestMethodGET,
 		RequestMethodPUT,
-		RequestMethodPOST
+		RequestMethodPOST,
+		RequestMethodDELETE
 	};
 }
 

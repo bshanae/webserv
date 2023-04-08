@@ -14,7 +14,7 @@ public:
 
 	GetRequestProcessor(Project& project, bool autoindex, const config::MediaConfig& mediaConfig);
 
-	virtual void processRequest(const Request& request, Response& response);
+	virtual void processRequest(const Request& request, const std::string& localPath, Response& response);
 
 private:
 

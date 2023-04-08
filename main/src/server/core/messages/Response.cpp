@@ -5,6 +5,14 @@
 
 using namespace webserv;
 
+void Response::setStatusCode(int code)
+{
+	std::stringstream buffer;
+	buffer << "HTTP/1.1 " << code << " ";
+
+	_statusLine = buffer.str();
+}
+
 void Response::setStatusCode(const StatusCode code, const std::string& customReason)
 {
 	std::string finalReason = customReason;
@@ -30,6 +38,11 @@ void Response::setDate(const std::time_t &date)
 void Response::setServer(const std::string& serverName)
 {
 	storeHeader(HeaderName::Server, serverName);
+}
+
+void Response::setLocation(const std::string& location)
+{
+	storeHeader(HeaderName::Location, location);
 }
 
 void Response::addHeader(const std::string& header)
