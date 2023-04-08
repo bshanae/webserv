@@ -38,8 +38,15 @@ private:
 
 	char _clientBuffer[_clientBufferSize];
 	IClientSocketListener* _listener;
+	Optional<Request> _incompleteRequest;
 
 	virtual void processSocketEvent();
+
+	Optional<std::string> readMessageFromSocket();
+	Optional<Request> processRequest(const std::string& message);
+	Optional<std::string> processResponse(const Request& request);
+	void writeMessageToSocket(const std::string& message);
+
 	void logRequest(const std::string& str) const;
 	void logResponse(const std::string& str) const;
 };

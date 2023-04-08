@@ -100,3 +100,29 @@ const std::string& Request::body() const
 {
 	return _body;
 }
+
+void Request::setBody(const std::string& b)
+{
+	_body = b;
+}
+
+Optional<std::string> Request::findHeader(const HeaderName& name) const
+{
+	typedef std::map<HeaderName, std::string>::const_iterator iterT;
+	for (iterT i = _headers.cbegin(); i != _headers.cend(); i++)
+	{
+		if (i->first == name)
+			return i->second;
+	}
+
+	return Optional<std::string>();
+}
+
+Optional<size_t> Request::contentLength() const
+{
+	Optional<std::string> s = findHeader(HeaderName::ContentLength);
+	if (!s)
+		return Optional<size_t>();
+
+	return std::stoul(*s);
+}

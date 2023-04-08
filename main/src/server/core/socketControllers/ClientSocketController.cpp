@@ -26,6 +26,23 @@ void ClientSocketController::setListener(IClientSocketListener* listener)
 
 void ClientSocketController::processSocketEvent()
 {
+	Optional<std::string> message = readMessageFromSocket();
+	if (!message)
+		return;
+
+	Optional<Request> request = processRequest(*message);
+	if (!request)
+		return;
+
+	Optional<std::string> response = processResponse(*request);
+	if (!response)
+		return;
+
+	writeMessageToSocket(*response);
+}
+
+Optional<std::string> ClientSocketController::readMessageFromSocket()
+{
 	// TODO What is buffer is too small?
 	ssize_t byteCount = read(socket(), _clientBuffer, _clientBufferSize - 1);
 	if (byteCount <= 0)
@@ -37,33 +54,65 @@ void ClientSocketController::processSocketEvent()
 		if (_listener != NULL)
 			_listener->onClientDisconnected(*this);
 
-		return;
+		return Optional<std::string>();
 	}
 
 	_clientBuffer[byteCount] = '\0';
 
-	const std::string requestStr = std::string(_clientBuffer);
-	logRequest(requestStr);
+	std::string m = std::string(_clientBuffer);
+	logRequest(m);
 
-	Optional<Request> request = Request::parse(requestStr);
-	if (!request)
+	return m;
+}
+
+Optional<Request> ClientSocketController::processRequest(const std::string& message)
+{
+	if (_incompleteRequest.hasValue())
 	{
-		log::e << *this << log::startm << "Request was not parsed!" << log::endm;
-		return;
-	}
+		Request request = *_incompleteRequest;
+		_incompleteRequest.reset();
 
-	Optional<Response> response = _listener->onClientSentRequest(*this, *request);
-	if (!response)
+		request.setBody(message);
+		return request;
+	}
+	else
+	{
+		Optional<Request> request = Request::parse(message);
+		if (!request)
+		{
+			log::e << *this << log::startm << "Request was not parsed!" << log::endm;
+			return Optional<Request>();
+		}
+
+		if (request->contentLength())
+		{
+			_incompleteRequest = request;
+			return Optional<Request>();
+		}
+
+		return request;
+	}
+}
+
+Optional<std::string> ClientSocketController::processResponse(const Request& request)
+{
+	Optional<Response> r = _listener->onClientSentRequest(*this, request);
+	if (!r)
 	{
 		log::w << *this << log::startm << "No response is provided!" << log::endm;
-		return;
+		return Optional<std::string>();
 	}
 
-	const std::string responseStr = response->build();
-	logResponse(responseStr);
+	const std::string rStr = r->build();
+	logResponse(rStr);
 
-	const long bytesSent = write(socket(), responseStr.c_str(), responseStr.size());
-	if (bytesSent != responseStr.size())
+	return rStr;
+}
+
+void ClientSocketController::writeMessageToSocket(const std::string& message)
+{
+	const long bytesSent = write(socket(), message.c_str(), message.size());
+	if (bytesSent != message.size())
 	{
 		// TODO Error
 	}
