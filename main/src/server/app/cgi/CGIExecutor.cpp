@@ -89,6 +89,8 @@ std::vector<std::string> CGIExecutor::collectConstEnv(const ServerConfig& server
 	env.push_back("SERVER_ADDR=" + serverConfig.address().host);
 	env.push_back("SERVER_NAME=" + serverConfig.address().host);
 	env.push_back("SERVER_PORT=" + std::to_string(serverConfig.address().port));
+	env.push_back("REMOTE_ADDR=" + serverConfig.address().host);
+	env.push_back("REMOTE_PORT=" + std::to_string(serverConfig.address().port));
 	env.push_back("SERVER_SOFTWARE=webserv/1.0");
 	env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 
@@ -100,8 +102,6 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 	std::vector<std::string> env = _constEnv;
 
 	env.push_back("SERVER_PROTOCOL=" + request.protocol());
-//	env.push_back("REMOTE_ADDR=" + serverConfig.address().host); TODO
-//	env.push_back("REMOTE_PORT=" + std::to_string(serverConfig.address().port)); TODO
 	env.push_back("QUERY_STRING=" + request.query());
 	env.push_back("REQUEST_METHOD=" + toString(request.method()));
 	env.push_back("REQUEST_URI=" + request.uri());
