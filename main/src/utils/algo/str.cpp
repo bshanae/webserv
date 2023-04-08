@@ -55,6 +55,9 @@ void algo::markEmptyLines(std::string& target, const std::string& endl)
 {
 	replaceAll(target, endl + endl, endl + "$" + endl);
 
+	if (target.length() < endl.length())
+		return;
+
 	const size_t lastEndlOffset = target.length() - endl.length();
 	if (target.compare(lastEndlOffset, endl.length(), endl) == 0)
 		target.replace(lastEndlOffset, endl.length(), endl + "$");
