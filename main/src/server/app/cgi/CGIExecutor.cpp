@@ -51,7 +51,7 @@ CGIOutput CGIExecutor::executeCGI(const Request& request) const
 		sys::Process process(localPath, arg, env);
 
 		// write stdin
-		process.stdIn() << "Hello world!" << std::endl;
+		process.stdIn() << request.body() << std::endl;
 
 		// wait for exit
 		const int exitCode = process.wait();
