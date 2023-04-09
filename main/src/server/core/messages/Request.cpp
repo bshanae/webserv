@@ -45,7 +45,7 @@ Optional<Request> Request::parse(const std::string& data)
 				break;
 
 			const HeaderName headerName = HeaderName(line.substr(0, line.find(':')));
-			const std::string headerValue = algo::range(line, line.find(' '), line.length() - 1); // from space till \r
+			const std::string headerValue = algo::range(line, line.find(' ') + 1, line.length() - 1); // from space till \r
 
 			r._headers[headerName] = headerValue;
 		}
@@ -101,15 +101,15 @@ const std::string& Request::body() const
 	return _body;
 }
 
-void Request::setBody(const std::string& b)
+void Request::appendBody(const std::string& bodyPiece)
 {
-	_body = b;
+	_body += bodyPiece;
 }
 
 Optional<std::string> Request::findHeader(const HeaderName& name) const
 {
-	typedef std::map<HeaderName, std::string>::const_iterator iterT;
-	for (iterT i = _headers.cbegin(); i != _headers.cend(); i++)
+	typedef std::map<HeaderName, std::string>::const_iterator HeaderIterator;
+	for (HeaderIterator i = _headers.cbegin(); i != _headers.cend(); i++)
 	{
 		if (i->first == name)
 			return i->second;

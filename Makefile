@@ -24,6 +24,7 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/server/app/locationProcessor/LocationProcessor.cpp              \
 	 main/src/server/app/requestProcessors/RequestProcessor.cpp               \
 	 main/src/server/app/requestProcessors/GetRequestProcessor.cpp            \
+	 main/src/server/app/requestProcessors/PostRequestProcessor.cpp           \
 	 main/src/server/app/project/Project.cpp                                  \
 	 main/src/server/app/project/IndexGenerator.cpp                           \
 	 main/src/server/app/cgi/CGIExecutor.cpp                                  \

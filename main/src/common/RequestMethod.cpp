@@ -38,9 +38,9 @@ std::string toString(RequestMethod method)
 	static std::map<RequestMethod, std::string> lookup;
 	if (lookup.empty())
 	{
-		lookup[RequestMethodGET] = "get";
-		lookup[RequestMethodPUT] = "put";
-		lookup[RequestMethodPOST] = "post";
+		lookup[RequestMethodGET] = "GET";
+		lookup[RequestMethodPUT] = "PUT";
+		lookup[RequestMethodPOST] = "POST";
 	}
 
 	std::map<RequestMethod, std::string>::iterator i = lookup.find(method);

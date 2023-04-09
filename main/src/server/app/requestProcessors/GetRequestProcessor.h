@@ -12,7 +12,8 @@ class webserv::GetRequestProcessor : public RequestProcessor
 {
 public:
 
-	GetRequestProcessor(Project& project, bool autoindex, const config::MediaConfig& mediaConfig);
+	GetRequestProcessor(Project& project, CGIExecutor& cgi, bool autoindex, const config::MediaConfig& mediaConfig);
+	virtual ~GetRequestProcessor();
 
 	virtual void processRequest(const Request& request, const std::string& localPath, Response& response);
 

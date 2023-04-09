@@ -8,15 +8,21 @@
 using namespace webserv;
 using namespace webserv::config;
 
-GetRequestProcessor::GetRequestProcessor(Project& project, bool autoindex, const MediaConfig& mediaConfig):
-	RequestProcessor(project),
+GetRequestProcessor::GetRequestProcessor(Project& project, CGIExecutor& cgi, bool autoindex, const MediaConfig& mediaConfig):
+	RequestProcessor(project, cgi),
 	_autoindex(autoindex),
 	_mediaConfig(mediaConfig)
 {
 }
 
+GetRequestProcessor::~GetRequestProcessor()
+{}
+
 void GetRequestProcessor::processRequest(const Request& request, const std::string& localPath, Response& response)
 {
+	if (tryProcessCGI(request, localPath, response))
+		return;
+
 	const std::string& remotePath = request.path();
 	const std::string& fullLocalPath = project().resolvePath(localPath);
 

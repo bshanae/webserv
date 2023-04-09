@@ -1,11 +1,12 @@
 #include "CGIExecutor.h"
 
 #include <ostream>
-#include "log/log.h"
-#include "common/exceptions/WebException.h"
+#include "utils/exceptions/SystemException.h"
 #include "utils/sys/sys.path.h"
 #include "utils/sys/Process.h"
 #include "utils/io/io.h"
+#include "common/exceptions/WebException.h"
+#include "log/log.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -51,7 +52,7 @@ CGIOutput CGIExecutor::executeCGI(const Request& request) const
 		sys::Process process(localPath, arg, env);
 
 		// write stdin
-		process.stdIn() << request.body() << std::endl;
+		process.stdIn() << request.body() << std::flush;
 
 		// wait for exit
 		const int exitCode = process.wait();
@@ -66,9 +67,10 @@ CGIOutput CGIExecutor::executeCGI(const Request& request) const
 		}
 		else
 		{
-			log::e << *this << log::startm << "CGI exited with code " << exitCode << ", stderr:" << log::endl
+			log::e << *this << log::startm << "CGI exited with code " << exitCode << log::endl
+				   << "STDERR:" << log::endl
 				   << stdErr << log::endm;
-			throw WebException(StatusCodeInternalServerError, "Can't execute CGI");
+			throw SystemException("Can't execute CGI");
 		}
 
 		return parseCGIOutput(stdOut);
@@ -105,6 +107,14 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 	env.push_back("QUERY_STRING=" + request.query());
 	env.push_back("REQUEST_METHOD=" + toString(request.method()));
 	env.push_back("REQUEST_URI=" + request.uri());
+
+	Optional<std::string> contentLength = request.findHeader(HeaderName::ContentLength);
+	if (contentLength)
+		env.push_back("CONTENT_LENGTH=" + *contentLength);
+
+	Optional<std::string> contentType = request.findHeader(HeaderName::ContentType);
+	if (contentType)
+		env.push_back("CONTENT_TYPE=" + *contentType);
 
 	return env;
 }

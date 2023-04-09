@@ -24,7 +24,7 @@ public:
 	const std::string& protocol() const;
 	const std::map<HeaderName, std::string>& headers() const;
 	const std::string& body() const;
-	void setBody(const std::string& b);
+	void appendBody(const std::string& bodyPiece);
 
 	Optional<std::string> findHeader(const HeaderName& name) const;
 	Optional<size_t> contentLength() const;

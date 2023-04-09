@@ -69,10 +69,16 @@ Optional<Request> ClientSocketController::processRequest(const std::string& mess
 {
 	if (_incompleteRequest.hasValue())
 	{
+		log::e << *this << log::startm << "Incomplete request. Append." << log::endm;
+		_incompleteRequest->appendBody(message);
+
+		if (_incompleteRequest->body().size() < *_incompleteRequest->contentLength())
+			return Optional<Request>();
+
+		log::e << *this << log::startm << "Incomplete request. Finish." << log::endm;
 		Request request = *_incompleteRequest;
 		_incompleteRequest.reset();
 
-		request.setBody(message);
 		return request;
 	}
 	else
@@ -86,6 +92,8 @@ Optional<Request> ClientSocketController::processRequest(const std::string& mess
 
 		if (request->contentLength())
 		{
+			log::e << *this << log::startm << "Incomplete request. Start." << log::endm;
+
 			_incompleteRequest = request;
 			return Optional<Request>();
 		}
@@ -123,7 +131,7 @@ void ClientSocketController::logRequest(const std::string& str) const
 	if (!log::v.enabled)
 		return;
 
-	std::string markedStr = algo::truncate(str, 500);
+	std::string markedStr = algo::truncate(str, 5000);
 	algo::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "REQUEST" << log::endl

@@ -4,6 +4,7 @@
 #include "common/exceptions/WebException.h"
 #include "log/log.h"
 #include "server/app/requestProcessors/GetRequestProcessor.h"
+#include "server/app/requestProcessors/PostRequestProcessor.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -14,7 +15,8 @@ Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_locationProcessor(config.locations()),
 	_cgi(config.cgi(), config, _project)
 {
-	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, config.autoindex(), mediaConfig);
+	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, config.autoindex(), mediaConfig);
+	_requestProcessors[RequestMethodPOST] = new PostRequestProcessor(_project, _cgi);
 }
 
 Server::~Server()
@@ -41,9 +43,7 @@ Optional<Response> Server::onServerReceivedRequest(const Request& request)
 
 		if (processRedirect(location, response))
 			return response;
-		if (processCGIRequest(request, localPath, response))
-			return response;
-		processRegularRequest(request, localPath, response);
+		processRequest(request, localPath, response);
 	}
 	catch (WebException& e)
 	{
@@ -75,28 +75,7 @@ bool Server::processRedirect(const Location& location, Response& response)
 	return true;
 }
 
-bool Server::processCGIRequest(const Request& request, const std::string& localPath, Response& response)
-{
-	const std::string& remotePath = request.path();
-	const std::string& fullLocalPath = _project.resolvePath(localPath);
-
-	if (!_cgi.isCGI(remotePath, fullLocalPath))
-		return false;
-
-	if (!sys::isFile(fullLocalPath))
-		throw WebException(StatusCodeNotFound, "CGI script not found.");
-
-	CGIOutput output = _cgi.executeCGI(request);
-
-	response.setStatusCode(StatusCodeOk);
-	response.setBody(output.body);
-	for (int i = 0; i < output.headers.size(); i++)
-		response.addHeader(output.headers[i]);
-
-	return true;
-}
-
-void Server::processRegularRequest(const Request& request, const std::string& localPath, Response& response)
+void Server::processRequest(const Request& request, const std::string& localPath, Response& response)
 {
 	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
 	if (i == _requestProcessors.end())
