@@ -58,13 +58,15 @@ int main(int argc, char** argv)
 		// initialize virtual servers
 
 		std::map<WebAddress, std::vector<Server*> > serversByAddress;
-		for (std::vector<ServerConfig>::const_iterator s = config.servers().cbegin(); s != config.servers().cend(); s++)
+		typedef std::vector<ServerConfig>::const_iterator ServerConfigIterator;
+		for (ServerConfigIterator s = config.servers().cbegin(); s != config.servers().cend(); s++)
 			serversByAddress[s->address()].push_back(new Server(*s, config.media()));
 
 		// initialize server socket controllers, link virtual servers to them
 
 		std::vector<ServerSocketController*> serverSockets;
-		for (std::map<WebAddress, std::vector<Server*> >::iterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
+		typedef std::map<WebAddress, std::vector<Server*> >::iterator ServersByAddressIterator;
+		for (ServersByAddressIterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
 		{
 			serverSockets.push_back(new ServerSocketController(sByA->first));
 			for (std::vector<Server*>::iterator s = sByA->second.begin(); s != sByA->second.end(); s++)
@@ -83,7 +85,7 @@ int main(int argc, char** argv)
 		for (int i = 0; i < serverSockets.size(); i++)
 			delete serverSockets[i];
 
-		for (std::map<WebAddress, std::vector<Server*> >::iterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
+		for (ServersByAddressIterator sByA = serversByAddress.begin(); sByA != serversByAddress.end(); sByA++)
 		{
 			for (std::vector<Server*>::iterator s = sByA->second.begin(); s != sByA->second.end(); s++)
 				delete *s;
