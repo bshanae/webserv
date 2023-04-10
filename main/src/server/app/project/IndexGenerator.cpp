@@ -15,7 +15,7 @@ std::string IndexGenerator::generatePage(Project& project, const std::string& re
 	{
 		const std::string& entryName = entries[i];
 		const std::string remoteEntryPath = sys::path::concat(remotePath, entryName);
-		const std::string localEntryPath = project.resolvePath(remoteEntryPath);
+		const std::string localEntryPath = project.resolvePath(sys::path::concat(localPath, entryName));
 
 		fileInfos.push_back(buildFileInfo(project, entryName, remoteEntryPath, localEntryPath));
 	}
