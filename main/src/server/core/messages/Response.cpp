@@ -67,6 +67,11 @@ void Response::setEmptyBody()
 	setBody(MediaType::Default, "");
 }
 
+void Response::ignoreBody()
+{
+	_body = Optional<std::string>();
+}
+
 std::string Response::build() const
 {
 	static const std::string endl = "\r\n";
@@ -83,10 +88,8 @@ std::string Response::build() const
 
 	buffer << endl;
 
-	if (!_body.hasValue())
-		throw InvalidOperationException("Response's body has to be set in order to fill header Content-Length!");
-
-	buffer << *_body;
+	if (_body.hasValue())
+		buffer << *_body;
 
 	return buffer.str();
 }

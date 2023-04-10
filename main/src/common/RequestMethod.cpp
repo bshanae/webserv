@@ -15,6 +15,7 @@ std::istream& operator>>(std::istream& stream, RequestMethod& method)
 	if (lookup.empty())
 	{
 		lookup["get"] = RequestMethodGET;
+		lookup["head"] = RequestMethodHEAD;
 		lookup["put"] = RequestMethodPUT;
 		lookup["post"] = RequestMethodPOST;
 		lookup["delete"] = RequestMethodDELETE;
@@ -39,6 +40,7 @@ std::string toString(RequestMethod method)
 	if (lookup.empty())
 	{
 		lookup[RequestMethodGET] = "GET";
+		lookup[RequestMethodHEAD] = "HEAD";
 		lookup[RequestMethodPUT] = "PUT";
 		lookup[RequestMethodPOST] = "POST";
 	}

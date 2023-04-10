@@ -7,6 +7,7 @@ namespace webserv
 	enum RequestMethod
 	{
 		RequestMethodGET,
+		RequestMethodHEAD,
 		RequestMethodPUT,
 		RequestMethodPOST,
 		RequestMethodDELETE

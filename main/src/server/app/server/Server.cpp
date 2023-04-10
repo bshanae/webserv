@@ -4,6 +4,7 @@
 #include "common/exceptions/WebException.h"
 #include "log/log.h"
 #include "server/app/requestProcessors/GetRequestProcessor.h"
+#include "server/app/requestProcessors/HeadRequestProcessor.h"
 #include "server/app/requestProcessors/PostRequestProcessor.h"
 
 using namespace webserv;
@@ -16,6 +17,7 @@ Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_cgi(config.cgi(), config, _project)
 {
 	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, config.autoindex(), mediaConfig);
+	_requestProcessors[RequestMethodHEAD] = new HeadRequestProcessor(_project, _cgi, config.autoindex(), mediaConfig);
 	_requestProcessors[RequestMethodPOST] = new PostRequestProcessor(_project, _cgi);
 }
 

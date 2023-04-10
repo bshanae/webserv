@@ -31,6 +31,7 @@ public:
 	void setBody(const std::string& data);
 	void setBody(const MediaType& type, const std::string& data);
 	void setEmptyBody();
+	void ignoreBody();
 
 	std::string build() const;
 
