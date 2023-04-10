@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include "config/ServerConfig.h"
 #include "config/MediaConfig.h"
 #include "server/core/messages/Request.h"
