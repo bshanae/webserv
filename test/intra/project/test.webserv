@@ -1,0 +1,38 @@
+log {
+	info 1
+	warning 1
+	error 1
+	verbose 1
+}
+
+media default
+
+server {
+    address 0.0.0.0:8080
+    root .
+    autoindex 1
+
+    location {
+        remote /
+        local /www
+        methods GET
+    }
+
+    location {
+        remote /put_test/
+        local /var/put_test/
+        methods PUT
+    }
+
+    location {
+        remote /post_body
+        local /var/post_body/
+        methods POST
+    }
+
+    location {
+        remote /directory
+        local /www/YoupiBanane
+        methods GET
+    }
+}
