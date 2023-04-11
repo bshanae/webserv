@@ -1,9 +1,11 @@
 #pragma once
 
 #include <vector>
-#include "SocketController.h"
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
+#include "../SocketController.h"
+#include "RequestAccumulator.h"
+
 
 namespace webserv
 {
@@ -38,7 +40,7 @@ private:
 
 	char _clientBuffer[_clientBufferSize];
 	IClientSocketListener* _listener;
-	Optional<Request> _incompleteRequest;
+	RequestAccumulator _requestAccumulator;
 
 	virtual void processSocketEvent();
 

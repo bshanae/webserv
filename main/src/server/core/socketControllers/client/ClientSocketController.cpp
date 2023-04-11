@@ -67,39 +67,12 @@ Optional<std::string> ClientSocketController::readMessageFromSocket()
 
 Optional<Request> ClientSocketController::processRequest(const std::string& message)
 {
-	if (_incompleteRequest.hasValue())
-	{
-		log::e << *this << log::startm << "Incomplete request. Append." << log::endm;
-		_incompleteRequest->appendBody(message);
+	_requestAccumulator.accumulate(message);
 
-		if (_incompleteRequest->body().size() < *_incompleteRequest->contentLength())
-			return Optional<Request>();
-
-		log::e << *this << log::startm << "Incomplete request. Finish." << log::endm;
-		Request request = *_incompleteRequest;
-		_incompleteRequest.reset();
-
-		return request;
-	}
+	if (_requestAccumulator.requestReady())
+		return _requestAccumulator.request();
 	else
-	{
-		Optional<Request> request = Request::parse(message);
-		if (!request)
-		{
-			log::e << *this << log::startm << "Request was not parsed!" << log::endm;
-			return Optional<Request>();
-		}
-
-		if (request->contentLength())
-		{
-			log::e << *this << log::startm << "Incomplete request. Start." << log::endm;
-
-			_incompleteRequest = request;
-			return Optional<Request>();
-		}
-
-		return request;
-	}
+		return Optional<Request>();
 }
 
 Optional<std::string> ClientSocketController::processResponse(const Request& request)

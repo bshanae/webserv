@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "SocketController.h"
-#include "ClientSocketController.h"
+#include "../SocketController.h"
+#include "../client/ClientSocketController.h"
 #include "common/WebAddress.h"
 #include "server/core/messages/Response.h"
 #include "utils/templates/Optional.h"

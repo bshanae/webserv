@@ -6,7 +6,7 @@
 #include "config/MediaConfig.h"
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
-#include "server/core/socketControllers/ServerSocketController.h"
+#include "server/core/socketControllers/server/ServerSocketController.h"
 #include "server/app/requestProcessors/RequestProcessor.h"
 #include "server/app/project/Project.h"
 #include "server/app/LocationProcessor.h"
