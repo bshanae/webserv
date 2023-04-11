@@ -28,7 +28,6 @@ public:
 	const WebAddress& address() const;
 	const std::string& root() const;
 	const std::vector<Location>& locations() const;
-	bool autoindex() const;
 	const CGIConfig& cgi() const;
 
 private:
@@ -37,6 +36,5 @@ private:
 	WebAddress _address;
 	std::string _root;
 	std::vector<Location> _locations;
-	bool _autoindex;
 	CGIConfig _cgi;
 };

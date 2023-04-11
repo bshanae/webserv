@@ -16,8 +16,8 @@ Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_locationProcessor(config.locations()),
 	_cgi(config.cgi(), config, _project)
 {
-	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, config.autoindex(), mediaConfig);
-	_requestProcessors[RequestMethodHEAD] = new HeadRequestProcessor(_project, _cgi, config.autoindex(), mediaConfig);
+	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, mediaConfig);
+	_requestProcessors[RequestMethodHEAD] = new HeadRequestProcessor(_project, _cgi, mediaConfig);
 	_requestProcessors[RequestMethodPOST] = new PostRequestProcessor(_project, _cgi);
 }
 
@@ -41,11 +41,9 @@ Optional<Response> Server::onServerReceivedRequest(const Request& request)
 		if (!algo::contains(location.methods(), request.method()))
 			throw WebException(StatusCodeMethodNowAllowed);
 
-		const std::string localPath = location.transformRemotePath(request.path());
-
 		if (processRedirect(location, response))
 			return response;
-		processRequest(request, localPath, response);
+		processRequest(request, location, response);
 	}
 	catch (WebException& e)
 	{
@@ -77,13 +75,13 @@ bool Server::processRedirect(const Location& location, Response& response)
 	return true;
 }
 
-void Server::processRequest(const Request& request, const std::string& localPath, Response& response)
+void Server::processRequest(const Request& request, const Location& location, Response& response)
 {
 	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
 	if (i == _requestProcessors.end())
 		throw WebException(StatusCodeBadRequest, "Unsupported request method");
 
-	i->second->processRequest(request, localPath, response);
+	i->second->processRequest(request, location, response);
 }
 
 std::ostream& operator<<(std::ostream& stream, const Server& server)

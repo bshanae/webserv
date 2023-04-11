@@ -18,15 +18,6 @@ std::string sys::path::directory(const std::string& path)
 	return path.substr(0, lastSlashIndex);
 }
 
-std::string sys::path::asDirectory(const std::string& path)
-{
-	std::string result;
-	if (result[result.length() - 1] != '/')
-		result += '/';
-
-	return result;
-}
-
 std::string sys::path::concat(const std::string& a, const std::string& b)
 {
 	if (a.empty())
@@ -34,8 +25,21 @@ std::string sys::path::concat(const std::string& a, const std::string& b)
 	if (b.empty())
 		return a;
 
+	if (a == "." && b[0] == '.')
+		return b;
+
 	if (a[a.length() - 1] == '/' || b[0] == '/')
 		return a + b;
 	else
 		return a + '/' + b;
+}
+
+std::string sys::path::removeTrailingSplash(const std::string& path)
+{
+	if (path.length() == 0)
+		return path;
+	if (path[path.length() - 1] != '/')
+		return path;
+
+	return path.substr(0, path.length() - 1);
 }

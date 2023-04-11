@@ -10,23 +10,23 @@ media default
 server {
     address 0.0.0.0:8080
     root .
-    autoindex 1
 
     location {
         remote /
         local /www
         methods GET
+        index index.html
     }
 
     location {
-        remote /put_test/
-        local /var/put_test/
+        remote /put_test
+        local /var/put_test
         methods PUT
     }
 
     location {
         remote /post_body
-        local /var/post_body/
+        local /var/post_body
         methods POST
     }
 
@@ -34,5 +34,6 @@ server {
         remote /directory
         local /www/YoupiBanane
         methods GET
+        index youpi.bad_extension
     }
 }

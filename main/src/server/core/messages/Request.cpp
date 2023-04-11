@@ -3,6 +3,7 @@
 #include <sstream>
 #include "utils/exceptions/ParsingException.h"
 #include "utils/algo/str.h"
+#include "utils/sys/sys.path.h"
 #include "log/log.h"
 #include "common/HeaderName.h"
 
@@ -23,12 +24,12 @@ Optional<Request> Request::parse(const std::string& data)
 		const size_t iQuestion = r._uri.find('?');
 		if (iQuestion != std::string::npos)
 		{
-			r._path = r._uri.substr(0, iQuestion);
+			r._path = sys::path::removeTrailingSplash(r._uri.substr(0, iQuestion));
 			r._query = r._uri.substr(iQuestion + 1, r._uri.length() - 1);
 		}
 		else
 		{
-			r._path = r._uri;
+			r._path = sys::path::removeTrailingSplash(r._uri);
 			r._query = "";
 		}
 

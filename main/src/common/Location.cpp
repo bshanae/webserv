@@ -21,11 +21,11 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 		}
 		else if (algo::startsWith(line, "remote"))
 		{
-			config._remotePath = utils::extractArgument(line);
+			config._remotePath = sys::path::removeTrailingSplash(utils::extractArgument(line));
 		}
 		else if (algo::startsWith(line, "local"))
 		{
-			config._localPath = utils::extractArgument(line);
+			config._localPath = sys::path::removeTrailingSplash(utils::extractArgument(line));
 		}
 		else if (algo::startsWith(line, "redirect"))
 		{
@@ -37,6 +37,18 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 		{
 			std::vector<RequestMethod> v = utils::extractArguments<RequestMethod>(line);
 			config._methods = std::set<RequestMethod>(v.begin(), v.end());
+		}
+		else if (algo::startsWith(line, "index"))
+		{
+			config._index = utils::extractArgument(line);
+		}
+		else if (algo::startsWith(line, "autoindex"))
+		{
+			config._autoindex = true;
+		}
+		else
+		{
+			throw ParsingException("Invalid line: " + line);
 		}
 	}
 
@@ -66,6 +78,16 @@ int Location::redirectionCode() const
 const std::set<RequestMethod>& Location::methods() const
 {
 	return _methods;
+}
+
+const Optional<std::string> &Location::index() const
+{
+	return _index;
+}
+
+bool Location::autoindex() const
+{
+	return _autoindex;
 }
 
 std::string Location::transformRemotePath(const std::string& path) const

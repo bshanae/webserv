@@ -39,10 +39,6 @@ std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& co
 
 			config._locations.push_back(location);
 		}
-		else if (algo::startsWith(line, "autoindex"))
-		{
-			config._autoindex = utils::extractArgument<bool>(line);
-		}
 		else if (algo::startsWith(line, "cgi"))
 		{
 			source >> config._cgi;
@@ -56,7 +52,7 @@ std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& co
 	return source;
 }
 
-ServerConfig::ServerConfig() : _autoindex(false)
+ServerConfig::ServerConfig()
 {}
 
 const std::string& ServerConfig::name() const
@@ -77,11 +73,6 @@ const std::string& ServerConfig::root() const
 const std::vector<Location>& ServerConfig::locations() const
 {
 	return _locations;
-}
-
-bool ServerConfig::autoindex() const
-{
-	return _autoindex;
 }
 
 const CGIConfig& ServerConfig::cgi() const

@@ -42,5 +42,5 @@ private:
 
 	virtual Optional<Response> onServerReceivedRequest(const Request& request);
 	bool processRedirect(const Location& location, Response& response);
-	void processRequest(const Request& request, const std::string& localPath, Response& response);
+	void processRequest(const Request& request, const Location& location, Response& response);
 };

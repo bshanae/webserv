@@ -14,8 +14,10 @@ PostRequestProcessor::PostRequestProcessor(Project& project, CGIExecutor& cgi): 
 PostRequestProcessor::~PostRequestProcessor()
 {}
 
-void PostRequestProcessor::processRequest(const Request& request, const std::string& localPath, Response& response)
+void PostRequestProcessor::processRequest(const Request& request, const Location& location, Response& response)
 {
+	const std::string localPath = location.transformRemotePath(request.path());
+
 	if (tryProcessCGI(request, localPath, response))
 		return;
 }

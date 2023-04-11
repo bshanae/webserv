@@ -3,16 +3,16 @@
 using namespace webserv;
 using namespace webserv::config;
 
-HeadRequestProcessor::HeadRequestProcessor(Project& project, CGIExecutor& cgi, bool autoindex, const MediaConfig& mediaConfig):
-	GetRequestProcessor(project, cgi, autoindex, mediaConfig)
+HeadRequestProcessor::HeadRequestProcessor(Project& project, CGIExecutor& cgi, const MediaConfig& mediaConfig):
+	GetRequestProcessor(project, cgi, mediaConfig)
 {
 }
 
 HeadRequestProcessor::~HeadRequestProcessor()
 {}
 
-void HeadRequestProcessor::processRequest(const Request& request, const std::string& localPath, Response& response)
+void HeadRequestProcessor::processRequest(const Request& request, const Location& location, Response& response)
 {
-	GetRequestProcessor::processRequest(request, localPath, response);
+	GetRequestProcessor::processRequest(request, location, response);
 	response.ignoreBody();
 }

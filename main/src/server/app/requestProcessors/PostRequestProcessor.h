@@ -15,7 +15,7 @@ public:
 	PostRequestProcessor(Project& project, CGIExecutor& cgi);
 	~PostRequestProcessor();
 
-	virtual void processRequest(const Request& request, const std::string& localPath, Response& response);
+	virtual void processRequest(const Request& request, const Location& location, Response& response);
 
 private:
 };

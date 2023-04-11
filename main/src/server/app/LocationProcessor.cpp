@@ -21,7 +21,7 @@ const Location& LocationProcessor::resolveLocation(const std::string& path) cons
 			continue;
 
 		const size_t matchLength = l->remotePath().length();
-		if (l->remotePath().length() > bestMatchLength)
+		if (bestMatch == nullptr || l->remotePath().length() > bestMatchLength)
 		{
 			bestMatch = &*l;
 			bestMatchLength = matchLength;
