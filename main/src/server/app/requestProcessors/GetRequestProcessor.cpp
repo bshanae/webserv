@@ -1,9 +1,10 @@
 #include "GetRequestProcessor.h"
 
-#include "common/exceptions/WebException.h"
-#include "server/app/project/IndexGenerator.h"
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
+#include "log/log.h"
+#include "common/exceptions/WebException.h"
+#include "server/app/project/IndexGenerator.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -42,17 +43,25 @@ void GetRequestProcessor::processRequest(const Request& request, const std::stri
 			response.setStatusCode(StatusCodeOk);
 			response.setBody(MediaType::Html, IndexGenerator::generatePage(project(), remotePath, fullLocalPath));
 		}
-	}
-	else if (sys::isFile(fullLocalPath))
-	{
-		response.setStatusCode(StatusCodeOk);
-		response.setBody(
-			_mediaConfig.fileExtensionToMediaType().at(sys::path::extension(fullLocalPath)),
-			sys::readFile(fullLocalPath)
-		);
+
+		return;
 	}
 	else
 	{
-		throw WebException(StatusCodeNotFound, "File not found: " + fullLocalPath);
+		MediaType mediaType = MediaType::Default;
+		try
+		{
+			mediaType = _mediaConfig.fileExtensionToMediaType().at(sys::path::extension(localPath));
+		}
+		catch (...)
+		{
+			log::w << "[GetRequestProcessor]" << log::startm << "Unknown extension " << sys::path::extension(localPath) << log::endm;
+		}
+
+		if (!sys::isFile(fullLocalPath))
+			throw WebException(StatusCodeNotFound, "File not found: " + fullLocalPath);
+
+		response.setStatusCode(StatusCodeOk);
+		response.setBody(mediaType, sys::readFile(fullLocalPath));
 	}
 }
