@@ -9,7 +9,7 @@
 #include "server/core/socketControllers/ServerSocketController.h"
 #include "server/app/requestProcessors/RequestProcessor.h"
 #include "server/app/project/Project.h"
-#include "server/app/locationProcessor/LocationProcessor.h"
+#include "server/app/LocationProcessor.h"
 #include "server/app/cgi/CGIExecutor.h"
 #include "utils/templates/Optional.h"
 

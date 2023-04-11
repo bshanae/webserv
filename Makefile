@@ -14,14 +14,14 @@ SRCS=main/src/main.cpp                                                        \
 	 main/src/config/CGIConfig.cpp                                            \
 	 main/src/config/MediaConfig.cpp                                          \
 	 main/src/config/utils.cpp                                                \
-	 main/src/server/core/coreServer/CoreServer.cpp                           \
+	 main/src/server/core/CoreServer.cpp                                      \
 	 main/src/server/core/socketControllers/SocketController.cpp              \
 	 main/src/server/core/socketControllers/ServerSocketController.cpp        \
 	 main/src/server/core/socketControllers/ClientSocketController.cpp        \
 	 main/src/server/core/messages/Request.cpp                                \
      main/src/server/core/messages/Response.cpp                               \
-     main/src/server/app/Server/Server.cpp                                    \
-	 main/src/server/app/locationProcessor/LocationProcessor.cpp              \
+     main/src/server/app/Server.cpp                                           \
+	 main/src/server/app/LocationProcessor.cpp                                \
 	 main/src/server/app/requestProcessors/RequestProcessor.cpp               \
 	 main/src/server/app/requestProcessors/GetRequestProcessor.cpp            \
 	 main/src/server/app/requestProcessors/HeadRequestProcessor.cpp           \

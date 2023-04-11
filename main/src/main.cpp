@@ -1,9 +1,9 @@
 #include <fstream>
 #include <unistd.h>
 #include "config/Config.h"
-#include "server/core/coreServer/CoreServer.h"
+#include "server/core/CoreServer.h"
 #include "server/core/socketControllers/ServerSocketController.h"
-#include "server/app/server/Server.h"
+#include "server/app/Server.h"
 #include "log/log.h"
 #include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
