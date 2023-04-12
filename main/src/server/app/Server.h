@@ -20,17 +20,18 @@ namespace webserv
 
 std::ostream& operator<<(std::ostream& stream, const webserv::Server& server);
 
-class webserv::Server : public IServerSocketListener
+class webserv::Server : public IServerSocketDelegate
 {
 	friend std::ostream&::operator<<(std::ostream& stream, const Server& server);
 
 public:
 
 	Server(const config::ServerConfig& config, const config::MediaConfig& mediaConfig);
-	~Server();
+	virtual ~Server();
 
 private:
 
+	std::string _name;
 	WebAddress _address;
 	Project _project;
 	LocationProcessor _locationProcessor;
@@ -40,7 +41,8 @@ private:
 	Server(Server&);
 	Server& operator=(Server&);
 
-	virtual Optional<Response> onServerReceivedRequest(const Request& request);
+	virtual bool targetOfRequest(const Request& request);
+	virtual Response respondToRequest(const Request& request);
 	bool processRedirect(const Location& location, Response& response);
 	void processRequest(const Request& request, const Location& location, Response& response);
 };

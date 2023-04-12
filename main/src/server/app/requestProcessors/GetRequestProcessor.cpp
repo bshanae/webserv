@@ -31,7 +31,7 @@ void GetRequestProcessor::processRequest(const Request& request, const Location&
 	{
 		if (location.index())
 		{
-			const std::string indexPath = project().resolvePath(sys::path::concat(fullLocalPath, *location.index()));
+			const std::string indexPath = project().resolvePath(sys::path::concat(localPath, *location.index()));
 			if (!sys::isFile(indexPath))
 				throw WebException(StatusCodeNotFound, "Index not found: " + indexPath);
 

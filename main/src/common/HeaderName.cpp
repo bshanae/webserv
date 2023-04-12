@@ -7,6 +7,7 @@ using namespace webserv;
 
 HeaderName HeaderName::Date = HeaderName("Date");
 HeaderName HeaderName::Server = HeaderName("Server");
+HeaderName HeaderName::Host = HeaderName("Host");
 HeaderName HeaderName::Location = HeaderName("Location");
 HeaderName HeaderName::ContentLength = HeaderName("Content-Length");
 HeaderName HeaderName::ContentType = HeaderName("Content-Type");

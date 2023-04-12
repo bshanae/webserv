@@ -13,6 +13,7 @@ public:
 
 	static HeaderName Date;
 	static HeaderName Server;
+	static HeaderName Host;
 	static HeaderName Location;
 	static HeaderName ContentLength;
 	static HeaderName ContentType;

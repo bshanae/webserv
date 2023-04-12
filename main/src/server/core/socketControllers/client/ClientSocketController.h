@@ -3,23 +3,15 @@
 #include <vector>
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
-#include "../SocketController.h"
+#include "server/core/socketControllers/SocketController.h"
+#include "server/core/socketDelegates/IClientSocketDelegate.h"
 #include "RequestAccumulator.h"
 
 
 namespace webserv
 {
-	class IClientSocketListener;
 	class ClientSocketController;
 }
-
-class webserv::IClientSocketListener
-{
-public:
-
-	virtual void onClientDisconnected(const ClientSocketController& controller) = 0;
-	virtual Optional<Response> onClientSentRequest(const ClientSocketController& controller, const Request& request) = 0;
-};
 
 std::ostream& operator<<(std::ostream& stream, const webserv::ClientSocketController& controller);
 
@@ -29,17 +21,19 @@ class webserv::ClientSocketController : public SocketController
 
 public:
 
-	explicit ClientSocketController(sys::FDescriptor socket);
+	explicit ClientSocketController(sys::FDescriptor socket, const WebAddress& address);
 	virtual ~ClientSocketController();
 
-	void setListener(IClientSocketListener* listener);
+	const WebAddress& address() const;
+	void setDelegate(IClientSocketDelegate* delegate);
 
 private:
 
 	static const size_t _clientBufferSize = 8192;
 
+	WebAddress _address;
 	char _clientBuffer[_clientBufferSize];
-	IClientSocketListener* _listener;
+	IClientSocketDelegate* _delegate;
 	RequestAccumulator _requestAccumulator;
 
 	virtual void processSocketEvent();

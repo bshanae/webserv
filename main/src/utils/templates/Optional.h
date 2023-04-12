@@ -45,22 +45,22 @@ public:
 
 	T& operator*()
 	{
-		return getValue();
+		return value();
 	}
 
 	const T& operator*() const
 	{
-		return getValue();
+		return value();
 	}
 
 	T* operator->()
 	{
-		return &getValue();
+		return &value();
 	}
 
 	const T* operator->() const
 	{
-		return &getValue();
+		return &value();
 	}
 
 	bool hasValue() const
@@ -73,7 +73,7 @@ public:
 		_hasValue = false;
 	}
 
-	T& getValue()
+	T& value()
 	{
 		if (!_hasValue)
 			throw InvalidStateException("Value is not set!");
@@ -81,7 +81,7 @@ public:
 		return _value;
 	}
 
-	const T& getValue() const
+	const T& value() const
 	{
 		if (!_hasValue)
 			throw InvalidStateException("Value is not set!");

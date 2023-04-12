@@ -7,7 +7,7 @@
 using namespace webserv;
 using namespace webserv::log;
 
-ClientSocketController::ClientSocketController(sys::FDescriptor socket): _listener(NULL) // NOLINT(cppcoreguidelines-pro-type-member-init)
+ClientSocketController::ClientSocketController(sys::FDescriptor socket, const WebAddress& address): _delegate(NULL), _address(address) // NOLINT(cppcoreguidelines-pro-type-member-init)
 {
 	bindSocket(socket);
 
@@ -19,9 +19,14 @@ ClientSocketController::~ClientSocketController()
 	log::i << *this << log::startm << "Uninitialized." << log::endm;
 }
 
-void ClientSocketController::setListener(IClientSocketListener* listener)
+const WebAddress& ClientSocketController::address() const
 {
-	_listener = listener;
+	return _address;
+}
+
+void ClientSocketController::setDelegate(IClientSocketDelegate* delegate)
+{
+	_delegate = delegate;
 }
 
 void ClientSocketController::processSocketEvent()
@@ -51,8 +56,8 @@ Optional<std::string> ClientSocketController::readMessageFromSocket()
 
 		unbindSocket();
 
-		if (_listener != NULL)
-			_listener->onClientDisconnected(*this);
+		if (_delegate != NULL)
+			_delegate->onClientDisconnected(_address);
 
 		return Optional<std::string>();
 	}
@@ -77,14 +82,9 @@ Optional<Request> ClientSocketController::processRequest(const std::string& mess
 
 Optional<std::string> ClientSocketController::processResponse(const Request& request)
 {
-	Optional<Response> r = _listener->onClientSentRequest(*this, request);
-	if (!r)
-	{
-		log::w << *this << log::startm << "No response is provided!" << log::endm;
-		return Optional<std::string>();
-	}
+	Response r = _delegate->respondToRequest(request);
 
-	const std::string rStr = r->build();
+	const std::string rStr = r.build();
 	logResponse(rStr);
 
 	return rStr;
@@ -125,6 +125,6 @@ void ClientSocketController::logResponse(const std::string& str) const
 
 std::ostream& operator<<(std::ostream& stream, const ClientSocketController& controller)
 {
-	stream << "[ClientSocketController:socket=" << controller.socket() << "]";
+	stream << "[ClientSocketController:socket=" << controller.socket() << ",address=" << controller._address << "]";
 	return stream;
 }

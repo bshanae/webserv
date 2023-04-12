@@ -28,6 +28,7 @@ public:
 
 	Optional<std::string> findHeader(const HeaderName& name) const;
 	Optional<size_t> contentLength() const;
+	Optional<std::string> hostName() const;
 
 private:
 

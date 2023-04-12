@@ -14,6 +14,11 @@ WebAddress::WebAddress(const std::string& host, int port) : host(host), port(por
 {
 }
 
+bool WebAddress::operator==(const WebAddress& that) const
+{
+	return this->host == that.host && this->port == that.port;
+}
+
 bool WebAddress::operator<(const WebAddress& r) const
 {
 	if (this->host != r.host)

@@ -50,9 +50,9 @@ ServerSocketController::~ServerSocketController()
 	log::i << *this << log::startm << "Uninitialized." << log::endm;
 }
 
-void ServerSocketController::registerListener(IServerSocketListener& listener)
+void ServerSocketController::registerDelegate(IServerSocketDelegate& delegate)
 {
-	_listeners.push_back(&listener);
+	_delegates.push_back(&delegate);
 }
 
 void ServerSocketController::processSocketEvent()
@@ -62,21 +62,24 @@ void ServerSocketController::processSocketEvent()
 	int s = accept(socket(), reinterpret_cast<sockaddr*>(&clientAddress), &addressLength);
 	// TODO if (tempSocket < 0)
 
+	char clientAddressStr[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &(clientAddress.sin_addr), clientAddressStr, INET_ADDRSTRLEN);
+
 	if (fcntl(s, F_SETFL, O_NONBLOCK) != 0)
 		throw SocketException("Can't set O_NONBLOCK!");
 
-	ClientSocketController* clientController = new ClientSocketController(s);
+	ClientSocketController* clientController = new ClientSocketController(s, WebAddress(clientAddressStr, clientAddress.sin_port));
 	_clientControllers.push_back(clientController);
 
-	clientController->setListener(this);
+	clientController->setDelegate(this);
 	notifyAboutNewController(clientController);
 }
 
-void ServerSocketController::onClientDisconnected(const ClientSocketController& clientC)
+void ServerSocketController::onClientDisconnected(const WebAddress& clientAddress)
 {
 	for (std::vector<ClientSocketController*>::iterator i = _clientControllers.begin(); i != _clientControllers.end(); i++)
 	{
-		if (*i == &clientC)
+		if ((*i)->address() == clientAddress)
 		{
 			delete *i;
 			_clientControllers.erase(i);
@@ -85,21 +88,18 @@ void ServerSocketController::onClientDisconnected(const ClientSocketController& 
 		}
 	}
 
-	log::e << *this << log::startm << "Can't find client controller " << clientC << "!" << log::endm;
+	log::e << *this << log::startm << "Can't find client controller with address" << clientAddress << "!" << log::endm;
 }
 
-Optional<Response> ServerSocketController::onClientSentRequest(const ClientSocketController& clientC, const Request& request)
+Response ServerSocketController::respondToRequest(const webserv::Request& request)
 {
-	Optional<Response> response;
-
-	for (std::vector<IServerSocketListener*>::iterator i = _listeners.begin(); i != _listeners.end(); i++)
+	for (std::vector<IServerSocketDelegate*>::iterator i = _delegates.begin(); i != _delegates.end(); i++)
 	{
-		response = (*i)->onServerReceivedRequest(request);
-		if (response)
-			break;
+		if ((*i)->targetOfRequest(request))
+			return (*i)->respondToRequest(request);
 	}
 
-	return response;
+	return _delegates.front()->respondToRequest(request);
 }
 
 std::ostream& operator<<(std::ostream& stream, const ServerSocketController& controller)

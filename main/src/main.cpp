@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 		{
 			serverSockets.push_back(new ServerSocketController(sByA->first));
 			for (std::vector<Server*>::iterator s = sByA->second.begin(); s != sByA->second.end(); s++)
-				serverSockets.back()->registerListener(dynamic_cast<IServerSocketListener&>(**s));
+				serverSockets.back()->registerDelegate(static_cast<IServerSocketDelegate&>(**s));
 		}
 
 		// run server

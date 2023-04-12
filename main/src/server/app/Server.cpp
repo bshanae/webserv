@@ -11,8 +11,9 @@ using namespace webserv;
 using namespace webserv::config;
 
 Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
-	_project(config.root()),
+	_name(config.name()),
 	_address(config.address()),
+	_project(config.root()),
 	_locationProcessor(config.locations()),
 	_cgi(config.cgi(), config, _project)
 {
@@ -27,10 +28,17 @@ Server::~Server()
 		delete i->second;
 }
 
-Optional<Response> Server::onServerReceivedRequest(const Request& request)
+bool Server::targetOfRequest(const Request& request)
 {
-	// TODO Check server name
+	Optional<std::string> hostName = request.hostName();
+	if (!hostName)
+		return false;
 
+	return *hostName == _name;
+}
+
+Response Server::respondToRequest(const Request& request)
+{
 	Response response;
 	response.setDate(std::time(0));
 	response.setServer("Webserv 21");

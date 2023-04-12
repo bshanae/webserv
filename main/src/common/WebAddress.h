@@ -15,6 +15,7 @@ struct webserv::WebAddress
 	WebAddress();
 	WebAddress(const std::string& host, int port);
 
+	bool operator==(const WebAddress& that) const;
 	bool operator<(const WebAddress& r) const;
 };
 

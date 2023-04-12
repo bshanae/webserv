@@ -127,3 +127,16 @@ Optional<size_t> Request::contentLength() const
 
 	return std::stoul(*s);
 }
+
+Optional<std::string> Request::hostName() const
+{
+	Optional<std::string> s = findHeader(HeaderName::Host);
+	if (!s)
+		return Optional<std::string>();
+
+	const size_t iColon = s->find(':');
+	if (iColon == -1)
+		return s;
+
+	return algo::range(*s, 0, iColon);
+}
