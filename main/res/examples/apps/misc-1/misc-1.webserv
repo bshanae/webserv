@@ -15,5 +15,6 @@ server {
         remote /
         local /
         methods POST, GET, DELETE
+        autoindex
     }
 }
