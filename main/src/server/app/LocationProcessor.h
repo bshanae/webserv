@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "common/Location.h"
 
 namespace webserv

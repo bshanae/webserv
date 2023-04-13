@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "utils/templates/Optional.h"
 #include "common/WebAddress.h"
 #include "common/Location.h"
