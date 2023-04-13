@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "utils/templates/SimpleBuffer.h"
 #include "server/core/messages/Request.h"
 #include "server/core/messages/Response.h"
 #include "server/core/socketControllers/SocketController.h"
@@ -21,7 +22,7 @@ class webserv::ClientSocketController : public SocketController
 
 public:
 
-	explicit ClientSocketController(sys::FDescriptor socket, const WebAddress& address);
+	ClientSocketController(sys::FDescriptor socket, const WebAddress& address);
 	virtual ~ClientSocketController();
 
 	const WebAddress& address() const;
@@ -29,19 +30,23 @@ public:
 
 private:
 
-	static const size_t _clientBufferSize = 8192;
-
+	SimpleBuffer<char> _readBuffer;
+	SimpleBuffer<char> _writeBuffer;
 	WebAddress _address;
-	char _clientBuffer[_clientBufferSize];
 	IClientSocketDelegate* _delegate;
 	RequestAccumulator _requestAccumulator;
 
-	virtual void processSocketEvent();
+	ClientSocketController(ClientSocketController&);
+	ClientSocketController& operator=(ClientSocketController&);
 
-	Optional<std::string> readMessageFromSocket();
-	Optional<Request> processRequest(const std::string& message);
+	virtual void processSocketEvent(SocketEvent event);
+	void processCanReadEvent();
+	void processCanWriteEvent();
+	Optional<std::string> readFromSocket();
+	Optional<Request> processRequest(const std::string& data);
 	Optional<std::string> processResponse(const Request& request);
-	void writeMessageToSocket(const std::string& message);
+	void saveResponse(const std::string& message);
+	void flushResponses();
 
 	void logRequest(const std::string& str) const;
 	void logResponse(const std::string& str) const;

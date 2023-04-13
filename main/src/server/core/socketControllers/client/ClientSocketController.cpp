@@ -7,7 +7,11 @@
 using namespace webserv;
 using namespace webserv::log;
 
-ClientSocketController::ClientSocketController(sys::FDescriptor socket, const WebAddress& address): _delegate(NULL), _address(address) // NOLINT(cppcoreguidelines-pro-type-member-init)
+ClientSocketController::ClientSocketController(sys::FDescriptor socket, const WebAddress& address):
+	_delegate(NULL),
+	_address(address), // NOLINT(cppcoreguidelines-pro-type-member-init)
+	_readBuffer(512),
+	_writeBuffer(512)
 {
 	bindSocket(socket);
 
@@ -29,28 +33,18 @@ void ClientSocketController::setDelegate(IClientSocketDelegate* delegate)
 	_delegate = delegate;
 }
 
-void ClientSocketController::processSocketEvent()
+void ClientSocketController::processSocketEvent(SocketEvent event)
 {
-	Optional<std::string> message = readMessageFromSocket();
-	if (!message)
-		return;
-
-	Optional<Request> request = processRequest(*message);
-	if (!request)
-		return;
-
-	Optional<std::string> response = processResponse(*request);
-	if (!response)
-		return;
-
-	writeMessageToSocket(*response);
+	if (event == SocketEventCanRead)
+		processCanReadEvent();
+	if (event == SocketEventCanWrite)
+		processCanWriteEvent();
 }
 
-Optional<std::string> ClientSocketController::readMessageFromSocket()
+void ClientSocketController::processCanReadEvent()
 {
-	// TODO What is buffer is too small?
-	ssize_t byteCount = read(socket(), _clientBuffer, _clientBufferSize - 1);
-	if (byteCount <= 0)
+	Optional<std::string> data = readFromSocket();
+	if (!data)
 	{
 		log::w << *this << log::startm << "Connection closed." << log::endm;
 
@@ -59,20 +53,56 @@ Optional<std::string> ClientSocketController::readMessageFromSocket()
 		if (_delegate != NULL)
 			_delegate->onClientDisconnected(_address);
 
-		return Optional<std::string>();
+		return;
 	}
 
-	_clientBuffer[byteCount] = '\0';
+	Optional<Request> request = processRequest(*data);
+	if (!request)
+		return;
 
-	std::string m = std::string(_clientBuffer);
+	Optional<std::string> response = processResponse(*request);
+	if (!response)
+		return;
+
+	saveResponse(*response);
+}
+
+void ClientSocketController::processCanWriteEvent()
+{
+	flushResponses();
+}
+
+Optional<std::string> ClientSocketController::readFromSocket()
+{
+	for (;;)
+	{
+		const ssize_t readSize = read(socket(), _readBuffer.writePtr(), _readBuffer.availableWriteSize());
+		_readBuffer.didWrite(readSize);
+
+		if (readSize == 0)
+			return Optional<std::string>();
+
+		if (!_readBuffer.full())
+			break;
+
+		_readBuffer.willWrite(512);
+	}
+
+	_readBuffer.write("\0", 1);
+
+	std::string m = std::string(_readBuffer.readPtr());
+	_readBuffer.didRead(_readBuffer.availableReadSize());
+
 	logRequest(m);
+
+	_readBuffer.pack();
 
 	return m;
 }
 
-Optional<Request> ClientSocketController::processRequest(const std::string& message)
+Optional<Request> ClientSocketController::processRequest(const std::string& data)
 {
-	_requestAccumulator.accumulate(message);
+	_requestAccumulator.accumulate(data);
 
 	if (_requestAccumulator.requestReady())
 		return _requestAccumulator.request();
@@ -90,13 +120,20 @@ Optional<std::string> ClientSocketController::processResponse(const Request& req
 	return rStr;
 }
 
-void ClientSocketController::writeMessageToSocket(const std::string& message)
+void ClientSocketController::saveResponse(const std::string& message)
 {
-	const long bytesSent = write(socket(), message.c_str(), message.size());
-	if (bytesSent != message.size())
-	{
-		// TODO Error
-	}
+	_writeBuffer.write(message.data(), message.size());
+}
+
+void ClientSocketController::flushResponses()
+{
+	if (_writeBuffer.availableReadSize() == 0)
+		return;
+
+	const size_t writtenSize = write(socket(), _writeBuffer.readPtr(), _writeBuffer.availableReadSize());
+	_writeBuffer.didRead(writtenSize);
+
+	_writeBuffer.pack();
 }
 
 void ClientSocketController::logRequest(const std::string& str) const
@@ -104,7 +141,7 @@ void ClientSocketController::logRequest(const std::string& str) const
 	if (!log::v.enabled)
 		return;
 
-	std::string markedStr = algo::truncate(str, 5000);
+	std::string markedStr = algo::truncate(str, 500);
 	algo::markEmptyLines(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "REQUEST" << log::endl

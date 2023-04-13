@@ -17,11 +17,11 @@ Optional<Request> RequestAccumulator::request()
 	return result;
 }
 
-void RequestAccumulator::accumulate(const std::string& message)
+void RequestAccumulator::accumulate(const std::string& data)
 {
 	if (!_tmpRequest)
 	{
-		_tmpBuffer += message;
+		_tmpBuffer += data;
 
 		const size_t iHeaderEnd = _tmpBuffer.find("\r\n\r\n");
 		if (iHeaderEnd != -1)
@@ -34,7 +34,7 @@ void RequestAccumulator::accumulate(const std::string& message)
 	}
 	else
 	{
-		_tmpRequest->appendBody(message);
+		_tmpRequest->appendBody(data);
 		tryBuildFinalRequest();
 	}
 }

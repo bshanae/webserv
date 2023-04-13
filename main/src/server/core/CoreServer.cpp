@@ -11,7 +11,7 @@ void CoreServer::registerSocketController(SocketController* controller)
 	controller->setSocketCreationControllerListener(this);
 
 	_socketControllers.push_back(controller);
-	_pollingTargets.push_back((pollfd){ .fd = controller->socket(), .events = POLLRDNORM });
+	_pollingTargets.push_back((pollfd){ .fd = controller->socket(), .events = POLLERR | POLLRDNORM | POLLWRNORM });
 }
 
 void CoreServer::run()
@@ -27,10 +27,15 @@ void CoreServer::run()
 
 		for (int i = 0; i < _pollingTargets.size() && readyCount > 0; i++)
 		{
-			if (!(_pollingTargets[i].revents & (POLLRDNORM | POLLERR)))
+			if (!_pollingTargets[i].revents)
 				continue;
 
-			_socketControllers[i]->processSocketEvent();
+			if (_pollingTargets[i].revents & POLLERR)
+				_socketControllers[i]->processSocketEvent(SocketEventError);
+			if (_pollingTargets[i].revents & POLLRDNORM)
+				_socketControllers[i]->processSocketEvent(SocketEventCanRead);
+			if (_pollingTargets[i].revents & POLLWRNORM)
+				_socketControllers[i]->processSocketEvent(SocketEventCanWrite);
 
 			if (_socketControllers[i]->socket() == sys::nullFd)
 			{

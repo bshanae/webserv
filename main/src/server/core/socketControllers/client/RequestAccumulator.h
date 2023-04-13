@@ -14,7 +14,7 @@ public:
 
 	bool requestReady() const;
 	Optional<Request> request();
-	void accumulate(const std::string& message);
+	void accumulate(const std::string& data);
 
 private:
 

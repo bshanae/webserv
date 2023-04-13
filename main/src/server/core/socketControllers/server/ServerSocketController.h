@@ -32,7 +32,7 @@ private:
 	std::vector<ClientSocketController*> _clientControllers;
 	std::vector<IServerSocketDelegate*> _delegates;
 
-	virtual void processSocketEvent();
+	virtual void processSocketEvent(SocketEvent event);
 	virtual void onClientDisconnected(const WebAddress& clientAddress);
 	virtual Response respondToRequest(const webserv::Request& request);
 };

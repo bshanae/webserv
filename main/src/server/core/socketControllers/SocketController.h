@@ -2,6 +2,7 @@
 
 #include <iosfwd>
 #include "utils/sys/sys.h"
+#include "server/core/SocketEvent.h"
 
 namespace webserv
 {
@@ -27,7 +28,7 @@ public:
 
 	sys::FDescriptor socket() const;
 
-	virtual void processSocketEvent() = 0;
+	virtual void processSocketEvent(SocketEvent event) = 0;
 	void setSocketCreationControllerListener(ISocketControllerCreationListener* listener);
 
 protected:

@@ -55,7 +55,7 @@ void ServerSocketController::registerDelegate(IServerSocketDelegate& delegate)
 	_delegates.push_back(&delegate);
 }
 
-void ServerSocketController::processSocketEvent()
+void ServerSocketController::processSocketEvent(SocketEvent event)
 {
 	struct sockaddr_in clientAddress = {};
 	uint32_t addressLength;
