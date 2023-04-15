@@ -89,6 +89,14 @@ public:
 		return _value;
 	}
 
+	T valueOr(const T& fallback) const
+	{
+		if (!_hasValue)
+			return fallback;
+
+		return _value;
+	}
+
 private:
 
 	bool _hasValue;
