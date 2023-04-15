@@ -20,7 +20,7 @@ namespace algo
 
 	void toLower(std::string& target);
 
-	void markEmptyLines(std::string& target, const std::string& endl);
+	void markEndl(std::string& target, const std::string& endl);
 
 	void replaceAll(std::string& target, const std::string& search, const std::string& replace);
 }

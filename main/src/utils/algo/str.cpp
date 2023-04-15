@@ -51,16 +51,9 @@ void algo::toLower(std::string& target)
 		target[i] = std::tolower(target[i]);
 }
 
-void algo::markEmptyLines(std::string& target, const std::string& endl)
+void algo::markEndl(std::string& target, const std::string& endl)
 {
-	replaceAll(target, endl + endl, endl + "$" + endl);
-
-	if (target.length() < endl.length())
-		return;
-
-	const size_t lastEndlOffset = target.length() - endl.length();
-	if (target.compare(lastEndlOffset, endl.length(), endl) == 0)
-		target.replace(lastEndlOffset, endl.length(), endl + "$");
+	replaceAll(target, endl, "$" + endl);
 }
 
 void algo::replaceAll(std::string& target, const std::string& search, const std::string& replace)

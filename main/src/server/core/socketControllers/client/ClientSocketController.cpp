@@ -142,7 +142,7 @@ void ClientSocketController::logRequest(const std::string& str) const
 		return;
 
 	std::string markedStr = algo::truncate(str, 500);
-	algo::markEmptyLines(markedStr, "\r\n");
+	algo::markEndl(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "REQUEST" << log::endl
 		   << markedStr << log::endm;
@@ -154,7 +154,7 @@ void ClientSocketController::logResponse(const std::string& str) const
 		return;
 
 	std::string markedStr = algo::truncate(str, 500);
-	algo::markEmptyLines(markedStr, "\r\n");
+	algo::markEndl(markedStr, "\r\n");
 
 	log::v << *this << log::startm << "RESPONSE" << log::endl
 		   << markedStr << log::endm;
