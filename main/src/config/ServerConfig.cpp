@@ -1,8 +1,9 @@
 #include "ServerConfig.h"
 
 #include "utils/algo/str.h"
-#include "config/utils.h"
 #include "common/WebAddress.h"
+#include "common/path.h"
+#include "config/utils.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -30,18 +31,14 @@ std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& co
 		}
 		else if (algo::startsWith(line, "root"))
 		{
-			config._root = utils::extractArgument(line);
+			config._root = directoryLocalView(utils::extractArgument(line));
 		}
 		else if (algo::startsWith(line, "location"))
 		{
-			Location location;
+			LocationConfig location;
 			source >> location;
 
 			config._locations.push_back(location);
-		}
-		else if (algo::startsWith(line, "cgi"))
-		{
-			source >> config._cgi;
 		}
 		else
 		{
@@ -70,12 +67,7 @@ const std::string& ServerConfig::root() const
 	return _root;
 }
 
-const std::vector<Location>& ServerConfig::locations() const
+const std::vector<LocationConfig>& ServerConfig::locations() const
 {
 	return _locations;
-}
-
-const CGIConfig& ServerConfig::cgi() const
-{
-	return _cgi;
 }

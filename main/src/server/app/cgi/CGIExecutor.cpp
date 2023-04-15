@@ -11,45 +11,21 @@
 using namespace webserv;
 using namespace webserv::config;
 
-CGIExecutor::CGIExecutor(
-	const CGIConfig& cgiConfig,
-	const ServerConfig& serverConfig,
-	Project& project
-) :
-	_project(project)
+CGIExecutor::CGIExecutor(const ServerConfig& serverConfig)
 {
-	_roots = cgiConfig.roots();
-	_extensions = cgiConfig.extensions();
-
 	_constEnv = collectConstEnv(serverConfig);
 }
 
-bool CGIExecutor::isCGI(const std::string& remotePath, const std::string& localPath) const
-{
-	const std::string extension = sys::path::extension(remotePath);
-	const std::set<std::string> cgiExtensions = _extensions;
-	if (cgiExtensions.find(extension) == cgiExtensions.end())
-		return false;
-
-	const std::string directory = sys::path::directory(remotePath);
-	const std::set<std::string> cgiRoots = _roots;
-	if (cgiRoots.find(directory) == cgiRoots.end())
-		return false;
-
-	return true;
-}
-
-CGIOutput CGIExecutor::executeCGI(const Request& request) const
+CGIOutput CGIExecutor::executeCGI(const Request& request, const std::string& fullLocalPath) const
 {
 	try
 	{
 		log::i << *this << log::startm << "Staring CGI script at '" << request.path() << "'" << log::endm;
 
-		const std::string localPath = _project.resolvePath(request.path());
 		const std::vector<std::string> arg;
 		const std::vector<std::string> env = collectEnv(request);
 
-		sys::Process process(localPath, arg, env);
+		sys::Process process(fullLocalPath, arg, env);
 
 		// write stdin
 		process.stdIn() << request.body() << std::flush;

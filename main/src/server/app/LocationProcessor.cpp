@@ -4,18 +4,19 @@
 #include "common/exceptions/WebException.h"
 
 using namespace webserv;
+using namespace webserv::config;
 
-LocationProcessor::LocationProcessor(const std::vector<Location>& locations) : _locations(locations)
+LocationProcessor::LocationProcessor(const std::vector<LocationConfig>& locations) : _locations(locations)
 {
 
 }
 
-const Location& LocationProcessor::resolveLocation(const std::string& path) const
+const LocationConfig& LocationProcessor::resolveLocation(const std::string& path) const
 {
-	const Location* bestMatch = nullptr;
+	const LocationConfig* bestMatch = nullptr;
 	size_t bestMatchLength = 0;
 
-	for (std::vector<Location>::const_iterator l = _locations.begin(); l != _locations.end(); l++)
+	for (std::vector<LocationConfig>::const_iterator l = _locations.begin(); l != _locations.end(); l++)
 	{
 		if (!algo::startsWith(path, l->remotePath()))
 			continue;

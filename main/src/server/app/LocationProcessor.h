@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "common/Location.h"
+#include "config/LocationConfig.h"
 
 namespace webserv
 {
@@ -12,11 +12,11 @@ class webserv::LocationProcessor
 {
 public:
 
-	LocationProcessor(const std::vector<Location>& locations);
+	LocationProcessor(const std::vector<config::LocationConfig>& locations);
 
-	const Location& resolveLocation(const std::string& path) const;
+	const config::LocationConfig& resolveLocation(const std::string& path) const;
 
 private:
 
-	std::vector<Location> _locations;
+	std::vector<config::LocationConfig> _locations;
 };

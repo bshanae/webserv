@@ -1,6 +1,7 @@
 #include "Server.h"
 
 #include "utils/algo/container.h"
+#include "utils/sys/sys.path.h"
 #include "common/exceptions/WebException.h"
 #include "log/log.h"
 #include "server/app/requestProcessors/GetRequestProcessor.h"
@@ -15,7 +16,7 @@ Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_address(config.address()),
 	_project(config.root()),
 	_locationProcessor(config.locations()),
-	_cgi(config.cgi(), config, _project)
+	_cgi(config)
 {
 	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, mediaConfig);
 	_requestProcessors[RequestMethodHEAD] = new HeadRequestProcessor(_project, _cgi, mediaConfig);
@@ -45,9 +46,9 @@ Response Server::respondToRequest(const Request& request)
 
 	try
 	{
-		const Location& location = _locationProcessor.resolveLocation(request.path());
-		if (!algo::contains(location.methods(), request.method()))
-			throw WebException(StatusCodeMethodNowAllowed);
+		const LocationConfig& location = _locationProcessor.resolveLocation(request.path());
+
+		validateRequest(request, location);
 
 		if (processRedirect(location, response))
 			return response;
@@ -71,7 +72,15 @@ Response Server::respondToRequest(const Request& request)
 	return response;
 }
 
-bool Server::processRedirect(const Location& location, Response& response)
+void Server::validateRequest(const Request& request, const config::LocationConfig& location) const
+{
+	if (location.extensions() && !algo::contains(*location.extensions(), sys::path::extension(request.path())))
+		throw WebException(StatusCodeNotFound);
+	if (!algo::contains(location.methods(), request.method()))
+		throw WebException(StatusCodeMethodNowAllowed);
+}
+
+bool Server::processRedirect(const LocationConfig& location, Response& response)
 {
 	if (location.redirectionUrl().empty())
 		return false;
@@ -83,7 +92,7 @@ bool Server::processRedirect(const Location& location, Response& response)
 	return true;
 }
 
-void Server::processRequest(const Request& request, const Location& location, Response& response)
+void Server::processRequest(const Request& request, const LocationConfig& location, Response& response)
 {
 	std::map<RequestMethod, RequestProcessor*>::iterator i = _requestProcessors.find(request.method());
 	if (i == _requestProcessors.end())

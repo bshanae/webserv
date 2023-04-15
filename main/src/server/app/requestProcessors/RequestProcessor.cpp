@@ -18,18 +18,32 @@ Project& RequestProcessor::project()
 	return _project;
 }
 
-bool RequestProcessor::tryProcessCGI(const Request& request, const std::string& localPath, Response& response)
+std::string RequestProcessor::resolveRemotePath(const Request& request)
 {
-	const std::string& remotePath = request.path();
-	const std::string& fullLocalPath = _project.resolvePath(localPath);
+	return request.path();
+}
 
-	if (!_cgi.isCGI(remotePath, fullLocalPath))
+std::string RequestProcessor::resolveLocalPath(const Request& request, const config::LocationConfig& location)
+{
+	return location.transformRemotePath(resolveRemotePath(request));
+}
+
+std::string RequestProcessor::resolveFullLocalPath(const Request& request, const config::LocationConfig& location)
+{
+	return project().resolvePath(resolveLocalPath(request, location));
+}
+
+bool RequestProcessor::tryExecuteCGI(const Request& request,  const config::LocationConfig& location, Response& response)
+{
+	if (!location.cgi())
 		return false;
+
+	const std::string fullLocalPath = resolveFullLocalPath(request, location);
 
 	if (!sys::isFile(fullLocalPath))
 		throw WebException(StatusCodeNotFound, "CGI script not found.");
 
-	CGIOutput output = _cgi.executeCGI(request);
+	CGIOutput output = _cgi.executeCGI(request, fullLocalPath);
 
 	response.setStatusCode(StatusCodeOk);
 	response.setBody(output.body);

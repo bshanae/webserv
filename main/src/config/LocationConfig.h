@@ -7,14 +7,17 @@
 
 namespace webserv
 {
-	class Location;
+	namespace config
+	{
+		class LocationConfig;
+	}
 }
 
-std::istream& operator>>(std::istream& source, webserv::Location& config);
+std::istream& operator>>(std::istream& source, webserv::config::LocationConfig& config);
 
-class webserv::Location
+class webserv::config::LocationConfig
 {
-	friend std::istream& ::operator>>(std::istream& source, Location& config);
+	friend std::istream& ::operator>>(std::istream& source, LocationConfig& config);
 
 public:
 
@@ -23,8 +26,10 @@ public:
 	const std::string& redirectionUrl() const;
 	int redirectionCode() const;
 	const std::set<RequestMethod>& methods() const;
+	const Optional<std::set<std::string> >& extensions() const;
 	const Optional<std::string> &index() const;
 	bool autoindex() const;
+	bool cgi() const;
 
 	std::string transformRemotePath(const std::string& path) const;
 
@@ -35,6 +40,8 @@ private:
 	std::string _redirectionUrl;
 	int _redirectionCode;
 	std::set<RequestMethod> _methods;
+	Optional<std::set<std::string> > _extensions;
 	Optional<std::string> _index;
 	bool _autoindex;
+	bool _cgi;
 };

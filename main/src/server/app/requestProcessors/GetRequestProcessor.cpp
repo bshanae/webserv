@@ -18,13 +18,13 @@ GetRequestProcessor::GetRequestProcessor(Project& project, CGIExecutor& cgi, con
 GetRequestProcessor::~GetRequestProcessor()
 {}
 
-void GetRequestProcessor::processRequest(const Request& request, const Location& location, Response& response)
+void GetRequestProcessor::processRequest(const Request& request, const LocationConfig& location, Response& response)
 {
-	const std::string& remotePath = request.path();
-	const std::string localPath = location.transformRemotePath(request.path());
-	const std::string& fullLocalPath = project().resolvePath(localPath);
+	const std::string& remotePath = resolveRemotePath(request);
+	const std::string localPath = resolveLocalPath(request, location);
+	const std::string& fullLocalPath = resolveFullLocalPath(request, location);
 
-	if (tryProcessCGI(request, localPath, response))
+	if (tryExecuteCGI(request, location, response))
 		return;
 
 	if (sys::isDirectory(fullLocalPath))

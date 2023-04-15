@@ -33,13 +33,3 @@ std::string sys::path::concat(const std::string& a, const std::string& b)
 	else
 		return a + '/' + b;
 }
-
-std::string sys::path::removeTrailingSplash(const std::string& path)
-{
-	if (path.length() == 0)
-		return path;
-	if (path[path.length() - 1] != '/')
-		return path;
-
-	return path.substr(0, path.length() - 1);
-}

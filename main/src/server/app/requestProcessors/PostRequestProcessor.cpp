@@ -1,6 +1,5 @@
 #include "PostRequestProcessor.h"
 
-#include "utils/sys/sys.path.h"
 #include "common/exceptions/WebException.h"
 #include "server/app/project/IndexGenerator.h"
 
@@ -14,10 +13,8 @@ PostRequestProcessor::PostRequestProcessor(Project& project, CGIExecutor& cgi): 
 PostRequestProcessor::~PostRequestProcessor()
 {}
 
-void PostRequestProcessor::processRequest(const Request& request, const Location& location, Response& response)
+void PostRequestProcessor::processRequest(const Request& request, const LocationConfig& location, Response& response)
 {
-	const std::string localPath = location.transformRemotePath(request.path());
-
-	if (tryProcessCGI(request, localPath, response))
+	if (tryExecuteCGI(request, location, response))
 		return;
 }

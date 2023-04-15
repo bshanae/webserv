@@ -11,7 +11,7 @@ SRCS=main/src/main.cpp                                                          
 	 main/src/config/Config.cpp                                                          \
 	 main/src/config/LogConfig.cpp                                                       \
 	 main/src/config/ServerConfig.cpp                                                    \
-	 main/src/config/CGIConfig.cpp                                                       \
+	 main/src/config/LocationConfig.cpp                                                  \
 	 main/src/config/MediaConfig.cpp                                                     \
 	 main/src/config/utils.cpp                                                           \
 	 main/src/server/core/CoreServer.cpp                                                 \
@@ -40,7 +40,7 @@ SRCS=main/src/main.cpp                                                          
      main/src/common/MediaType.cpp                                                      \
      main/src/common/WebAddress.cpp                                                     \
      main/src/common/exceptions/WebException.cpp                                        \
-	 main/src/common/Location.cpp                                                       \
+	 main/src/common/path.cpp                                                           \
 	 main/src/utils/sys/Process.cpp                                                     \
 	 main/src/utils/sys/Pipe.cpp                                                        \
 	 main/src/utils/sys/FDescriptor.cpp                                                 \

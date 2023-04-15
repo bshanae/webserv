@@ -11,7 +11,7 @@ HeadRequestProcessor::HeadRequestProcessor(Project& project, CGIExecutor& cgi, c
 HeadRequestProcessor::~HeadRequestProcessor()
 {}
 
-void HeadRequestProcessor::processRequest(const Request& request, const Location& location, Response& response)
+void HeadRequestProcessor::processRequest(const Request& request, const LocationConfig& location, Response& response)
 {
 	GetRequestProcessor::processRequest(request, location, response);
 	response.ignoreBody();

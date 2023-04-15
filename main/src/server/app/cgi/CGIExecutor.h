@@ -1,6 +1,5 @@
 #pragma once
 
-#include "config/CGIConfig.h"
 #include "config/ServerConfig.h"
 #include "server/core/messages/Request.h"
 #include "server/app/project/Project.h"
@@ -17,21 +16,13 @@ class webserv::CGIExecutor
 {
 public:
 
-	CGIExecutor(
-		const config::CGIConfig& cgiConfig,
-		const config::ServerConfig& serverConfig,
-		Project& project
-	);
+	explicit CGIExecutor(const config::ServerConfig& serverConfig);
 
-	bool isCGI(const std::string& remotePath, const std::string& localPath) const;
-	CGIOutput executeCGI(const Request& request) const;
+	CGIOutput executeCGI(const Request& request, const std::string& fullLocalPath) const;
 
 private:
 
 	std::vector<std::string> _constEnv;
-	std::set<std::string> _roots;
-	std::set<std::string> _extensions;
-	Project& _project;
 
 	std::vector<std::string> collectConstEnv(const config::ServerConfig& serverConfig) const;
 	std::vector<std::string> collectEnv(const Request& request) const;

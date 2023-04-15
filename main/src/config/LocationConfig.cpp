@@ -1,13 +1,14 @@
-#include "Location.h"
+#include "LocationConfig.h"
 
 #include "utils/algo/str.h"
 #include "utils/sys/sys.path.h"
+#include "common/path.h"
 #include "config/utils.h"
 
 using namespace webserv;
 using namespace webserv::config;
 
-std::istream& operator>>(std::istream& source, webserv::Location& config)
+std::istream& operator>>(std::istream& source, webserv::config::LocationConfig& config)
 {
 	std::string line;
 	while (utils::getLine(source, line))
@@ -21,11 +22,11 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 		}
 		else if (algo::startsWith(line, "remote"))
 		{
-			config._remotePath = sys::path::removeTrailingSplash(utils::extractArgument(line));
+			config._remotePath = directoryRemoteView(utils::extractArgument(line));
 		}
 		else if (algo::startsWith(line, "local"))
 		{
-			config._localPath = sys::path::removeTrailingSplash(utils::extractArgument(line));
+			config._localPath = directoryRemoteView(utils::extractArgument(line));
 		}
 		else if (algo::startsWith(line, "redirect"))
 		{
@@ -38,6 +39,11 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 			std::vector<RequestMethod> v = utils::extractArguments<RequestMethod>(line);
 			config._methods = std::set<RequestMethod>(v.begin(), v.end());
 		}
+		else if (algo::startsWith(line, "extensions"))
+		{
+			std::vector<std::string> v = utils::extractArguments<std::string>(line);
+			config._extensions = std::set<std::string>(v.begin(), v.end());
+		}
 		else if (algo::startsWith(line, "index"))
 		{
 			config._index = utils::extractArgument(line);
@@ -45,6 +51,10 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 		else if (algo::startsWith(line, "autoindex"))
 		{
 			config._autoindex = true;
+		}
+		else if (algo::startsWith(line, "cgi"))
+		{
+			config._cgi = true;
 		}
 		else
 		{
@@ -55,42 +65,52 @@ std::istream& operator>>(std::istream& source, webserv::Location& config)
 	return source;
 }
 
-const std::string& Location::remotePath() const
+const std::string& LocationConfig::remotePath() const
 {
 	return _remotePath;
 }
 
-const std::string& Location::localPath() const
+const std::string& LocationConfig::localPath() const
 {
 	return _localPath;
 }
 
-const std::string& Location::redirectionUrl() const
+const std::string& LocationConfig::redirectionUrl() const
 {
 	return _redirectionUrl;
 }
 
-int Location::redirectionCode() const
+int LocationConfig::redirectionCode() const
 {
 	return _redirectionCode;
 }
 
-const std::set<RequestMethod>& Location::methods() const
+const std::set<RequestMethod>& LocationConfig::methods() const
 {
 	return _methods;
 }
 
-const Optional<std::string> &Location::index() const
+const Optional<std::set<std::string> >& LocationConfig::extensions() const
+{
+	return _extensions;
+}
+
+const Optional<std::string> &LocationConfig::index() const
 {
 	return _index;
 }
 
-bool Location::autoindex() const
+bool LocationConfig::autoindex() const
 {
 	return _autoindex;
 }
 
-std::string Location::transformRemotePath(const std::string& path) const
+bool LocationConfig::cgi() const
+{
+	return _cgi;
+}
+
+std::string LocationConfig::transformRemotePath(const std::string& path) const
 {
 	const std::string suffix = algo::range(path, _remotePath.length(), path.length());
 	return sys::path::concat(_localPath, suffix);

@@ -15,7 +15,7 @@ public:
 	GetRequestProcessor(Project& project, CGIExecutor& cgi, const config::MediaConfig& mediaConfig);
 	virtual ~GetRequestProcessor();
 
-	virtual void processRequest(const Request& request, const Location& location, Response& response);
+	virtual void processRequest(const Request& request, const config::LocationConfig& location, Response& response);
 
 private:
 

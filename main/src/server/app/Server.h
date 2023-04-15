@@ -43,6 +43,7 @@ private:
 
 	virtual bool targetOfRequest(const Request& request);
 	virtual Response respondToRequest(const Request& request);
-	bool processRedirect(const Location& location, Response& response);
-	void processRequest(const Request& request, const Location& location, Response& response);
+	void validateRequest(const Request& request, const config::LocationConfig& location) const;
+	bool processRedirect(const config::LocationConfig& location, Response& response);
+	void processRequest(const Request& request, const config::LocationConfig& location, Response& response);
 };
