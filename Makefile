@@ -114,7 +114,11 @@ $(EXE): $(OBJS)
 
 $(foreach SRC,$(SRCS),$(eval $(call OBJ_TEMPLATE,$(SRC))))
 
+test: FORCE
+	cd test/private; ./venv/bin/python main.py
+
 # FINAL
 
 -include $(DEP)
 .PHONY: all clean fclean re debug
+FORCE:

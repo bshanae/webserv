@@ -1,0 +1,29 @@
+log {
+	info 1
+	warning 1
+	error 1
+	verbose 1
+}
+
+media default
+
+server {
+    address 0.0.0.0:8080
+    root .
+
+    location {
+        remote /cgi-1
+        local /cgi-bin-1
+        methods GET POST
+    	extensions .py
+        cgi
+    }
+
+    location {
+        remote /cgi-2
+        local /cgi-bin-2
+        methods GET POST
+    	extensions .py
+        cgi
+    }
+}

@@ -1,0 +1,45 @@
+log {
+	info 1
+	warning 1
+	error 1
+	verbose 1
+}
+
+media default
+
+server {
+    address 0.0.0.0:8080
+    root .
+
+    location {
+        remote /pages-1
+        local /pages-1
+        methods GET
+    }
+
+    location {
+        remote /pages-2
+        local /pages-2
+        methods GET
+    }
+
+    # aliases
+
+    location {
+        remote /
+        local /pages-1
+        methods GET
+    }
+
+	location {
+        remote /alias
+        local /pages-2
+        methods GET
+    }
+
+    location {
+        remote /redirect
+        redirect 301 /pages-2/page-c.html
+        methods GET
+    }
+}
