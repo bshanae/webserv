@@ -33,6 +33,7 @@ private:
 
 	std::string _name;
 	WebAddress _address;
+	Optional<size_t> _maxClientBodySize;
 	Project _project;
 	LocationProcessor _locationProcessor;
 	CGIExecutor _cgi;

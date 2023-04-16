@@ -10,6 +10,7 @@ namespace webserv
 		StatusCodeBadRequest = 400,
 		StatusCodeNotFound = 404,
 		StatusCodeMethodNowAllowed = 405,
+		StatusCodePayloadTooLarge = 413,
 		StatusCodeInternalServerError = 500,
 	};
 }

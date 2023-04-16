@@ -20,6 +20,9 @@ std::string defaultReason(StatusCode code)
 		case StatusCodeMethodNowAllowed:
 			return "Method not allowed";
 
+		case StatusCodePayloadTooLarge:
+			return "Payload too large";
+
 		case StatusCodeInternalServerError:
 			return "Internal server error";
 

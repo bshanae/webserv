@@ -14,6 +14,7 @@ using namespace webserv::config;
 Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
 	_name(config.name()),
 	_address(config.address()),
+	_maxClientBodySize(config.maxClientBodySize()),
 	_project(config.root()),
 	_locationProcessor(config.locations()),
 	_cgi(config)
@@ -46,13 +47,17 @@ Response Server::respondToRequest(const Request& request)
 
 	try
 	{
+		if (_maxClientBodySize && request.body().size() > *_maxClientBodySize)
+			throw WebException(StatusCodePayloadTooLarge);
+
 		const LocationConfig& location = _locationProcessor.resolveLocation(request.path());
 
 		validateRequest(request, location);
 
-		if (processRedirect(location, response))
-			return response;
-		processRequest(request, location, response);
+		if (!processRedirect(location, response))
+			processRequest(request, location, response);
+
+		return response;
 	}
 	catch (WebException& e)
 	{
