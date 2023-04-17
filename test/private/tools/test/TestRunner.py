@@ -81,10 +81,13 @@ class TestRunner:
         return result
 
     def __run_test(self, s: socket, suite: TestSuite, group: TestGroup, test: Test, i: int) -> TestResult:
-        request_str = test.request.build()
-        s.sendall(bytes(test.request.build(), encoding='utf-8'))
+        request_strs = test.request.build()
+        for request_str in request_strs:
+            s.sendall(bytes(request_str, encoding='utf-8'))
 
         response_str = s.recv(4096).decode('utf-8')
+        if len(response_str) == 0:
+            raise Exception('Response is empty')
         response = Response(response_str)
 
         test_id = f'{suite.get_name()}'
@@ -99,7 +102,7 @@ class TestRunner:
             ansi('=' * 200, code.RED)
             ansi(f'{test_id} KO', code.RED)
             ansi('REQUEST', code.RED, code.BOLD)
-            ansi(request_str, code.RED)
+            ansi(str.join('', request_strs), code.RED)
             ansi('RESPONSE', code.RED, code.BOLD)
             ansi(response_str, code.RED)
             ansi('=' * 200, code.RED)

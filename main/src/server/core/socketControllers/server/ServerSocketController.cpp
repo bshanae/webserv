@@ -50,9 +50,9 @@ ServerSocketController::~ServerSocketController()
 	log::i << *this << log::startm << "Uninitialized." << log::endm;
 }
 
-void ServerSocketController::registerDelegate(IServerSocketDelegate& delegate)
+void ServerSocketController::registerDelegate(IServerSocketDelegate* delegate)
 {
-	_delegates.push_back(&delegate);
+	_delegates.push_back(delegate);
 }
 
 void ServerSocketController::processSocketEvent(SocketEvent event)

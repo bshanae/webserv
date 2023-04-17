@@ -1,7 +1,11 @@
+from typing import List
+
 from tools.http.http import CRLF
 
 
 class Request:
+    SPLIT = '@@SPLIT@@'
+
     def __init__(self):
         self._method = ''
         self._url = ''
@@ -25,7 +29,7 @@ class Request:
         self.add_header('Content-Length', str(len(body)))
         return self
 
-    def build(self) -> str:
+    def build(self) -> List[str]:
         result = ''
 
         result += f'{self._method} {self._url} HTTP/1.1' + CRLF
@@ -36,4 +40,4 @@ class Request:
 
         result += self._body
 
-        return result
+        return result.split(Request.SPLIT)

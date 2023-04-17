@@ -73,6 +73,14 @@ public:
 		_hasValue = false;
 	}
 
+	T transfer()
+	{
+		T temp = value();
+		reset();
+
+		return temp;
+	}
+
 	T& value()
 	{
 		if (!_hasValue)

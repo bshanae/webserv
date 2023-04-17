@@ -140,3 +140,8 @@ Optional<std::string> Request::hostName() const
 
 	return algo::range(*s, 0, iColon);
 }
+
+bool Request::chunkedEncoding() const
+{
+	return findHeader(HeaderName::TransferEncoding).valueOr("") == "chunked";
+}

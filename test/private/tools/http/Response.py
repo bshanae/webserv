@@ -7,7 +7,7 @@ class Response:
         self.headers = {}
         self.body = ''
 
-        header, body = s.split(CRLF * 2)
+        header, body = s.split(CRLF * 2, 1)
 
         self.parse_header(header)
         self.parse_body(body)
@@ -19,10 +19,7 @@ class Response:
         self.code = int(status_line_words[1])
 
         for header in header_lines[1:]:
-            i_colon = header.find(': ')
-            name = header[:i_colon]
-            value = header[i_colon + 2:]
-
+            name, value = header.split(': ', 1)
             self.headers[name] = value
 
     def parse_body(self, body: str):

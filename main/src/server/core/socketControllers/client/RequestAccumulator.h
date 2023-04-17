@@ -12,15 +12,14 @@ class webserv::RequestAccumulator
 {
 public:
 
-	bool requestReady() const;
-	Optional<Request> request();
-	void accumulate(const std::string& data);
+	Optional<Request> accumulate(const std::string& data);
 
 private:
 
-	std::string _tmpBuffer;
+	std::string _requestBuffer;
+	std::string _bodyBuffer;
 	Optional<Request> _tmpRequest;
-	Optional<Request> _finalRequest;
 
-	void tryBuildFinalRequest();
+	Optional<Request> accumulateBody(const std::string& bodyPiece);
+	Optional<std::string> accumulateChunk();
 };

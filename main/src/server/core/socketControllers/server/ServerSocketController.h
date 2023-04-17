@@ -24,7 +24,7 @@ public:
 	explicit ServerSocketController(const WebAddress& address);
 	~ServerSocketController();
 
-	void registerDelegate(IServerSocketDelegate& listener);
+	void registerDelegate(IServerSocketDelegate* listener);
 
 private:
 

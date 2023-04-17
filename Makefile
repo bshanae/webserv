@@ -7,18 +7,18 @@ BASE_LD_FLAGS=
 
 PROJECT_NAME=webserv
 
-SRCS=main/src/main.cpp                                                                   \
-	 main/src/config/Config.cpp                                                          \
-	 main/src/config/LogConfig.cpp                                                       \
-	 main/src/config/ServerConfig.cpp                                                    \
-	 main/src/config/LocationConfig.cpp                                                  \
-	 main/src/config/MediaConfig.cpp                                                     \
-	 main/src/config/utils.cpp                                                           \
-	 main/src/server/core/CoreServer.cpp                                                 \
-	 main/src/server/core/socketControllers/SocketController.cpp                         \
-	 main/src/server/core/socketControllers/server/ServerSocketController.cpp            \
-	 main/src/server/core/socketControllers/client/ClientSocketController.cpp            \
-	 main/src/server/core/socketControllers/client/RequestAccumulator.cpp                \
+SRCS=main/src/main.cpp                                                                  \
+	 main/src/config/Config.cpp                                                         \
+	 main/src/config/LogConfig.cpp                                                      \
+	 main/src/config/ServerConfig.cpp                                                   \
+	 main/src/config/LocationConfig.cpp                                                 \
+	 main/src/config/MediaConfig.cpp                                                    \
+	 main/src/config/utils.cpp                                                          \
+	 main/src/server/core/CoreServer.cpp                                                \
+	 main/src/server/core/socketControllers/SocketController.cpp                        \
+	 main/src/server/core/socketControllers/server/ServerSocketController.cpp           \
+	 main/src/server/core/socketControllers/client/ClientSocketController.cpp           \
+	 main/src/server/core/socketControllers/client/RequestAccumulator.cpp               \
 	 main/src/server/core/messages/Request.cpp                                          \
      main/src/server/core/messages/Response.cpp                                         \
      main/src/server/app/Server.cpp                                                     \

@@ -17,6 +17,7 @@ public:
 	static HeaderName Location;
 	static HeaderName ContentLength;
 	static HeaderName ContentType;
+	static HeaderName TransferEncoding;
 
 	HeaderName();
 	explicit HeaderName(const std::string& string);

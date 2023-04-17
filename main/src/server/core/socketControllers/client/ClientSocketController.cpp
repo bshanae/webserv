@@ -102,12 +102,7 @@ Optional<std::string> ClientSocketController::readFromSocket()
 
 Optional<Request> ClientSocketController::processRequest(const std::string& data)
 {
-	_requestAccumulator.accumulate(data);
-
-	if (_requestAccumulator.requestReady())
-		return _requestAccumulator.request();
-	else
-		return Optional<Request>();
+	return _requestAccumulator.accumulate(data);
 }
 
 Optional<std::string> ClientSocketController::processResponse(const Request& request)
