@@ -34,8 +34,8 @@ void webserv::log::initialize(const LogConfig& config)
 	w = LogStream(LogModifier::yellow);
 	e = LogStream(LogModifier::red);
 
-	v.enabled = true;
-	i.enabled = true;
-	w.enabled = true;
-	e.enabled = true;
+	v.enabled = config.verboseLevelEnabled();
+	i.enabled = config.infoLevelEnabled();
+	w.enabled = config.warningLevelEnabled();
+	e.enabled = config.errorLevelEnabled();
 }
