@@ -16,6 +16,8 @@ class webserv::CoreServer : public ISocketControllerCreationListener
 {
 public:
 
+	virtual ~CoreServer();
+
 	void registerSocketController(SocketController* controller);
 	void run();
 

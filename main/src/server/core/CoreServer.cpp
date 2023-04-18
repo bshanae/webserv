@@ -4,6 +4,13 @@
 
 using namespace webserv;
 
+CoreServer::~CoreServer()
+{
+	for (int i = 0; i < _socketControllers.size(); i++)
+		delete _socketControllers[i];
+	_socketControllers.clear();
+}
+
 void CoreServer::registerSocketController(SocketController* controller)
 {
 	log::i << *this << log::startm << "Register " << *controller << log::endm;
@@ -41,8 +48,11 @@ void CoreServer::run()
 			{
 				log::i << *this << log::startm << "Unregister " << *_socketControllers[i] << log::endm;
 
+				delete _socketControllers[i];
+
 				_pollingTargets.erase(_pollingTargets.begin() + i);
 				_socketControllers.erase(_socketControllers.begin() + i);
+
 				i--;
 			}
 

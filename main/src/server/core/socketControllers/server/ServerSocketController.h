@@ -22,7 +22,7 @@ class webserv::ServerSocketController : public SocketController, public IClientS
 public:
 
 	explicit ServerSocketController(const WebAddress& address);
-	~ServerSocketController();
+	virtual ~ServerSocketController();
 
 	void registerDelegate(IServerSocketDelegate* listener);
 

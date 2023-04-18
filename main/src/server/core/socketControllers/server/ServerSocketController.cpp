@@ -44,9 +44,7 @@ ServerSocketController::ServerSocketController(const WebAddress& address) : _add
 
 ServerSocketController::~ServerSocketController()
 {
-	for (int i = 0; i < _clientControllers.size(); i++)
-		delete _clientControllers[i];
-
+	_clientControllers.clear();
 	log::i << *this << log::startm << "Uninitialized." << log::endm;
 }
 
@@ -81,9 +79,7 @@ void ServerSocketController::onClientDisconnected(const WebAddress& clientAddres
 	{
 		if ((*i)->address() == clientAddress)
 		{
-			delete *i;
 			_clientControllers.erase(i);
-
 			return;
 		}
 	}

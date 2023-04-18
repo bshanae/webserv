@@ -13,6 +13,8 @@ class webserv::IServerSocketDelegate
 {
 public:
 
+	virtual ~IServerSocketDelegate() {}
+
 	virtual bool targetOfRequest(const Request& request) = 0;
 	virtual Response respondToRequest(const Request& request) = 0;
 };
