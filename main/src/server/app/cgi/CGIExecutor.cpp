@@ -5,6 +5,7 @@
 #include "utils/sys/sys.path.h"
 #include "utils/sys/Process.h"
 #include "utils/io/io.h"
+#include "utils/algo/str.h"
 #include "common/exceptions/WebException.h"
 #include "log/log.h"
 
@@ -109,11 +110,11 @@ CGIOutput CGIExecutor::parseCGIOutput(const std::string& rawOutput) const
 			break;
 		}
 
-		output.headers.push_back(rawOutput.substr(lower, current));
+		output.headers.push_back(algo::range(rawOutput, lower, current));
 		lower = current + 2;
 	}
 
-	output.body = rawOutput.substr(current + 2, rawOutput.length() - 1);
+	output.body = algo::range(rawOutput, current + 2, rawOutput.length());
 
 	return output;
 }
