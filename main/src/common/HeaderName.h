@@ -18,6 +18,7 @@ public:
 	static HeaderName ContentLength;
 	static HeaderName ContentType;
 	static HeaderName TransferEncoding;
+	static HeaderName Cookie;
 
 	HeaderName();
 	explicit HeaderName(const std::string& string);

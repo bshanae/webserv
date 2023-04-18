@@ -93,6 +93,10 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 	if (contentType)
 		env.push_back("CONTENT_TYPE=" + *contentType);
 
+	Optional<std::string> cookie = request.findHeader(HeaderName::Cookie);
+	if (cookie)
+		env.push_back("HTTP_COOKIE=" + *cookie);
+
 	return env;
 }
 
