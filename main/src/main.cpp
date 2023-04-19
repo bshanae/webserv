@@ -12,7 +12,7 @@ using namespace webserv;
 using namespace webserv::config;
 using namespace webserv::log;
 
-bool getConfigFile(int argc, char** argv, std::ifstream& configFile)
+bool getConfigFile(int argc, char** argv, std::string& configPath, std::ifstream& configFile)
 {
 	if (argc != 2)
 	{
@@ -21,7 +21,7 @@ bool getConfigFile(int argc, char** argv, std::ifstream& configFile)
 		return false;
 	}
 
-	const std::string configPath = argv[1];
+	configPath = argv[1];
 
 	configFile = std::ifstream(configPath);
 	if (!configFile)
@@ -29,9 +29,6 @@ bool getConfigFile(int argc, char** argv, std::ifstream& configFile)
 		std::cerr << "Can't open file " << configPath << std::endl;
 		return false;
 	}
-
-	const std::string configDir = sys::path::directory(configPath);
-	chdir(configDir.c_str());
 
 	return true;
 }
@@ -44,12 +41,22 @@ int main(int argc, char** argv)
 	{
 		// read config
 
+		std::string configPath;
 		std::ifstream configFile;
-		if (!getConfigFile(argc, argv, configFile))
+		if (!getConfigFile(argc, argv, configPath, configFile))
 			return 1;
 
 		Config config;
 		configFile >> config;
+
+		// change dir
+
+		char startDir[PATH_MAX];
+		if (getcwd(startDir, sizeof(startDir)) == NULL)
+			throw std::runtime_error("Can't get current directory");
+
+		const std::string configDir = sys::path::directory(configPath);
+		chdir(configDir.c_str());
 
 		// initialize log
 
@@ -60,7 +67,7 @@ int main(int argc, char** argv)
 		std::map<WebAddress, std::vector<Server*> > serversByAddress;
 		typedef std::vector<ServerConfig>::const_iterator ServerConfigIterator;
 		for (ServerConfigIterator s = config.servers().cbegin(); s != config.servers().cend(); s++)
-			serversByAddress[s->address()].push_back(new Server(*s, config.media()));
+			serversByAddress[s->address()].push_back(new Server(startDir, *s, config.media()));
 
 		// initialize server socket controllers, link virtual servers to them
 

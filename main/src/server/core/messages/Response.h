@@ -18,8 +18,8 @@ class webserv::Response
 public:
 
 	// status line
-	void setStatusCode(int code);
 	void setStatusCode(StatusCode code, const std::string& customReason = "");
+	StatusCode getStatusCode() const;
 
 	// header
 	void setDate(const std::time_t& date);
@@ -30,13 +30,14 @@ public:
 	// body
 	void setBody(const std::string& data);
 	void setBody(const MediaType& type, const std::string& data);
-	void setEmptyBody();
+	bool needsBody() const;
 	void ignoreBody();
 
 	std::string build() const;
 
 private:
 
+	Optional<StatusCode> _statusCode; // hack
 	std::string _statusLine;
 	std::vector<std::string> _headers;
 	Optional<std::string> _body;

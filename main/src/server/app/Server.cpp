@@ -11,7 +11,8 @@
 using namespace webserv;
 using namespace webserv::config;
 
-Server::Server(const ServerConfig& config, const MediaConfig& mediaConfig):
+Server::Server(const std::string& startDir, const ServerConfig& config, const MediaConfig& mediaConfig):
+	_startDir(startDir),
 	_name(config.name()),
 	_address(config.address()),
 	_maxClientBodySize(config.maxClientBodySize()),
@@ -64,15 +65,16 @@ Response Server::respondToRequest(const Request& request)
 		log::e << *this << log::startm << "Web error. Code: " << e.code() << ". Cause: " << e.what() << log::endm;
 
 		response.setStatusCode(e.code());
-		response.setEmptyBody();
 	}
 	catch (std::exception& e)
 	{
 		log::e << *this << log::startm << "Unknown error: " << e.what() << log::endm;
 
 		response.setStatusCode(StatusCodeInternalServerError);
-		response.setEmptyBody();
 	}
+
+	if (response.needsBody())
+		response.setBody(MediaType::Html, loadDefaultBody(response.getStatusCode()));
 
 	return response;
 }
@@ -90,9 +92,8 @@ bool Server::processRedirect(const LocationConfig& location, Response& response)
 	if (location.redirectionUrl().empty())
 		return false;
 
-	response.setStatusCode(location.redirectionCode());
+	response.setStatusCode((StatusCode)location.redirectionCode());
 	response.setLocation(location.redirectionUrl());
-	response.setEmptyBody();
 
 	return true;
 }
@@ -104,6 +105,17 @@ void Server::processRequest(const Request& request, const LocationConfig& locati
 		throw WebException(StatusCodeBadRequest, "Unsupported request method");
 
 	i->second->processRequest(request, location, response);
+}
+
+std::string Server::loadDefaultBody(StatusCode code)
+{
+	const std::string defaultPageDir = sys::path::concat(_startDir, "main/res/defaults/pages/");
+	const std::string defaultPage = sys::path::concat(defaultPageDir, std::to_string(code) + ".html");
+
+	if (!sys::isFile(defaultPage))
+		return "";
+
+	return sys::readFile(defaultPage);
 }
 
 std::ostream& operator<<(std::ostream& stream, const Server& server)

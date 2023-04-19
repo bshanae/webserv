@@ -5,14 +5,6 @@
 
 using namespace webserv;
 
-void Response::setStatusCode(int code)
-{
-	std::stringstream buffer;
-	buffer << "HTTP/1.1 " << code << " ";
-
-	_statusLine = buffer.str();
-}
-
 void Response::setStatusCode(const StatusCode code, const std::string& customReason)
 {
 	std::string finalReason = customReason;
@@ -23,6 +15,12 @@ void Response::setStatusCode(const StatusCode code, const std::string& customRea
 	buffer << "HTTP/1.1 " << code << " " << finalReason;
 
 	_statusLine = buffer.str();
+	_statusCode = code;
+}
+
+StatusCode Response::getStatusCode() const
+{
+	return *_statusCode;
 }
 
 void Response::setDate(const std::time_t &date)
@@ -62,14 +60,14 @@ void Response::setBody(const MediaType& type, const std::string& data)
 	storeHeader(HeaderName::ContentType, type);
 }
 
-void Response::setEmptyBody()
+bool Response::needsBody() const
 {
-	setBody(MediaType::Default, "");
+	return !_body.hasValue();
 }
 
 void Response::ignoreBody()
 {
-	_body = Optional<std::string>();
+	_body = "";
 }
 
 std::string Response::build() const

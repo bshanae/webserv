@@ -7,6 +7,7 @@ namespace webserv
 	enum StatusCode
 	{
 		StatusCodeOk = 200,
+		StatusCodeRedirect = 301,
 		StatusCodeBadRequest = 400,
 		StatusCodeNotFound = 404,
 		StatusCodeMethodNowAllowed = 405,

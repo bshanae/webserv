@@ -26,11 +26,12 @@ class webserv::Server : public IServerSocketDelegate
 
 public:
 
-	Server(const config::ServerConfig& config, const config::MediaConfig& mediaConfig);
+	Server(const std::string& startDir, const config::ServerConfig& config, const config::MediaConfig& mediaConfig);
 	virtual ~Server();
 
 private:
 
+	std::string _startDir;
 	std::string _name;
 	WebAddress _address;
 	Optional<size_t> _maxClientBodySize;
@@ -47,4 +48,5 @@ private:
 	void validateRequest(const Request& request, const config::LocationConfig& location) const;
 	bool processRedirect(const config::LocationConfig& location, Response& response);
 	void processRequest(const Request& request, const config::LocationConfig& location, Response& response);
+	std::string loadDefaultBody(StatusCode code);
 };

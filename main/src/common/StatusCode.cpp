@@ -9,7 +9,10 @@ std::string defaultReason(StatusCode code)
 	switch (code)
 	{
 		case StatusCodeOk:
-			return "OK";
+			return "Ok";
+
+		case StatusCodeRedirect:
+			return "Redirect";
 
 		case StatusCodeBadRequest:
 			return "Bad request";
@@ -27,6 +30,6 @@ std::string defaultReason(StatusCode code)
 			return "Internal server error";
 
 		default:
-			throw InvalidArgumentException();
+			throw InvalidArgumentException("Unknown status code:" + std::to_string(code));
 	}
 }
