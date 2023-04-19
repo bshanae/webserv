@@ -1,0 +1,19 @@
+log {
+	info 1
+	warning 1
+	error 1
+	verbose 1
+}
+
+media default
+
+server {
+    address 0.0.0.0:8080
+    root .
+
+    location {
+        remote /
+        local /data
+        methods DELETE
+    }
+}

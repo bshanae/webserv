@@ -7,6 +7,8 @@
 #include "server/app/requestProcessors/GetRequestProcessor.h"
 #include "server/app/requestProcessors/HeadRequestProcessor.h"
 #include "server/app/requestProcessors/PostRequestProcessor.h"
+#include "server/app/requestProcessors/PutRequestProcessor.h"
+#include "server/app/requestProcessors/DeleteRequestProcessor.h"
 
 using namespace webserv;
 using namespace webserv::config;
@@ -23,6 +25,8 @@ Server::Server(const std::string& startDir, const ServerConfig& config, const Me
 	_requestProcessors[RequestMethodGET] = new GetRequestProcessor(_project, _cgi, mediaConfig);
 	_requestProcessors[RequestMethodHEAD] = new HeadRequestProcessor(_project, _cgi, mediaConfig);
 	_requestProcessors[RequestMethodPOST] = new PostRequestProcessor(_project, _cgi);
+	_requestProcessors[RequestMethodPUT] = new PutRequestProcessor(_project, _cgi);
+	_requestProcessors[RequestMethodDELETE] = new DeleteRequestProcessor(_project, _cgi);
 }
 
 Server::~Server()

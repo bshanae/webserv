@@ -17,4 +17,6 @@ void PostRequestProcessor::processRequest(const Request& request, const Location
 {
 	if (tryExecuteCGI(request, location, response))
 		return;
+
+	response.setStatusCode(StatusCodeNoContent);
 }

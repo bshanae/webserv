@@ -122,3 +122,8 @@ std::vector<std::string> sys::enumerateDirectory(const std::string& path)
 
 	return entries;
 }
+
+bool sys::remove(const std::string& path)
+{
+	return std::remove(path.c_str()) == 0;
+}

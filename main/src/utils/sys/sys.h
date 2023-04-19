@@ -20,4 +20,5 @@ namespace sys
 	bool isFile(const std::string& path);
 	bool isDirectory(const std::string& path);
 	std::vector<std::string> enumerateDirectory(const std::string& path);
+	bool remove(const std::string& path);
 }

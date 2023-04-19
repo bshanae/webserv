@@ -11,11 +11,20 @@ std::string defaultReason(StatusCode code)
 		case StatusCodeOk:
 			return "Ok";
 
+		case StatusCodeCreated:
+			return "Resource created";
+
+		case StatusCodeNoContent:
+			return "No content";
+
 		case StatusCodeRedirect:
 			return "Redirect";
 
 		case StatusCodeBadRequest:
 			return "Bad request";
+
+		case StatusCodeForbidden:
+			return "Forbidden";
 
 		case StatusCodeNotFound:
 			return "Not found";

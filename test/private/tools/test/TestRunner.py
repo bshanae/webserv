@@ -41,7 +41,7 @@ class TestRunner:
             f'{webserv_exe} {config_file} 1>{TestRunner._temp_out_file} 2>{TestRunner._temp_err_file}',
             close_fds=True,
             shell=True)
-        time.sleep(0.1)
+        time.sleep(0.01)
 
         return p
 
