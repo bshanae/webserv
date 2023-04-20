@@ -51,7 +51,7 @@ public:
 	void willWrite(size_t size)
 	{
 		if (size > availableWriteSize())
-			enlarge();
+			enlarge(size);
 	}
 
 	void write(const T* data, size_t dataSize)
@@ -84,9 +84,9 @@ private:
 	SimpleBuffer(SimpleBuffer&);
 	SimpleBuffer& operator=(SimpleBuffer&);
 
-	void enlarge()
+	void enlarge(size_t required_size)
 	{
-		const size_t newSize = _dataSize * 2;
+		const size_t newSize = std::max(_dataSize * 2, required_size + _offsetW);
 		T* newData = new T[newSize];
 
 		std::memcpy(newData, _data, _dataSize);
