@@ -35,10 +35,11 @@ std::string RequestProcessor::resolveFullLocalPath(const Request& request, const
 
 bool RequestProcessor::tryExecuteCGI(const Request& request,  const config::LocationConfig& location, Response& response)
 {
-	if (!location.cgi())
+	if (!location.cgiEnabled())
 		return false;
 
-	const std::string fullLocalPath = resolveFullLocalPath(request, location);
+	const std::string localPath = location.cgiForward().valueOr(resolveLocalPath(request, location));
+	const std::string fullLocalPath = project().resolvePath(localPath);
 
 	if (!sys::isFile(fullLocalPath))
 		throw WebException(StatusCodeNotFound, "CGI script not found.");

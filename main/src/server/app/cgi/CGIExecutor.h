@@ -18,7 +18,7 @@ public:
 
 	explicit CGIExecutor(const config::ServerConfig& serverConfig);
 
-	CGIOutput executeCGI(const Request& request, const std::string& fullLocalPath) const;
+	CGIOutput executeCGI(const Request& request, const std::string& cgiPath) const;
 
 private:
 

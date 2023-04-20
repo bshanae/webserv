@@ -52,9 +52,13 @@ std::istream& operator>>(std::istream& source, webserv::config::LocationConfig& 
 		{
 			config._autoindex = true;
 		}
-		else if (algo::startsWith(line, "cgi"))
+		else if (algo::startsWith(line, "cgi_enable"))
 		{
-			config._cgi = true;
+			config._cgiEnabled = true;
+		}
+		else if (algo::startsWith(line, "cgi_forward"))
+		{
+			config._cgiForward = utils::extractArgument<std::string>(line);
 		}
 		else
 		{
@@ -105,9 +109,14 @@ bool LocationConfig::autoindex() const
 	return _autoindex;
 }
 
-bool LocationConfig::cgi() const
+bool LocationConfig::cgiEnabled() const
 {
-	return _cgi;
+	return _cgiEnabled;
+}
+
+const Optional<std::string>& LocationConfig::cgiForward() const
+{
+	return _cgiForward;
 }
 
 std::string LocationConfig::transformRemotePath(const std::string& path) const

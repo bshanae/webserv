@@ -29,7 +29,8 @@ public:
 	const Optional<std::set<std::string> >& extensions() const;
 	const Optional<std::string> &index() const;
 	bool autoindex() const;
-	bool cgi() const;
+	bool cgiEnabled() const;
+	const Optional<std::string>& cgiForward() const;
 
 	std::string transformRemotePath(const std::string& path) const;
 
@@ -43,5 +44,6 @@ private:
 	Optional<std::set<std::string> > _extensions;
 	Optional<std::string> _index;
 	bool _autoindex;
-	bool _cgi;
+	bool _cgiEnabled;
+	Optional<std::string> _cgiForward;
 };

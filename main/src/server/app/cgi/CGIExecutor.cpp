@@ -17,16 +17,16 @@ CGIExecutor::CGIExecutor(const ServerConfig& serverConfig)
 	_constEnv = collectConstEnv(serverConfig);
 }
 
-CGIOutput CGIExecutor::executeCGI(const Request& request, const std::string& fullLocalPath) const
+CGIOutput CGIExecutor::executeCGI(const Request& request, const std::string& cgiPath) const
 {
 	try
 	{
-		log::i << *this << log::startm << "Staring CGI script at '" << request.path() << "'" << log::endm;
+		log::i << *this << log::startm << "Staring CGI script at '" << cgiPath << "'" << log::endm;
 
 		const std::vector<std::string> arg;
 		const std::vector<std::string> env = collectEnv(request);
 
-		sys::Process process(fullLocalPath, arg, env);
+		sys::Process process(cgiPath, arg, env);
 
 		// write stdin
 		process.stdIn() << request.body() << std::flush;
@@ -55,7 +55,7 @@ CGIOutput CGIExecutor::executeCGI(const Request& request, const std::string& ful
 	catch (std::exception& e)
 	{
 		log::e << *this << log::startm
-			   << "Can't execute script at " << request.path() << log::endl
+			   << "Can't execute script at " << cgiPath << log::endl
 			   << "Exception:" << e.what() << log::endm;
 		throw WebException(StatusCodeInternalServerError, "Can't execute CGI");
 	}
