@@ -28,6 +28,7 @@ server {
         remote /post_body
         local /var/post_body
         methods POST
+        max_client_body_size 100
     }
 
     location {

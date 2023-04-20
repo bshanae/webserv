@@ -60,6 +60,10 @@ std::istream& operator>>(std::istream& source, webserv::config::LocationConfig& 
 		{
 			config._cgiForward = utils::extractArgument<std::string>(line);
 		}
+		else if (algo::startsWith(line, "max_client_body_size"))
+		{
+			config._maxClientBodySize = utils::extractArgument<size_t>(line);
+		}
 		else
 		{
 			throw ParsingException("Invalid line: " + line);
@@ -117,6 +121,11 @@ bool LocationConfig::cgiEnabled() const
 const Optional<std::string>& LocationConfig::cgiForward() const
 {
 	return _cgiForward;
+}
+
+const Optional<size_t>& LocationConfig::maxClientBodySize() const
+{
+	return _maxClientBodySize;
 }
 
 std::string LocationConfig::transformRemotePath(const std::string& path) const

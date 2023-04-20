@@ -40,10 +40,6 @@ std::istream& operator>>(std::istream& source, webserv::config::ServerConfig& co
 
 			config._locations.push_back(location);
 		}
-		else if (algo::startsWith(line, "max_client_body_size"))
-		{
-			config._maxClientBodySize = utils::extractArgument<size_t>(line);
-		}
 		else
 		{
 			throw ParsingException("Invalid line: " + line);
@@ -74,9 +70,4 @@ const std::string& ServerConfig::root() const
 const std::vector<LocationConfig>& ServerConfig::locations() const
 {
 	return _locations;
-}
-
-const Optional<size_t>& ServerConfig::maxClientBodySize() const
-{
-	return _maxClientBodySize;
 }

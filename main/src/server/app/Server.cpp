@@ -17,7 +17,6 @@ Server::Server(const std::string& startDir, const ServerConfig& config, const Me
 	_startDir(startDir),
 	_name(config.name()),
 	_address(config.address()),
-	_maxClientBodySize(config.maxClientBodySize()),
 	_project(config.root()),
 	_locationProcessor(config.locations()),
 	_cgi(config)
@@ -52,11 +51,11 @@ Response Server::respondToRequest(const Request& request)
 
 	try
 	{
-		if (_maxClientBodySize && request.body().size() > *_maxClientBodySize)
-			throw WebException(StatusCodePayloadTooLarge);
-
 		const LocationConfig& location = _locationProcessor.resolveLocation(request.path());
 		log::v << *this << log::startm << "Resolved location: " << location.remotePath() << log::endm;
+
+		if (request.body().size() > location.maxClientBodySize().valueOr(SIZE_T_MAX))
+			throw WebException(StatusCodePayloadTooLarge);
 
 		validateRequest(request, location);
 

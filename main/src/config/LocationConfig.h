@@ -31,6 +31,7 @@ public:
 	bool autoindex() const;
 	bool cgiEnabled() const;
 	const Optional<std::string>& cgiForward() const;
+	const Optional<size_t>& maxClientBodySize() const;
 
 	std::string transformRemotePath(const std::string& path) const;
 
@@ -46,4 +47,5 @@ private:
 	bool _autoindex;
 	bool _cgiEnabled;
 	Optional<std::string> _cgiForward;
+	Optional<size_t> _maxClientBodySize;
 };

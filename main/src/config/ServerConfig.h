@@ -28,7 +28,6 @@ public:
 	const WebAddress& address() const;
 	const std::string& root() const;
 	const std::vector<LocationConfig>& locations() const;
-	const Optional<size_t>& maxClientBodySize() const;
 
 private:
 
@@ -36,5 +35,4 @@ private:
 	WebAddress _address;
 	std::string _root;
 	std::vector<LocationConfig> _locations;
-	Optional<size_t> _maxClientBodySize;
 };
