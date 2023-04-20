@@ -10,12 +10,12 @@ media default
 server {
     address 0.0.0.0:8080
     root .
-    max_client_body_size 100
 
     location {
         remote /
         local /www
         methods GET
         index index.html
+         max_client_body_size 100
     }
 }

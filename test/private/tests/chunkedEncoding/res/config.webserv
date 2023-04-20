@@ -16,6 +16,6 @@ server {
         local /cgi-bin
         methods GET
         extensions .py
-        cgi
+        cgi_enable
     }
 }

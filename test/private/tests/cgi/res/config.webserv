@@ -16,7 +16,7 @@ server {
         local /cgi-bin-1
         methods GET POST
     	extensions .py
-        cgi
+        cgi_enable
     }
 
     location {
@@ -24,6 +24,6 @@ server {
         local /cgi-bin-2
         methods GET POST
     	extensions .py
-        cgi
+        cgi_enable
     }
 }
