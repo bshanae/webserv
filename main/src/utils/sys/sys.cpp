@@ -81,7 +81,10 @@ std::string sys::execute(
 		cEnv.push_back(NULL);
 
 		if (execve(cCmd, cArgv.data(), cEnv.data()) < 0)
-			throw SystemException("execve failed");
+		{
+			std::cerr << "execve failed" << std::endl;
+			exit(1);
+		}
 	}
 	else
 	{
