@@ -88,9 +88,7 @@ Optional<std::string> ClientSocketController::readFromSocket()
 		_readBuffer.willWrite(512);
 	}
 
-	_readBuffer.write("\0", 1);
-
-	std::string m = std::string(_readBuffer.readPtr());
+	std::string m(_readBuffer.readPtr(), _readBuffer.availableReadSize());
 	_readBuffer.didRead(_readBuffer.availableReadSize());
 
 	logRequest(m);
