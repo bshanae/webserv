@@ -84,6 +84,7 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 	env.push_back("QUERY_STRING=" + request.query());
 	env.push_back("REQUEST_METHOD=" + toString(request.method()));
 	env.push_back("REQUEST_URI=" + request.uri());
+	env.push_back("PATH_INFO=" + request.uri());
 
 	Optional<std::string> contentLength = request.findHeader(HeaderName::ContentLength);
 	if (contentLength)
