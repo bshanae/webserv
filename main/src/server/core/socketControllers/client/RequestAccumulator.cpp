@@ -53,7 +53,7 @@ Optional<Request> RequestAccumulator::accumulateBody(const std::string& bodyPiec
 	else
 	{
 		_tmpRequest->appendBody(bodyPiece);
-		bodyComplete = _tmpRequest->contentLength().valueOr(0) >= _tmpRequest->body().size();
+		bodyComplete = _tmpRequest->contentLength().valueOr(0) <= _tmpRequest->body().size();
 	}
 
 	if (bodyComplete)
