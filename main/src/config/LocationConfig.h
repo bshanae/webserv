@@ -21,6 +21,8 @@ class webserv::config::LocationConfig
 
 public:
 
+	LocationConfig();
+
 	const std::string& remotePath() const;
 	const std::string& localPath() const;
 	const std::string& redirectionUrl() const;

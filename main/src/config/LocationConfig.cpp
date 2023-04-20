@@ -73,6 +73,9 @@ std::istream& operator>>(std::istream& source, webserv::config::LocationConfig& 
 	return source;
 }
 
+LocationConfig::LocationConfig() : _autoindex(false), _cgiEnabled(false)
+{}
+
 const std::string& LocationConfig::remotePath() const
 {
 	return _remotePath;
