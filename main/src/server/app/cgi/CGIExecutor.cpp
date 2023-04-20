@@ -76,6 +76,23 @@ std::vector<std::string> CGIExecutor::collectEnv(const Request& request) const
 	if (cookie)
 		env.push_back("HTTP_COOKIE=" + *cookie);
 
+	typedef std::map<HeaderName, std::string>::const_iterator HeaderIterator;
+	for (HeaderIterator it = request.headers().begin(); it != request.headers().end(); it++)
+	{
+		std::string name = it->first;
+		for (int i = 0; i < name.length(); i++)
+		{
+			if (name[i] == '-')
+				name[i] = '_';
+
+			name[i] = std::toupper(name[i]);
+		}
+
+		const std::string value = it->second;
+
+		env.push_back("HTTP_" + name + "=" + value);
+	}
+
 	return env;
 }
 
