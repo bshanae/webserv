@@ -11,7 +11,13 @@ namespace sys
 	void listenForTermination();
 
 	void close(FDescriptor& fd);
-	void transfer(FDescriptor& fdFrom, FDescriptor fdTo);
+
+	std::string execute(
+		const std::string& cmd,
+		const std::vector<std::string>& arg,
+		const std::vector<std::string>& env,
+		const std::string& in
+	);
 
 	Optional<struct stat> stat(const std::string &absolutePath);
 	tm* modificationTime(const std::string& path);

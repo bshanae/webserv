@@ -43,10 +43,7 @@ SRCS=main/src/main.cpp                                                          
      main/src/common/WebAddress.cpp                                                     \
      main/src/common/exceptions/WebException.cpp                                        \
 	 main/src/common/path.cpp                                                           \
-	 main/src/utils/sys/Process.cpp                                                     \
-	 main/src/utils/sys/Pipe.cpp                                                        \
 	 main/src/utils/sys/FDescriptor.cpp                                                 \
-	 main/src/utils/sys/FDStream.cpp                                                    \
 	 main/src/utils/sys/sys.path.cpp                                                    \
 	 main/src/utils/algo/str.cpp									                    \
 	 main/src/utils/io/io.cpp										                    \

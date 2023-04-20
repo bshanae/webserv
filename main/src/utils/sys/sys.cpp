@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include "utils/exceptions/FileException.h"
+#include "utils/exceptions/SystemException.h"
 #include "utils/exceptions/InvalidArgumentException.h"
 
 using namespace sys;
@@ -33,10 +34,92 @@ void sys::close(FDescriptor& fd)
 	fd = nullFd;
 }
 
-void sys::transfer(FDescriptor& from, FDescriptor to)
+std::string sys::execute(
+	const std::string& cmd,
+	const std::vector<std::string>& arg,
+	const std::vector<std::string>& env,
+	const std::string& in
+)
 {
-	dup2(from, to);
-	close(from);
+	std::string out;
+
+	int stdinDup = dup(sys::stdIn);
+	int stdoutDup = dup(sys::stdOut);
+
+	FILE* fIn = tmpfile();
+	FILE* fOut = tmpfile();
+	int fdIn = fileno(fIn);
+	int fdOut = fileno(fOut);
+
+	write(fdIn, in.c_str(), in.size());
+	lseek(fdIn, 0, SEEK_SET);
+
+	pid_t pid = fork();
+	if (pid == -1)
+		throw SystemException("fork failed");
+
+	if (pid == 0)
+	{
+		// child
+
+		dup2(fdIn, sys::stdIn);
+		dup2(fdOut, sys::stdOut);
+
+		const char* cCmd = cmd.c_str();
+
+		std::vector<char*> cArgv;
+		cArgv.reserve(1 + arg.size() + 1);
+		cArgv.push_back((char*)cCmd);
+		for (int i = 0; i < arg.size(); i++)
+			cArgv.push_back(const_cast<char*>(arg[i].c_str()));
+		cArgv.push_back(NULL);
+
+		std::vector<char*> cEnv;
+		cEnv.reserve(env.size() + 1);
+		for (int i = 0; i < env.size(); i++)
+			cEnv.push_back(const_cast<char*>(env[i].c_str()));
+		cEnv.push_back(NULL);
+
+		if (execve(cCmd, cArgv.data(), cEnv.data()) < 0)
+			throw SystemException("execve failed");
+	}
+	else
+	{
+		//parent
+
+		static const int buf_size = 65536;
+		char buffer[buf_size] = { 0 };
+
+		waitpid(-1, NULL, 0);
+		lseek(fdOut, 0, SEEK_SET);
+
+		for (;;)
+		{
+			memset(buffer, 0, buf_size);
+
+			const int nRead = read(fdOut, buffer, buf_size - 1);
+			if (nRead == 0)
+				break;
+
+			out += buffer;
+		}
+	}
+
+	dup2(stdinDup, sys::stdIn);
+	dup2(stdoutDup, sys::stdOut);
+
+	fclose(fIn);
+	fclose(fOut);
+
+	close(fdIn);
+	close(fdOut);
+	close(stdinDup);
+	close(stdoutDup);
+
+	if (pid == 0)
+		exit(0);
+
+	return out;
 }
 
 Optional<struct stat> sys::stat(const std::string &absolutePath)

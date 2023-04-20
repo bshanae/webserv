@@ -2,10 +2,10 @@
 
 #include <ostream>
 #include "utils/exceptions/SystemException.h"
+#include "utils/sys/sys.h"
 #include "utils/sys/sys.path.h"
-#include "utils/sys/Process.h"
-#include "utils/io/io.h"
 #include "utils/algo/str.h"
+#include "utils/sys/FDescriptor.h"
 #include "common/exceptions/WebException.h"
 #include "log/log.h"
 
@@ -26,31 +26,9 @@ CGIOutput CGIExecutor::executeCGI(const Request& request, const std::string& cgi
 		const std::vector<std::string> arg;
 		const std::vector<std::string> env = collectEnv(request);
 
-		sys::Process process(cgiPath, arg, env);
+		const std::string out = sys::execute(cgiPath, arg, env, request.body());
 
-		// write stdin
-		process.stdIn() << request.body() << std::flush;
-
-		// wait for exit
-		const int exitCode = process.wait();
-
-		// read stdin and stderr
-		const std::string stdOut = io::to_string(process.stdOut());
-		const std::string stdErr = io::to_string(process.stdErr());
-
-		if (exitCode == 0)
-		{
-			log::i << *this << log::startm << "CGI script exited with code " << exitCode << log::endm;
-		}
-		else
-		{
-			log::e << *this << log::startm << "CGI exited with code " << exitCode << log::endl
-				   << "STDERR:" << log::endl
-				   << stdErr << log::endm;
-			throw SystemException("Can't execute CGI");
-		}
-
-		return parseCGIOutput(stdOut);
+		return parseCGIOutput(out);
 	}
 	catch (std::exception& e)
 	{
