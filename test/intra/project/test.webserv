@@ -2,7 +2,7 @@ log {
 	info 1
 	warning 1
 	error 1
-	verbose 1
+	verbose 0
 }
 
 media default
@@ -37,4 +37,19 @@ server {
         methods GET
         index youpi.bad_extension
     }
+
+    location {
+		remote /directory/*.bla
+		local /www/YoupiBanane
+		methods GET POST
+		cgi_enable
+		cgi_forward /cgi-bin/cgi_tester
+    }
+
+	location {
+		remote /cgi
+		local /cgi-bin
+		methods GET POST
+		cgi_enable
+	}
 }
