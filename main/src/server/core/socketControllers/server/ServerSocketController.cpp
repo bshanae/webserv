@@ -58,13 +58,14 @@ void ServerSocketController::processSocketEvent(SocketEvent event)
 	struct sockaddr_in clientAddress = {};
 	uint32_t addressLength;
 	int s = accept(socket(), reinterpret_cast<sockaddr*>(&clientAddress), &addressLength);
-	// TODO if (tempSocket < 0)
+	if (s < 0)
+		throw SocketException("accept fail");
 
 	char clientAddressStr[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(clientAddress.sin_addr), clientAddressStr, INET_ADDRSTRLEN);
 
 	if (fcntl(s, F_SETFL, O_NONBLOCK) != 0)
-		throw SocketException("Can't set O_NONBLOCK!");
+		throw SocketException("fcntl fail");
 
 	ClientSocketController* clientController = new ClientSocketController(s, WebAddress(clientAddressStr, clientAddress.sin_port));
 	_clientControllers.push_back(clientController);

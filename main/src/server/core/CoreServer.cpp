@@ -28,7 +28,8 @@ void CoreServer::run()
 	while (!sys::TerminationRequested)
 	{
 		int readyCount = poll(_pollingTargets.data(), _pollingTargets.size(), 0);
-		// TODO Check error
+		if (readyCount < 0)
+			throw std::runtime_error("poll fail");
 		if (readyCount == 0)
 			continue;
 
