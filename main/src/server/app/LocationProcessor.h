@@ -19,4 +19,6 @@ public:
 private:
 
 	std::vector<config::LocationConfig> _locations;
+
+	static int match(const std::string& remote, const std::string& local);
 };

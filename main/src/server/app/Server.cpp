@@ -56,6 +56,7 @@ Response Server::respondToRequest(const Request& request)
 			throw WebException(StatusCodePayloadTooLarge);
 
 		const LocationConfig& location = _locationProcessor.resolveLocation(request.path());
+		log::v << *this << log::startm << "Resolved location: " << location.remotePath() << log::endm;
 
 		validateRequest(request, location);
 

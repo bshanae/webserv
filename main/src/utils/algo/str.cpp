@@ -27,7 +27,7 @@ bool algo::startsWith(const std::string& main, const std::string& prefix)
 	for (; i < prefix.length() && i < main.length(); i++)
 	{
 		if (main[i] != prefix[i])
-			return false;
+			break;
 	}
 
 	return i == prefix.length();
@@ -64,4 +64,32 @@ void algo::replaceAll(std::string& target, const std::string& search, const std:
 		target.replace(i, search.length(), replace);
 		i += replace.length();
 	}
+}
+
+static bool matchHelper(const std::string& pattern, const std::string& target, int iPattern, int iTarget)
+{
+	if (iPattern == pattern.length())
+		return iTarget == target.length();
+
+	if (pattern[iPattern] == '*')
+	{
+		if (iTarget == target.length())
+			return matchHelper(pattern, target, iPattern + 1, iTarget);
+
+		return matchHelper(pattern, target, iPattern, iTarget + 1) ||
+			   matchHelper(pattern, target, iPattern + 1, iTarget);
+	}
+	else
+	{
+		if (iTarget == target.length())
+			return iPattern == pattern.length();
+
+		return pattern[iPattern] == target[iTarget] &&
+		       matchHelper(pattern, target, iPattern + 1, iTarget + 1);
+	}
+}
+
+bool algo::match(const std::string& pattern, const std::string& target)
+{
+	return matchHelper(pattern, target, 0, 0);
 }

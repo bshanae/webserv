@@ -112,6 +112,13 @@ bool LocationConfig::cgi() const
 
 std::string LocationConfig::transformRemotePath(const std::string& path) const
 {
-	const std::string suffix = algo::range(path, _remotePath.length(), path.length());
-	return sys::path::concat(_localPath, suffix);
+	if (_remotePath.find('*') != std::string::npos)
+	{
+		return sys::path::concat(_localPath, sys::path::file(path));
+	}
+	else
+	{
+		const std::string suffix = algo::range(path, _remotePath.length(), path.length());
+		return sys::path::concat(_localPath, suffix);
+	}
 }

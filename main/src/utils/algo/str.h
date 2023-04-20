@@ -23,4 +23,7 @@ namespace algo
 	void markEndl(std::string& target, const std::string& endl);
 
 	void replaceAll(std::string& target, const std::string& search, const std::string& replace);
+
+	/// Tests match pattern with *
+	bool match(const std::string& pattern, const std::string& target);
 }
