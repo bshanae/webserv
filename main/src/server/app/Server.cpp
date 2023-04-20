@@ -113,7 +113,7 @@ void Server::processRequest(const Request& request, const LocationConfig& locati
 
 std::string Server::loadDefaultBody(StatusCode code)
 {
-	const std::string defaultPageDir = sys::path::concat(_startDir, "main/res/defaults/pages/");
+	const std::string defaultPageDir = sys::path::concat(_startDir, "main/res/default-pages/");
 	const std::string defaultPage = sys::path::concat(defaultPageDir, std::to_string(code) + ".html");
 
 	if (!sys::isFile(defaultPage))

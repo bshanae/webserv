@@ -8,9 +8,8 @@ log {
 media default
 
 server {
-	name a.webservb
     address 0.0.0.0:8080
-    root a
+    root .
 
     location {
         remote /
@@ -18,30 +17,36 @@ server {
         methods GET
         index index.html
     }
-}
 
-server {
-	name b.webservb
-    address 0.0.0.0:8081
-    root b
 
     location {
-        remote /
-        local /www
+        remote /redirect-to-root
+        redirect 301 /index.html
         methods GET
-        index index.html
+    }
+
+    location {
+        remote /cgi-bin
+        local /cgi-bin
+        methods GET POST
+        cgi_enable
+    }
+
+    location {
+        remote /var
+        local /var
+        methods GET
     }
 }
 
 
 server {
-	name c.webserv
     address 0.0.0.0:8081
-    root c
+    root .
 
     location {
         remote /
-        local /www
+        local /www/hidden
         methods GET
         index index.html
     }
