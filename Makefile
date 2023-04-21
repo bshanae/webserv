@@ -80,6 +80,10 @@ LD_FLAGS=$(BASE_LD_FLAGS)
 
 DEP=$(addprefix $(BUILD_DEP_DIR)/,$(SRCS:.cpp=.d))
 
+TEST_DIR=test/private
+TEST_ENV=$(TEST_DIR)/venv
+TEST_VAR=$(TEST_DIR)/var
+
 # TEMPLATES
 
 define OBJ_TEMPLATE
@@ -113,8 +117,12 @@ $(EXE): $(OBJS)
 
 $(foreach SRC,$(SRCS),$(eval $(call OBJ_TEMPLATE,$(SRC))))
 
-test: FORCE
-	cd test/private; ./venv/bin/python main.py
+$(TEST_ENV):
+	$(call LOG,Building test evnironment)
+	$(SILENT) (cd $(TEST_DIR); virtualenv venv; source venv/bin/activate; pip install -r requirements.txt) &>/dev/null
+
+test: $(TEST_ENV) $(EXE) FORCE
+	$(SILENT) cd $(TEST_DIR); ./venv/bin/python main.py
 
 # FINAL
 
