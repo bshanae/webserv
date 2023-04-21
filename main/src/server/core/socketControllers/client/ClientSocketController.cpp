@@ -74,19 +74,29 @@ void ClientSocketController::processCanWriteEvent()
 
 Optional<std::string> ClientSocketController::readFromSocket()
 {
+	ssize_t totalReadSize = 0;
+
 	for (;;)
 	{
 		const ssize_t readSize = read(socket(), _readBuffer.writePtr(), _readBuffer.availableWriteSize());
-		_readBuffer.didWrite(readSize);
+		totalReadSize += readSize;
 
-		if (readSize == 0)
-			return Optional<std::string>();
+		if (readSize != 0 && readSize != -1)
+		{
+			_readBuffer.didWrite(readSize);
 
-		if (!_readBuffer.full())
-			break;
+			if (_readBuffer.full())
+			{
+				_readBuffer.willWrite(512);
+				continue;
+			}
+		}
 
-		_readBuffer.willWrite(512);
+		break;
 	}
+
+	if (totalReadSize == 0)
+		return Optional<std::string>();
 
 	std::string m(_readBuffer.readPtr(), _readBuffer.availableReadSize());
 	_readBuffer.didRead(_readBuffer.availableReadSize());
