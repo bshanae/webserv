@@ -14,14 +14,15 @@ using namespace webserv::log;
 
 bool getConfigFile(int argc, char** argv, std::string& configPath, std::ifstream& configFile)
 {
-	if (argc != 2)
+	if (argc > 1)
 	{
-		std::cerr << "Invalid usage." << std::endl;
-		std::cerr << "Usage: ./webserv [config path]" << std::endl;
-		return false;
+		configPath = argv[1];
 	}
-
-	configPath = argv[1];
+	else
+	{
+		std::cout << "Config file not provided! Launching example app." << std::endl << std::endl;
+		configPath = "main/res/example-app/config.webserv";
+	}
 
 	configFile = std::ifstream(configPath);
 	if (!configFile)
