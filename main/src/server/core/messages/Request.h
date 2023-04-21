@@ -15,7 +15,7 @@ class webserv::Request
 {
 public:
 
-	static Optional<Request> parse(const std::string& data);
+	static Request parse(const std::string& data);
 
 	RequestMethod method() const;
 	const std::string& uri() const;

@@ -43,7 +43,7 @@ bool Server::targetOfRequest(const Request& request)
 	return *hostName == _name;
 }
 
-Response Server::respondToRequest(const Request& request)
+Response Server::respondToRequest(const Optional<Request>& request)
 {
 	Response response;
 	response.setDate(std::time(0));
@@ -51,16 +51,19 @@ Response Server::respondToRequest(const Request& request)
 
 	try
 	{
-		const LocationConfig& location = _locationProcessor.resolveLocation(request.path());
+		if (!request)
+			throw WebException(StatusCodeBadRequest);
+
+		const LocationConfig& location = _locationProcessor.resolveLocation(request->path());
 		log::v << *this << log::startm << "Resolved location: " << location.remotePath() << log::endm;
 
-		if (request.body().size() > location.maxClientBodySize().valueOr(SIZE_T_MAX))
+		if (request->body().size() > location.maxClientBodySize().valueOr(SIZE_T_MAX))
 			throw WebException(StatusCodePayloadTooLarge);
 
-		validateRequest(request, location);
+		validateRequest(*request, location);
 
 		if (!processRedirect(location, response))
-			processRequest(request, location, response);
+			processRequest(*request, location, response);
 
 		return response;
 	}

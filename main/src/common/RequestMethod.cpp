@@ -43,6 +43,7 @@ std::string toString(RequestMethod method)
 		lookup[RequestMethodHEAD] = "HEAD";
 		lookup[RequestMethodPUT] = "PUT";
 		lookup[RequestMethodPOST] = "POST";
+		lookup[RequestMethodDELETE] = "DELETE";
 	}
 
 	std::map<RequestMethod, std::string>::iterator i = lookup.find(method);

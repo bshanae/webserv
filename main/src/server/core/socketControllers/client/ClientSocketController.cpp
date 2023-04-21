@@ -56,11 +56,19 @@ void ClientSocketController::processCanReadEvent()
 		return;
 	}
 
-	Optional<Request> request = processRequest(*data);
-	if (!request)
-		return;
+	Optional<Request> request;
+	try
+	{
+		request = processRequest(*data);
+		if (!request)
+			return; // Request is not complete.
+	}
+	catch (...)
+	{
+		// Request parsing failed. Send request to delegate anyway.
+	}
 
-	Optional<std::string> response = processResponse(*request);
+	Optional<std::string> response = processResponse(request);
 	if (!response)
 		return;
 
@@ -113,7 +121,7 @@ Optional<Request> ClientSocketController::processRequest(const std::string& data
 	return _requestAccumulator.accumulate(data);
 }
 
-Optional<std::string> ClientSocketController::processResponse(const Request& request)
+Optional<std::string> ClientSocketController::processResponse(const Optional<Request>& request)
 {
 	Response r = _delegate->respondToRequest(request);
 

@@ -44,7 +44,7 @@ private:
 	void processCanWriteEvent();
 	Optional<std::string> readFromSocket();
 	Optional<Request> processRequest(const std::string& data);
-	Optional<std::string> processResponse(const Request& request);
+	Optional<std::string> processResponse(const Optional<Request>& request);
 	void saveResponse(const std::string& message);
 	void flushResponses();
 

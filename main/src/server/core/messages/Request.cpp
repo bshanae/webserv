@@ -6,10 +6,11 @@
 #include "common/path.h"
 #include "log/log.h"
 #include "common/HeaderName.h"
+#include "common/exceptions/WebException.h"
 
 using namespace webserv;
 
-Optional<Request> Request::parse(const std::string& data)
+Request Request::parse(const std::string& data)
 {
 	try
 	{
@@ -58,12 +59,12 @@ Optional<Request> Request::parse(const std::string& data)
 	catch (const std::exception& e)
 	{
 		log::e << "Request" << log::startm << "Parsing error: " << e.what() << log::endm;
-		return Optional<Request>();
+		throw WebException(StatusCodeBadRequest);
 	}
 	catch (...)
 	{
 		log::e << "Request" << log::startm << "Unknown  parsing error." << log::endm;
-		return Optional<Request>();
+		throw WebException(StatusCodeBadRequest);
 	}
 }
 

@@ -43,7 +43,7 @@ private:
 	Server& operator=(Server&);
 
 	virtual bool targetOfRequest(const Request& request);
-	virtual Response respondToRequest(const Request& request);
+	virtual Response respondToRequest(const Optional<Request>& request);
 	void validateRequest(const Request& request, const config::LocationConfig& location) const;
 	bool processRedirect(const config::LocationConfig& location, Response& response);
 	void processRequest(const Request& request, const config::LocationConfig& location, Response& response);

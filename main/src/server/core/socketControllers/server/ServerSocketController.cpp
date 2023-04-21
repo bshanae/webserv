@@ -88,12 +88,15 @@ void ServerSocketController::onClientDisconnected(const WebAddress& clientAddres
 	log::e << *this << log::startm << "Can't find client controller with address" << clientAddress << "!" << log::endm;
 }
 
-Response ServerSocketController::respondToRequest(const webserv::Request& request)
+Response ServerSocketController::respondToRequest(const Optional<Request>& request)
 {
-	for (std::vector<IServerSocketDelegate*>::iterator i = _delegates.begin(); i != _delegates.end(); i++)
+	if (request)
 	{
-		if ((*i)->targetOfRequest(request))
-			return (*i)->respondToRequest(request);
+		for (std::vector<IServerSocketDelegate*>::iterator i = _delegates.begin(); i != _delegates.end(); i++)
+		{
+			if ((*i)->targetOfRequest(*request))
+				return (*i)->respondToRequest(*request);
+		}
 	}
 
 	return _delegates.front()->respondToRequest(request);

@@ -34,5 +34,5 @@ private:
 
 	virtual void processSocketEvent(SocketEvent event);
 	virtual void onClientDisconnected(const WebAddress& clientAddress);
-	virtual Response respondToRequest(const webserv::Request& request);
+	virtual Response respondToRequest(const Optional<Request>& request);
 };
